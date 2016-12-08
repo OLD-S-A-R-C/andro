@@ -73,7 +73,7 @@ public class playListDetailFragment extends Fragment {
                 Log.e("SongSelected",mItem.content);
 
                 DummyContent dummyContent = new DummyContent();
-                DummyContent.setStrSongSelected(mItem.details);
+                dummyContent.setStrSongSelected(mItem.details);
 
                 Intent intent = new Intent(getContext(), songContent.class);
                 intent.putExtra(EXTRA_MESSAGE, mItem.content+";"+mItem.details+";"+mItem.id+";"+strtext);

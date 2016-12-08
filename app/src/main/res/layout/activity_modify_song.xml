@@ -18,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Transferer vers..."
+        android:onClick="transferSong"
         android:id="@+id/button8"
         android:layout_below="@+id/spinner1"
         android:layout_alignParentStart="true"
@@ -35,6 +36,7 @@
         android:layout_height="wrap_content"
         android:text="Copier vers..."
         android:id="@+id/button12"
+        android:onClick="copySong"
         android:layout_below="@+id/spinner2"
         android:layout_alignEnd="@+id/spinner2"
         android:layout_alignParentStart="true" />
@@ -43,8 +45,69 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Supprimer"
+        android:onClick="deleteSong"
         android:id="@+id/button13"
         android:layout_below="@+id/button12"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Titre:"
+        android:id="@+id/textView13"
+        android:layout_below="@+id/button13"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText12"
+        android:layout_below="@+id/textView13"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/button13" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Artiste:"
+        android:id="@+id/textView16"
+        android:layout_below="@+id/editText12"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText15"
+        android:layout_below="@+id/textView16"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/editText12" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="URL:"
+        android:id="@+id/textView17"
+        android:layout_below="@+id/editText15"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText16"
+        android:layout_below="@+id/textView17"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/editText15" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modifier"
+        android:id="@+id/button14"
+        android:layout_below="@+id/editText16"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
 
