@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
@@ -115,6 +117,23 @@ public class modifySongActivity extends AppCompatActivity {
             strArtiste =lireJSON.get("artiste").toString();
 
             setTitle(strTitre + " - "+strArtiste);
+
+            EditText editText12 = (EditText)findViewById(R.id.editText12);
+            editText12.setText(strTitre);
+            EditText editText15 = (EditText)findViewById(R.id.editText15);
+            editText15.setText(strArtiste);
+            EditText editText16 = (EditText)findViewById(R.id.editText16);
+            editText16.setText(strMusique);
+            CheckBox checkBoxPublique = (CheckBox)findViewById(R.id.checkBox5);
+            CheckBox checkBoxActive = (CheckBox)findViewById(R.id.checkBox6);
+            if(strPublique.equals("true"))
+            {
+                checkBoxPublique.setChecked(true);
+            }
+            if(strActive.equals("true"))
+            {
+                checkBoxActive.setChecked(true);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

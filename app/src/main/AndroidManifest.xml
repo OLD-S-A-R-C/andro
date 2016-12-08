@@ -38,7 +38,8 @@
         <activity android:name=".modifyPlaylist" />
         <activity android:name=".songContent" />
         <activity android:name=".modifySongActivity" />
-        <activity android:name=".visualizeSongsActivity"></activity>
+        <activity android:name=".visualizeSongsActivity" />
+        <activity android:name=".addSongActivity"></activity>
     </application>
 
 </manifest>

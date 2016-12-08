@@ -253,6 +253,8 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             startActivity(intent);
         } else if (id == R.id.nav_send) {
             Log.e("nav_send","Selected");
+            Intent intent = new Intent(this, addSongActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
