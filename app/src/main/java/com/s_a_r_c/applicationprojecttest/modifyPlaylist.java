@@ -115,33 +115,28 @@ public class modifyPlaylist extends AppCompatActivity {
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("GET");
                 c.connect();
-                int status = c.getResponseCode();
-                switch (status) {
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
                     case 200:
-                    case 201:
-                        BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line+"\n");
-                        }
-                        br.close();
-                        return sb.toString();
-                }
-
-            } catch (Exception ex) {
-                return ex.toString();
-            } finally {
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
                     try {
                         c.disconnect();
-                    } catch (Exception ex) {
-                        //disconnect error
-                    }
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
                 }
             }
             return null;
-
         }
 
         protected void onPostExecute(String result) {
@@ -173,35 +168,29 @@ public class modifyPlaylist extends AppCompatActivity {
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("GET");
                 c.connect();
-                int status = c.getResponseCode();
-                switch (status) {
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
                     case 200:
-                    case 201:
-                        BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line+"\n");
-                        }
-                        br.close();
-                        return sb.toString();
-                }
-
-            } catch (Exception ex) {
-                return ex.toString();
-            } finally {
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
                     try {
                         c.disconnect();
-                    } catch (Exception ex) {
-                        //disconnect error
-                    }
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
                 }
             }
             return null;
-
         }
-
         protected void onPostExecute(String result) {
             jsonSaved = result;
             //confirmLogin();
@@ -233,33 +222,28 @@ public class modifyPlaylist extends AppCompatActivity {
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("GET");
                 c.connect();
-                int status = c.getResponseCode();
-                switch (status) {
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
                     case 200:
-                    case 201:
-                        BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line+"\n");
-                        }
-                        br.close();
-                        return sb.toString();
-                }
-
-            } catch (Exception ex) {
-                return ex.toString();
-            } finally {
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
                     try {
                         c.disconnect();
-                    } catch (Exception ex) {
-                        //disconnect error
-                    }
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
                 }
             }
             return null;
-
         }
 
         protected void onPostExecute(String result) {
@@ -367,33 +351,28 @@ public class modifyPlaylist extends AppCompatActivity {
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
-                int status = c.getResponseCode();
-                switch (status) {
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
                     case 200:
-                    case 201:
-                        BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line+"\n");
-                        }
-                        br.close();
-                        return sb.toString();
-                }
-
-            } catch (Exception ex) {
-                return ex.toString();
-            } finally {
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
                     try {
                         c.disconnect();
-                    } catch (Exception ex) {
-                        //disconnect error
-                    }
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
                 }
             }
             return null;
-
         }
 
         protected void onPostExecute(String result) {
@@ -427,33 +406,28 @@ public class modifyPlaylist extends AppCompatActivity {
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
-                int status = c.getResponseCode();
-                switch (status) {
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
                     case 200:
-                    case 201:
-                        BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line+"\n");
-                        }
-                        br.close();
-                        return sb.toString();
-                }
-
-            } catch (Exception ex) {
-                return ex.toString();
-            } finally {
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
                     try {
                         c.disconnect();
-                    } catch (Exception ex) {
-                        //disconnect error
-                    }
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
                 }
             }
             return null;
-
         }
 
         protected void onPostExecute(String result) {
@@ -507,33 +481,28 @@ public class modifyPlaylist extends AppCompatActivity {
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("GET");
                 c.connect();
-                int status = c.getResponseCode();
-                switch (status) {
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
                     case 200:
-                    case 201:
-                        BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line+"\n");
-                        }
-                        br.close();
-                        return sb.toString();
-                }
-
-            } catch (Exception ex) {
-                return ex.toString();
-            } finally {
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
                     try {
                         c.disconnect();
-                    } catch (Exception ex) {
-                        //disconnect error
-                    }
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
                 }
             }
             return null;
-
         }
 
         protected void onPostExecute(String result) {
@@ -584,33 +553,28 @@ public class modifyPlaylist extends AppCompatActivity {
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
-                int status = c.getResponseCode();
-                switch (status) {
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
                     case 200:
-                    case 201:
-                        BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line+"\n");
-                        }
-                        br.close();
-                        return sb.toString();
-                }
-
-            } catch (Exception ex) {
-                return ex.toString();
-            } finally {
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
                     try {
                         c.disconnect();
-                    } catch (Exception ex) {
-                        //disconnect error
-                    }
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
                 }
             }
             return null;
-
         }
 
         protected void onPostExecute(String result) {

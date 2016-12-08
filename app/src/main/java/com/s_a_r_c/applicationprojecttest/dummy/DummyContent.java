@@ -121,33 +121,28 @@ public class DummyContent extends Application{
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/getListesDeLecture");
                 c = (HttpURLConnection) u.openConnection();
                 c.connect();
-                int status = c.getResponseCode();
-                switch (status) {
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
                     case 200:
-                    case 201:
-                        BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line+"\n");
-                        }
-                        br.close();
-                        return sb.toString();
-                }
-
-            } catch (Exception ex) {
-                return ex.toString();
-            } finally {
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
                     try {
                         c.disconnect();
-                    } catch (Exception ex) {
-                        //disconnect error
-                    }
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
                 }
             }
             return null;
-
         }
 
         protected void onPostExecute(String result) {
@@ -210,33 +205,28 @@ public class DummyContent extends Application{
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/getListesdelectureMusique");
                 c = (HttpURLConnection) u.openConnection();
                 c.connect();
-                int status = c.getResponseCode();
-                switch (status) {
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
                     case 200:
-                    case 201:
-                        BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line+"\n");
-                        }
-                        br.close();
-                        return sb.toString();
-                }
-
-            } catch (Exception ex) {
-                return ex.toString();
-            } finally {
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
                     try {
                         c.disconnect();
-                    } catch (Exception ex) {
-                        //disconnect error
-                    }
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
                 }
             }
             return null;
-
         }
 
         protected void onPostExecute(String result) {
@@ -250,8 +240,6 @@ public class DummyContent extends Application{
         try {
 
             JSONObject lireJSON     = new JSONObject(jsonSaved);
-
-            ///////  int nbElements =  Integer.parseInt( lireJSON.get("NbFilms").toString());
             JSONArray jsonArray = lireJSON.getJSONArray("Elements");
             int nbElements = lireJSON.getJSONArray("Elements").length();
             JSONObject jsonMovie = new JSONObject();
@@ -283,37 +271,37 @@ public class DummyContent extends Application{
         strPassword = password;
         strID = ID;
     }
-    public void setStrSongSelected(String strElement)
+    public static void setStrSongSelected(String strElement)
     {
         strSongSelected = strElement;
     }
 //Test 
-    public void setStrPlaylistSelected(String strElement)
+    public static void setStrPlaylistSelected(String strElement)
     {
         strPlaylistSelected = strElement;
     }
 
-    public String getAlias()
+    public static String getAlias()
     {
         return strAlias;
     }
-    public String getCourriel()
+    public static String getCourriel()
     {
         return strCourriel;
     }
-    public String getPassword()
+    public static String getPassword()
     {
         return strPassword;
     }
-    public String getId()
+    public static String getId()
     {
         return strID;
     }
-    public String getStrSongSelected()
+    public static String getStrSongSelected()
     {
         return strSongSelected;
     }
-    public String getStrPlaylistSelected()
+    public static String getStrPlaylistSelected()
     {
         return strPlaylistSelected;
     }

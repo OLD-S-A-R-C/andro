@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 import com.s_a_r_c.applicationprojecttest.dummy.SongContent;
 
 import java.util.List;
@@ -71,8 +72,10 @@ public class playListDetailFragment extends Fragment {
                 appBarLayout.setTitle(mItem.content);
                 Log.e("SongSelected",mItem.content);
 
+                DummyContent dummyContent = new DummyContent();
+                DummyContent.setStrSongSelected(mItem.details);
+
                 Intent intent = new Intent(getContext(), songContent.class);
-                Log.e("strTextSent","//////////////"+strtext);
                 intent.putExtra(EXTRA_MESSAGE, mItem.content+";"+mItem.details+";"+mItem.id+";"+strtext);
                 startActivity(intent);
 
