@@ -53,7 +53,14 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
             }
         });
 
-        new DownloadSong(null).execute("Useless");
+    try
+    { new DownloadSong(null).execute("Useless");}
+        catch (Exception e)
+        {
+            finish();
+        }
+
+
     }
 
     @Override
