@@ -35,6 +35,7 @@ public class DummyContent extends Application{
     public static String strCourriel = "";
     public static String strSongSelected = "";
     public static String strPlaylistSelected = "";
+    //public static String strOwner = "";
     private static Context mContext;
 
     @Override
@@ -71,8 +72,8 @@ public class DummyContent extends Application{
         ITEM_MAP.put(item.id, item);
     }
 
-    private static DummyItem createDummyItem(int position, String strName, String strId) {
-        return new DummyItem(String.valueOf(position), strName+" " + position, makeDetails(position),strId);
+    private static DummyItem createDummyItem(int position, String strName, String strId, String strOwner) {
+        return new DummyItem(String.valueOf(position), strName+" " + position, makeDetails(position),strId, strOwner);
     }
 
     private static String makeDetails(int position) {
@@ -92,11 +93,14 @@ public class DummyContent extends Application{
         public final String content;
         public String details;
         public String strListeDeLecture= "";
+        public String owner = "";
 
-        public DummyItem(String id, String content, String details, String strId) {
+        public DummyItem(String id, String content, String details, String strId, String strOwner) {
             this.id = id;
             this.content = content;
             this.details = strId;
+            this.owner = strOwner;
+
         }
 
         @Override
@@ -170,7 +174,9 @@ public class DummyContent extends Application{
                String strNom =jsonMovie.get("Nom").toString();
                 String strId =jsonMovie.get("Id").toString();
                 Log.e("MOVIELIST1",strNom+" "+strId);
-                addItem(createDummyItem(i,strNom,strId));
+
+                String strOwnerID =jsonMovie.get("Proprietaire").toString();
+                addItem(createDummyItem(i,strNom,strId,strOwnerID));
                 //String strTitre =jsonMovie.get("titre").toString();
                // String strAnnonce=jsonMovie.get("affiche").toString();
                // String strResume=jsonMovie.get("resume").toString();
