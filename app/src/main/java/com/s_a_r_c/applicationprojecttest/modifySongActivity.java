@@ -676,7 +676,12 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError", "Status 400");
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString+"\n");}
+                        bufferedReader1.close();
+                        Log.e("bbbbbbbbbbbbbbbbbbbbbbb", stringBuilder1.toString());
                         return null;
                 }
             } catch (Exception ex) {
@@ -757,7 +762,12 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError", "Status 400");
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString+"\n");}
+                        bufferedReader1.close();
+                        Log.e("bbbbbbbbbbbbbbbbbbbbbbb", stringBuilder1.toString());
                         return null;
                 }
             } catch (Exception ex) {
