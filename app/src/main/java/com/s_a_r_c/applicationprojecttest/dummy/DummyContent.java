@@ -254,6 +254,7 @@ public class DummyContent extends Application{
                     {
                         item1.strListeDeLecture += strMusique+";";
                     }
+                   // Log.e("CREATELISTEDELECTURE",item1.content+"");
                 }
             }
 
@@ -261,6 +262,11 @@ public class DummyContent extends Application{
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("labo7",e.toString());
+        }
+
+        for(DummyItem item1 : ITEMS) {
+
+            Log.e("CREATELISTEDELECTURE",item1.content+" "+item1.strListeDeLecture+"");
         }
     }
     public void connectUser(String alias, String courriel, String password, String ID )

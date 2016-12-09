@@ -196,6 +196,7 @@ public class SongContent extends Application{
                 if(item1.details.equals(strId))
                 {
                     PURGEDITEMS.add(item1);
+                    Log.e("PURGED ITEMS", item1.content+" "+ item1.details);
                 }
 
 

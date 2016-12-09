@@ -167,14 +167,12 @@ public class playListDetailActivity extends AppCompatActivity {
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         SongContent songContent = new SongContent();
         for(DummyContent.DummyItem item1 : DummyContent.ITEMS) {
-            if(item1.details.equals(strPlaylistID)) {
+            if(item1.details.equals(DummyContent.getStrPlaylistSelected())) {
                 Log.e("strListeDeLecture", "" + item1.strListeDeLecture);
 
                 songContent.purgeSongs(item1.strListeDeLecture);
             }
         }
-
-
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(SongContent.ITEMS));
         Log.e("RecyclerView","////////////////////////////"+SongContent.ITEMS.size());
         songContent.rebuildItems();

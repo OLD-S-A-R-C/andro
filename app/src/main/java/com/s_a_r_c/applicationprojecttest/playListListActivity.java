@@ -148,6 +148,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                         Context context = v.getContext();
                         Intent intent = new Intent(context, playListDetailActivity.class);
                        intent.putExtra(playListDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        Log.e("STRLICTEDELECTURE",holder.mItem.content+" "+holder.mItem.strListeDeLecture);
                         DummyContent dummyContent = new DummyContent();
                         dummyContent.setStrPlaylistSelected(holder.mItem.details);
                         String message = "{\"action\":\""+holder.mItem.details+"\",\"success\":\"true\",\"Id\":\"" +strId+ "\",\"courriel\":\"" +strCourriel+ "\",\"motdepasse\":\"" +strMotDePasse+ "\",\"alias\":\"" +strAlias+ "\",\"avatar\":\"" +strAvatar+ "\"}";

@@ -36,7 +36,7 @@ public class addSongActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_song);
 
         EditText editText = (EditText)findViewById(R.id.editText19);
-        editText.setText("https://www.youtube.com/watch?v=Pw-0pbY9JeU&p5&p5");
+        editText.setText("https://www.youtube.com/watch?v=Pw-0pbY9JeU");
     }
 
     public void createSong(View view)
@@ -175,6 +175,7 @@ public class addSongActivity extends AppCompatActivity {
                 String strConfirmation = getMd5Hash(DummyContent.getPassword()+strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=184&confirmation=99fee649e6b6e7680a094d49cec71961&action=nouvelleMusique&p1=9&p2=testestTitre&p3=testtestArtiste&p4=testTestURL&p5=true&p6=true
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=181&confirmation=cc8e336a813dff682d64349fa4374724&action=nouvelleMusique&p1=9&p2=TestTitre&p3=TestArtiste&p4=https://www.youtube.com/watch?v=Pw-0pbY9JeU&p5=true&p6=true
+                Log.e("P%P%P%P%P%P%P%P%P%",strPublique+"");
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=nouvelleMusique&p1="+DummyContent.getId()+"&p2="+strTitre+"&p3="+strArtiste+"&p4="+strUrl+"&p5="+strPublique+"&p6="+strActive);
                 Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=nouvelleMusique&p1="+DummyContent.getId()+"&p2="+strTitre+"&p3="+strArtiste+"&p4="+strUrl+"&p5="+strPublique+"&p6="+strActive);
 
