@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
@@ -24,6 +29,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class songContent extends AppCompatActivity implements YouTubePlayer.OnInitializedListener {
     private YouTubePlayerSupportFragment mPlayerFragment;
@@ -36,6 +43,12 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
     String strPublique = "";
     String strActive = "";
     String strArtiste = "";
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,25 +66,71 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
             }
         });
 
-    try
-    { new DownloadSong(null).execute("Useless");}
-        catch (Exception e)
-        {
+        try {
+            new DownloadSong(null).execute("Useless");
+        } catch (Exception e) {
             finish();
         }
 
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-        Log.d("xxxxxxxxxxxxx", strMusique.split("/")[4]);
-        youTubePlayer.cueVideo(strMusique);
+        String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
+
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(strMusique);
+
+        if (matcher.find()) {
+            Log.d("vvvvvvvvvvvvvvv", matcher.group());
+            youTubePlayer.cueVideo(matcher.group());
+        }
+
     }
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
         Log.d("oups", youTubeInitializationResult.toString());
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("songContent Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 
     private class DownloadSong extends AsyncTask<String, Void, String> {
@@ -87,28 +146,34 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
             HttpURLConnection c = null;
             try {
                 DummyContent dummyContent = new DummyContent();
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/afficher/"+DummyContent.getStrSongSelected());
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/afficher/" + DummyContent.getStrSongSelected());
                 c = (HttpURLConnection) u.openConnection();
                 c.connect();
                 int intStatusRetrieved = c.getResponseCode();
                 String strString;
                 switch (intStatusRetrieved) {
                     case 200:
-                        InputStreamReader inputStreamReader =new InputStreamReader(c.getInputStream());
+                        InputStreamReader inputStreamReader = new InputStreamReader(c.getInputStream());
                         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                         StringBuilder stringBuilder = new StringBuilder();
-                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        while ((strString = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(strString + "\n");
+                        }
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
+                        Log.e("JsonRetrieveError", "Status 400");
                         return null;
-                }}
-            catch (Exception ex) {return ex.toString();} finally {
+                }
+            } catch (Exception ex) {
+                return ex.toString();
+            } finally {
                 if (c != null) {
                     try {
                         c.disconnect();
-                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
+                    } catch (Exception ex) {
+                        Log.e("JsonRetrieveError", "Error fielded");
+                    }
                 }
             }
             return null;
@@ -120,24 +185,22 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
             renderJson();
         }
     }
-    public void renderJson()
-    {
+
+    public void renderJson() {
         try {
 
-            JSONObject lireJSON     = new JSONObject(jsonSaved);
+            JSONObject lireJSON = new JSONObject(jsonSaved);
             String strProprietaire = lireJSON.get("proprietaire").toString();
-            JSONObject lireJSON2     = new JSONObject(strProprietaire);
+            JSONObject lireJSON2 = new JSONObject(strProprietaire);
             strOwnerID = lireJSON2.get("id").toString();
-             strVignette =lireJSON.get("vignette").toString();
-             strTitre =lireJSON.get("titre").toString();
-             strMusique =lireJSON.get("musique").toString();
-             strPublique =lireJSON.get("publique").toString();
-             strActive =lireJSON.get("active").toString();
-            strArtiste =lireJSON.get("artiste").toString();
+            strVignette = lireJSON.get("vignette").toString();
+            strTitre = lireJSON.get("titre").toString();
+            strMusique = lireJSON.get("musique").toString();
+            strPublique = lireJSON.get("publique").toString();
+            strActive = lireJSON.get("active").toString();
+            strArtiste = lireJSON.get("artiste").toString();
 
-            setTitle(strTitre + " - "+strArtiste);
-
-
+            setTitle(strTitre + " - " + strArtiste);
 
             ////////////YOUTUBE
             mPlayerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
@@ -145,7 +208,7 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e("labo7",e.toString());
+            Log.e("labo7", e.toString());
         }
     }
 

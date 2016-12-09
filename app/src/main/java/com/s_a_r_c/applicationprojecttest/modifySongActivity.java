@@ -663,7 +663,12 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError", "Status 400");
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString+"\n");}
+                        bufferedReader1.close();
+                        Log.e("bbbbbbbbbbbbbbbbbbbbbbb", stringBuilder1.toString());
                         return null;
                 }
             } catch (Exception ex) {
@@ -724,8 +729,8 @@ public class modifySongActivity extends AppCompatActivity {
 
                 String strConfirmation = getMd5Hash(DummyContent.getPassword() + strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=337&confirmation=26b15445192a07d528d0e70c2c58264d&action=supprimerMusiqueListe&p1=9&p2=16&p3=148
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=supprimerMusiqueListe&p1=" + DummyContent.getId() + "&p2=+" + DummyContent.getStrPlaylistSelected() + "+&p3=" + DummyContent.getStrSongSelected());
-                Log.e("Error", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=supprimerMusiqueListe&p1=" + DummyContent.getId() + "&p2=+" + DummyContent.getStrPlaylistSelected() + "+&p3=" + DummyContent.getStrSongSelected());
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=supprimerMusiqueListe&p1=" + DummyContent.getId() + "&p2=" + DummyContent.getStrPlaylistSelected() + "&p3=" + DummyContent.getStrSongSelected());
+                Log.e("Error", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=supprimerMusiqueListe&p1=" + DummyContent.getId() + "&p2=" + DummyContent.getStrPlaylistSelected() + "&p3=" + DummyContent.getStrSongSelected());
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
@@ -742,7 +747,12 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError", "Status 400");
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString+"\n");}
+                        bufferedReader1.close();
+                        Log.e("bbbbbbbbbbbbbbbbbbbbbbb", stringBuilder1.toString());
                         return null;
                 }
             } catch (Exception ex) {
