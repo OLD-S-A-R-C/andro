@@ -722,10 +722,12 @@ public class modifySongActivity extends AppCompatActivity {
                 strTitre = strTitre.replaceAll(" ", "%20");
                 strArtiste = strArtiste.replaceAll(" ", "%20");
 
+              //  strTicketID = (Integer.valueOf(strTicketID)+1)+"";
+
                 String strConfirmation = getMd5Hash(DummyContent.getPassword() + strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=337&confirmation=26b15445192a07d528d0e70c2c58264d&action=supprimerMusiqueListe&p1=9&p2=16&p3=148
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=supprimerMusiqueListe&p1=" + DummyContent.getId() + "&p2=+" + DummyContent.getStrPlaylistSelected() + "+&p3=" + DummyContent.getStrSongSelected());
-                Log.e("Error", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=supprimerMusiqueListe&p1=" + DummyContent.getId() + "&p2=+" + DummyContent.getStrPlaylistSelected() + "+&p3=" + DummyContent.getStrSongSelected());
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=supprimerMusiqueListe&p1=" + DummyContent.getId() + "&p2=" + DummyContent.getStrPlaylistSelected() + "&p3=" + DummyContent.getStrSongSelected());
+                Log.e("Error", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=supprimerMusiqueListe&p1=" + DummyContent.getId() + "&p2=" + DummyContent.getStrPlaylistSelected() + "&p3=" + DummyContent.getStrSongSelected());
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
