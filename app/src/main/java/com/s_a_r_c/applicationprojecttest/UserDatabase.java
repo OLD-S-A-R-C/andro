@@ -8,6 +8,7 @@
     import android.database.Cursor;
     import android.database.sqlite.SQLiteDatabase;
     import android.database.sqlite.SQLiteOpenHelper;
+    import android.util.Log;
 
     public class UserDatabase extends SQLiteOpenHelper {
 
@@ -34,7 +35,9 @@
             db.execSQL(sqlite_requete_table_login);
         }
 
-        public void ajouterUtilisateur(int idUser, String alias, String email, int idAvatar, String avatarB64, String motdepasse) {
+        public void logInUser(int idUser, String alias, String email, int idAvatar, String avatarB64, String motdepasse) {
+            this.reinitialiser();
+
             SQLiteDatabase db = this.getWritableDatabase();
 
             ContentValues values = new ContentValues();
@@ -58,12 +61,12 @@
             cursor.moveToFirst();
 
             if(cursor.getCount() > 0){
-                utilisateur.put("id", cursor.getString(1));
-                utilisateur.put("alias", cursor.getString(2));
-                utilisateur.put("email", cursor.getString(3));
-                utilisateur.put("avatar_id", cursor.getString(4));
-                utilisateur.put("avatar_b64", cursor.getString(5));
-                utilisateur.put("motdepasse", cursor.getString(6));
+                utilisateur.put(USER_ID, cursor.getString(0));
+                utilisateur.put(USER_ALIAS, cursor.getString(1));
+                utilisateur.put(USER_EMAIL, cursor.getString(2));
+                utilisateur.put(USER_AVATAR_ID, cursor.getString(3));
+                utilisateur.put(USER_AVATAR_B64, cursor.getString(4));
+                utilisateur.put(USER_MD5_PASSWORD, cursor.getString(5));
             }
             cursor.close();
             bd.close();

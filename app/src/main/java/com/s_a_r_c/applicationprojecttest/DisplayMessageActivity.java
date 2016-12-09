@@ -1,76 +1,33 @@
 package com.s_a_r_c.applicationprojecttest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.media.Image;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-
 
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.math.BigInteger;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 
 public class DisplayMessageActivity extends AppCompatActivity {
@@ -86,7 +43,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
     }
 public void confirmSuccesffulLoginAttempt()
     {
-Log.e("confirmSuccesffulLogin",jsonSaved+"Message");
+        Log.e("confirmSuccesffulLogin",jsonSaved+"Message");
         try {
             JSONObject lireJSON     = new JSONObject(jsonSaved);
             strSuccess =lireJSON.get("success").toString();
@@ -95,16 +52,20 @@ Log.e("confirmSuccesffulLogin",jsonSaved+"Message");
                 DummyContent dummyContent = new DummyContent();
 
                 dummyContent.connectUser(lireJSON.get("alias").toString(), lireJSON.get("courriel").toString(), lireJSON.get("motdepasse").toString(), lireJSON.get("Id").toString() );
-/*
+
                 UserDatabase userDb = new UserDatabase(getApplicationContext());
                 Log.d("xxxxxxxxxxxxxxxxx", jsonSaved);
-                userDb.ajouterUtilisateur(Integer.valueOf(lireJSON.get("Id").toString()),
+                userDb.logInUser(Integer.valueOf(lireJSON.get("Id").toString()),
                         lireJSON.get("alias").toString(),
                         lireJSON.get("courriel").toString(),
                         Integer.valueOf(lireJSON.get("avatar").toString()),
                         "",
                         lireJSON.get("motdepasse").toString());
-*/
+
+                //show his username
+                Map<String, String> userInfos = userDb.retournerInfosUser();
+                Log.d("alias of the dude", userInfos.get("alias"));
+
 
                 Intent intent = new Intent();
                 intent.putExtra("jsonSavedTransfer",jsonSaved);
@@ -114,7 +75,7 @@ Log.e("confirmSuccesffulLogin",jsonSaved+"Message");
             else
             {
                 TextView mTextView = (TextView) findViewById(R.id.textView4);
-                mTextView.setText("Captcha: (Le captcha est erroné !)");
+                mTextView.setText(lireJSON.get("reason").toString());
             }
 
         } catch (JSONException e) {
@@ -126,25 +87,43 @@ Log.e("confirmSuccesffulLogin",jsonSaved+"Message");
     /** Called when the user clicks the Login button */
     public void sendConfirmCaptcha(View view)
     {
-        Log.e("Captcha Attempt","confirm");
+        hideKeyboard();
 
-        strCaptcha = findViewById(R.id.textView4).toString();
-        EditText mTextView = (EditText)findViewById(R.id.editText3);
-        strCaptcha = mTextView.getText().toString();
-        new DownloadJsonCaptchaAttempt(null).execute("Useless");
+        TextView tvCaptcha = (TextView) findViewById(R.id.tvCaptcha);
+
+        if (tvCaptcha != null && tvCaptcha.getText().toString().trim().length() != 6) {
+            Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un captcha complet", Snackbar.LENGTH_SHORT).show();
+        } else {
+            Log.e("Captcha Attempt","confirm");
+
+            strCaptcha = findViewById(R.id.textView4).toString();
+            EditText mTextView = (EditText)findViewById(R.id.tvCaptcha);
+            strCaptcha = mTextView.getText().toString();
+            new DownloadJsonCaptchaAttempt(null).execute("Useless");
+        }
 
     }
     public void sendLoginAttempt(View view) {
-        // Do something in response to button
-        Log.e("Login Attempt","Username");
-        new DownloadJsonLoginAttempt(null).execute("Useless");
+        hideKeyboard();
+
+        TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
+        TextView tvPassword = (TextView) findViewById(R.id.tvPassword);
+
+        if(tvUsername != null && tvUsername.getText().toString().trim().equals(""))
+        {
+            Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un nom d'utilisateur !", Snackbar.LENGTH_SHORT).show();
+        } else if (tvPassword != null && tvPassword.getText().toString().trim().equals("")) {
+            Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un mot de passe", Snackbar.LENGTH_SHORT).show();
+        } else {
+            Log.e("Login Attempt","Username");
+            new DownloadJsonLoginAttempt(null).execute("Useless");
+        }
     }
     public void confirmLogin()
     {
         try {
-
             JSONObject lireJSON     = new JSONObject(jsonSaved);
-            //JSONObject jsonMovie = new JSONObject();
+
             String strCaptcha =lireJSON.get("captcha").toString();
             strTicketID =lireJSON.get("idTicket").toString();
             byte[] decodedString = Base64.decode(strCaptcha, Base64.DEFAULT);
@@ -167,11 +146,8 @@ Log.e("confirmSuccesffulLogin",jsonSaved+"Message");
         String url;
 
         public DownloadJsonLoginAttempt(String url) {
-
             this.url = url;
         }
-
-
 
         protected String doInBackground(String... url) {
 
@@ -193,6 +169,7 @@ Log.e("confirmSuccesffulLogin",jsonSaved+"Message");
                         }
                         br.close();
                         return sb.toString();
+
                 }
 
             } catch (Exception ex) {
@@ -247,8 +224,13 @@ Log.e("confirmSuccesffulLogin",jsonSaved+"Message");
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString+"\n");}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":" + stringBuilder1.toString() + "}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -265,5 +247,10 @@ Log.e("confirmSuccesffulLogin",jsonSaved+"Message");
             jsonSaved = result;
             confirmSuccesffulLoginAttempt();
         }
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }
