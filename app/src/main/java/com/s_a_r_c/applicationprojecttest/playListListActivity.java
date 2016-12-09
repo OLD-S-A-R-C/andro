@@ -98,12 +98,16 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-
+        DummyContent dummyContent = new DummyContent();
+        dummyContent.refresh();
 
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+
+
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -143,13 +147,14 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                                 .commit();
 */
                     } else {
+                        DummyContent dummyContent = new DummyContent();
+                      //  dummyContent.refresh();
 
                         Log.e("MTWOPANEACTIVITY","/////////////////SELECTEDFALSE");
                         Context context = v.getContext();
                         Intent intent = new Intent(context, playListDetailActivity.class);
                        intent.putExtra(playListDetailFragment.ARG_ITEM_ID, holder.mItem.id);
                         Log.e("STRLICTEDELECTURE",holder.mItem.content+" "+holder.mItem.strListeDeLecture);
-                        DummyContent dummyContent = new DummyContent();
                         dummyContent.setStrPlaylistSelected(holder.mItem.details);
                         String message = "{\"action\":\""+holder.mItem.details+"\",\"success\":\"true\",\"Id\":\"" +strId+ "\",\"courriel\":\"" +strCourriel+ "\",\"motdepasse\":\"" +strMotDePasse+ "\",\"alias\":\"" +strAlias+ "\",\"avatar\":\"" +strAvatar+ "\"}";
                         intent.putExtra(EXTRA_MESSAGE, message);
@@ -221,6 +226,9 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
+        DummyContent dummyContent = new DummyContent();
+        dummyContent.refresh();
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 

@@ -48,6 +48,15 @@ public class DummyContent extends Application{
         songContent.onCreate();
         new DownloadListDeLecture(null).execute("Useless");
     }
+
+    public void refresh()
+    {
+        ITEMS.clear();
+        new DownloadJson(null).execute("Useless");
+        //songContent.refresh();
+        new DownloadListDeLecture(null).execute("Useless");
+    }
+
     /**
      * An array of sample (dummy) items.
      */

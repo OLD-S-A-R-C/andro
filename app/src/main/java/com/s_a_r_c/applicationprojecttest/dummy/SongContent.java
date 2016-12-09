@@ -37,6 +37,13 @@ public class SongContent extends Application{
         new DownloadJson(null).execute("Useless");
 
     }
+    public void refresh()
+    {
+        ITEMS.clear();
+        SAVEDITEMS.clear();
+        Log.e("SIZE//////////////////",SAVEDITEMS.size()+" SAVED ITEMS////////////////////////////");
+        new DownloadJson(null).execute("Useless");
+    }
     public void refreshList(String strID)
     {
         super.onCreate();
