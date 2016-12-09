@@ -1,5 +1,6 @@
 package com.s_a_r_c.applicationprojecttest;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +26,7 @@ public class visualizeSongsActivity extends AppCompatActivity {
 
         ArrayList<String> playlists = new ArrayList<String>();
         for(SongContent.DummyItem item1 : SongContent.SAVEDITEMS) {
-            playlists.add(item1.content);
+            playlists.add(item1.content+" ;"+item1.details);
         }
 
 
@@ -35,9 +36,15 @@ public class visualizeSongsActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Object listItem = mListView.getItemAtPosition(position);
                 Log.e("Item Selected","YEPEYEP"+mListView.getItemAtPosition(position).toString());
-               // mListView.getItemAtPosition(position).toString();
+
+                String[] strSplit = mListView.getItemAtPosition(position).toString().split(";");
+                DummyContent.setStrPlaylistSelected("");
+                DummyContent.setStrSongSelected(strSplit[1]);
+                if(!DummyContent.getId().equals("")) {
+                    Intent intent = new Intent(getBaseContext(), modifySongActivity.class);
+                    startActivity(intent);
+                }
             }
         });
      }
