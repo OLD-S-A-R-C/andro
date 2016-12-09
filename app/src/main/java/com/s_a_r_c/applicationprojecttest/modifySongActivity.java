@@ -151,7 +151,9 @@ public class modifySongActivity extends AppCompatActivity {
     public void deleteSong(View view)
     {}
     public void transferSong(View view)
-    {}
+    {
+        new DownloadJsonTransferAttept(null).execute("Useless");
+    }
     public void copySong(View view)
     {
         new DownloadJsonCopyAttept(null).execute("Useless");
@@ -533,7 +535,7 @@ private class DownloadJsonCopyComplete extends AsyncTask<String, Void, String> {
             e.printStackTrace();
             Log.e("labo7",e.toString());
         }
-        String strTargetPlaylistFull =((Spinner)findViewById(R.id.spinner2)).getSelectedItem().toString();
+        String strTargetPlaylistFull =((Spinner)findViewById(R.id.spinner1)).getSelectedItem().toString();
         strTargetPlaylist = strTargetPlaylistFull.split(";")[1];
         new DownloadJsonTransferComplete(null).execute("Useless");
     }
@@ -560,8 +562,8 @@ private class DownloadJsonCopyComplete extends AsyncTask<String, Void, String> {
 
                 String strConfirmation = getMd5Hash(DummyContent.getPassword()+strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=216&confirmation=1c3de967358bc9cd76a2c2f61a57c3dd&action=ajouterMusiqueListe&p1=9&p2=14&p3=135
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=ajouterMusiqueListe&p1="+DummyContent.getId()+"&p2="+strTargetPlaylist+"&p3="+DummyContent.getStrSongSelected());
-                Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=ajouterMusiqueListe&p1="+DummyContent.getId()+"&p2="+strTargetPlaylist+"&p3="+DummyContent.getStrSongSelected());
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=transfererMusiqueListe&p1="+DummyContent.getId()+"&p2="+DummyContent.getStrPlaylistSelected()+"&p3="+strTargetPlaylist+"&p4="+DummyContent.getStrSongSelected());
+                Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=transfererMusiqueListe&p1="+DummyContent.getId()+"&p2="+DummyContent.getStrPlaylistSelected()+"&p3="+strTargetPlaylist+"&p4="+DummyContent.getStrSongSelected());
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
