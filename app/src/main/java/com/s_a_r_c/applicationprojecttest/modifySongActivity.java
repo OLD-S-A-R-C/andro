@@ -38,6 +38,7 @@ public class modifySongActivity extends AppCompatActivity {
     String strArtiste = "";
     String strPublique = "";
     String strActive = "";
+    String strTargetPlaylist = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +49,8 @@ public class modifySongActivity extends AppCompatActivity {
 
             if(!item1.details.equals(DummyContent.getStrPlaylistSelected()))
             {
-                playlists.add(item1.content);
+                if(item1.owner.equals(DummyContent.getId()))
+                playlists.add(item1.content+" ;"+item1.details);
             }
 
         }
@@ -151,7 +153,9 @@ public class modifySongActivity extends AppCompatActivity {
     public void transferSong(View view)
     {}
     public void copySong(View view)
-    {}
+    {
+        new DownloadJsonCopyAttept(null).execute("Useless");
+    }
 
 
     public void modifySong(View view)
@@ -343,4 +347,128 @@ public class modifySongActivity extends AppCompatActivity {
             Log.e("labo7",e.toString());
         }
     }
+    private class DownloadJsonCopyAttept extends AsyncTask<String, Void, String> {
+        String url;
+
+        public DownloadJsonCopyAttept(String url) {
+
+            this.url = url;
+        }
+
+
+
+        protected String doInBackground(String... url) {
+
+            HttpURLConnection c = null;
+            try {
+
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+DummyContent.getCourriel());
+                Log.e("URL","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+DummyContent.getCourriel());
+                c = (HttpURLConnection) u.openConnection();
+                c.setRequestMethod("GET");
+                c.connect();
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
+                    case 200:
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
+                if (c != null) {
+                    try {
+                        c.disconnect();
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
+                }
+            }
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+            jsonSaved = result;
+            //confirmLogin();
+            receivedCopyResponse();
+        }
+    }
+    public void receivedCopyResponse()
+    {
+        try {
+
+            JSONObject lireJSON     = new JSONObject(jsonSaved);
+            strTicketID =lireJSON.get("idTicket").toString();
+            strCle=lireJSON.get("cle").toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("labo7",e.toString());
+        }
+        String strTargetPlaylistFull =((Spinner)findViewById(R.id.spinner2)).getSelectedItem().toString();
+        strTargetPlaylist = strTargetPlaylistFull.split(";")[1];
+        new DownloadJsonCopyComplete(null).execute("Useless");
+    }
+
+
+private class DownloadJsonCopyComplete extends AsyncTask<String, Void, String> {
+    String url;
+
+    public DownloadJsonCopyComplete(String url) {
+
+        this.url = url;
+    }
+
+
+
+    protected String doInBackground(String... url) {
+
+        HttpURLConnection c = null;
+        try {
+            //$.md5(Cookies.get('motdepasse') + ticket.cle)
+
+            strTitre = strTitre.replaceAll(" ", "%20");
+            strArtiste = strArtiste.replaceAll(" ", "%20");
+
+            String strConfirmation = getMd5Hash(DummyContent.getPassword()+strCle);
+            //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=216&confirmation=1c3de967358bc9cd76a2c2f61a57c3dd&action=ajouterMusiqueListe&p1=9&p2=14&p3=135
+            URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=ajouterMusiqueListe&p1="+DummyContent.getId()+"&p2="+strTargetPlaylist+"&p3="+DummyContent.getStrSongSelected());
+            Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=ajouterMusiqueListe&p1="+DummyContent.getId()+"&p2="+strTargetPlaylist+"&p3="+DummyContent.getStrSongSelected());
+            c = (HttpURLConnection) u.openConnection();
+            c.setRequestMethod("PUT");
+            c.connect();
+            int intStatusRetrieved = c.getResponseCode();
+            String strString;
+            switch (intStatusRetrieved) {
+                case 200:
+                    InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                    bufferedReader.close();
+                    return stringBuilder.toString();
+                case 400:
+                    Log.e("JsonRetrieveError","Status 400");
+                    return null;
+            }}
+        catch (Exception ex) {return ex.toString();} finally {
+            if (c != null) {
+                try {
+                    c.disconnect();
+                } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
+            }
+        }
+        return null;
+    }
+
+    protected void onPostExecute(String result) {
+        jsonSaved = result;
+        Log.e("FinalResponse",jsonSaved+"11111111");
+
+        finalResponse();
+    }
+}
 }
