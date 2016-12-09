@@ -1,5 +1,7 @@
 package com.s_a_r_c.applicationprojecttest;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,6 +12,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 
 import org.json.JSONException;
@@ -20,8 +25,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class songContent extends AppCompatActivity {
-String jsonSaved = "";
+public class songContent extends AppCompatActivity implements YouTubePlayer.OnInitializedListener {
+    private YouTubePlayerSupportFragment mPlayerFragment;
+
+    String jsonSaved = "";
     String strOwnerID = "";
     String strVignette = "";
     String strTitre = "";
@@ -33,6 +40,7 @@ String jsonSaved = "";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_content);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSong);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +55,18 @@ String jsonSaved = "";
 
         new DownloadSong(null).execute("Useless");
     }
+
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+        Log.d("xxxxxxxxxxxxx", strMusique.split("/")[4]);
+        youTubePlayer.cueVideo(strMusique);
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+        Log.d("oups", youTubeInitializationResult.toString());
+    }
+
     private class DownloadSong extends AsyncTask<String, Void, String> {
         String url;
 
@@ -109,6 +129,12 @@ String jsonSaved = "";
             strArtiste =lireJSON.get("artiste").toString();
 
             setTitle(strTitre + " - "+strArtiste);
+
+
+
+            ////////////YOUTUBE
+            mPlayerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
+            mPlayerFragment.initialize("AIzaSyBUaqxxbastsk_rfIKiHo-AzYBO7jtD90I", this);
 
         } catch (JSONException e) {
             e.printStackTrace();
