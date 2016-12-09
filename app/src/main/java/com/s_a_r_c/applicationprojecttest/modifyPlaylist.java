@@ -1,13 +1,16 @@
 package com.s_a_r_c.applicationprojecttest;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,7 +86,7 @@ public class modifyPlaylist extends AppCompatActivity {
 
         EditText editText = (EditText)findViewById(R.id.editText14);
         editText.setText(strNom);
-        EditText editText2 = (EditText)findViewById(R.id.editText13);
+        EditText editText2 = (EditText)findViewById(R.id.etPlaylistDuplicate);
         editText2.setText(strNom+"(DUP)");
         if(strActive.equals("true"))
         {
@@ -126,8 +129,14 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -146,7 +155,15 @@ public class modifyPlaylist extends AppCompatActivity {
     }
     public void startModification(View view)
     {
-        new DownloadJsonModifyAttept(null).execute("Useless");
+        EditText etEditPlaylistName = (EditText) findViewById(R.id.etPlaylistName);
+
+        if (etEditPlaylistName.getText().toString().trim().equals("")) {
+            hideKeyboardShowToast("Nouveau nom de la liste invalide");
+        } else {
+            new DownloadJsonModifyAttept(null).execute("Useless");
+        }
+
+
     }
 
     private class DownloadJsonModifyAttept extends AsyncTask<String, Void, String> {
@@ -179,8 +196,14 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -200,7 +223,15 @@ public class modifyPlaylist extends AppCompatActivity {
 
     public void startDuplication(View view)
     {
-        new DownloadJsonDuplicationAttept(null).execute("Useless");
+        EditText etPlaylistDuplication = (EditText) findViewById(R.id.etPlaylistDuplicate);
+
+        if (etPlaylistDuplication.getText().toString().trim().equals("")) {
+            hideKeyboardShowToast("Nom de la duplication invalide");
+        } else {
+            new DownloadJsonDuplicationAttept(null).execute("Useless");
+        }
+
+
     }
 
     private class DownloadJsonDuplicationAttept extends AsyncTask<String, Void, String> {
@@ -265,7 +296,7 @@ public class modifyPlaylist extends AppCompatActivity {
             Log.e("labo7",e.toString());
         }
 
-        EditText editText = (EditText)findViewById(R.id.editText13);
+        EditText editText = (EditText)findViewById(R.id.etPlaylistDuplicate);
         MDstrNom = editText.getText().toString();
         new DownloadJsonDuplicationComplete(null).execute("Useless");
     }
@@ -362,8 +393,14 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -417,8 +454,14 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -444,10 +487,12 @@ public class modifyPlaylist extends AppCompatActivity {
             String strSuccess =lireJSON.get("success").toString();
             if(strSuccess.equals("true"))
             {
+                hideKeyboardShowToast(lireJSON.get("reason").toString());
                 finish();
             }
             else
             {
+                hideKeyboardShowToast(lireJSON.get("reason").toString());
                 Log.e("Final Response","Failure");
             }
 
@@ -492,8 +537,14 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -524,7 +575,7 @@ public class modifyPlaylist extends AppCompatActivity {
             Log.e("labo7",e.toString());
         }
 
-        EditText editText = (EditText)findViewById(R.id.editText13);
+        EditText editText = (EditText)findViewById(R.id.etPlaylistDuplicate);
         MDstrNom = editText.getText().toString();
         new DownloadJsonDeleteComplete(null).execute("Useless");
     }
@@ -564,8 +615,14 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -582,5 +639,12 @@ public class modifyPlaylist extends AppCompatActivity {
             Log.e("FinalResponse",jsonSaved+"");
             finalResponse();
         }
+    }
+
+    private void hideKeyboardShowToast(String strMessage) {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        Toast toast = Toast.makeText(this, strMessage, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

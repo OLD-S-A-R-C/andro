@@ -1,12 +1,15 @@
 package com.s_a_r_c.applicationprojecttest;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 
@@ -20,6 +23,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class addSongActivity extends AppCompatActivity {
     String jsonSaved = "";
@@ -35,13 +40,27 @@ public class addSongActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_song);
 
-        EditText editText = (EditText)findViewById(R.id.editText19);
+        EditText editText = (EditText)findViewById(R.id.etURLNewMusic);
         editText.setText("https://www.youtube.com/watch?v=Pw-0pbY9JeU");
     }
 
     public void createSong(View view)
     {
-        new DownloadJsonDeleteAttept(null).execute("Useless");
+        EditText etTitleNewMusic = (EditText) findViewById(R.id.etTitleNewMusic);
+        EditText etArtistNewMusic = (EditText) findViewById(R.id.etArtistNewMusic);
+        EditText etURLNewMusic = (EditText) findViewById(R.id.etURLNewMusic);
+
+        if (etTitleNewMusic.getText().toString().trim().equals("")) {
+            hideKeyboardShowToast("Titre invalide");
+        } else if (etArtistNewMusic.getText().toString().trim().equals("")) {
+            hideKeyboardShowToast("Artiste invalide");
+        } else if (etURLNewMusic.getText().toString().trim().equals("") || checkIfYoutubeURL(etURLNewMusic.getText().toString().trim())) {
+            hideKeyboardShowToast("URL invalide");
+        } else {
+            new DownloadJsonDeleteAttept(null).execute("Useless");
+        }
+
+
     }
 
 
@@ -93,8 +112,14 @@ public class addSongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -125,11 +150,11 @@ public class addSongActivity extends AppCompatActivity {
             Log.e("labo7",e.toString());
         }
 
-        EditText editText = (EditText)findViewById(R.id.editText17);
+        EditText editText = (EditText)findViewById(R.id.etTitleNewMusic);
         strTitre = editText.getText().toString();
-        EditText editText8 = (EditText)findViewById(R.id.editText18);
+        EditText editText8 = (EditText)findViewById(R.id.etArtistNewMusic);
         strArtiste = editText8.getText().toString();
-        EditText editText9 = (EditText)findViewById(R.id.editText19);
+        EditText editText9 = (EditText)findViewById(R.id.etURLNewMusic);
         strUrl = editText9.getText().toString();
         CheckBox checkBox = (CheckBox)findViewById(R.id.checkBox7);
         CheckBox checkBox2 = (CheckBox)findViewById(R.id.checkBox8);
@@ -193,8 +218,14 @@ public class addSongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -219,10 +250,12 @@ public class addSongActivity extends AppCompatActivity {
             String strSuccess =lireJSON.get("success").toString();
             if(strSuccess.equals("true"))
             {
+                hideKeyboardShowToast(lireJSON.get("reason").toString());
                 finish();
             }
             else
             {
+                hideKeyboardShowToast(lireJSON.get("reason").toString());
                 Log.e("Final Response","Failure");
             }
 
@@ -230,6 +263,26 @@ public class addSongActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e("labo7",e.toString());
         }
+    }
+
+    private Boolean checkIfYoutubeURL(String strURL) {
+        String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
+
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(strURL);
+
+        if (matcher.find()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void hideKeyboardShowToast(String strMessage) {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        Toast toast = Toast.makeText(this, strMessage, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
 }

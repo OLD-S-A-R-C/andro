@@ -30,7 +30,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText13"
+        android:id="@+id/etPlaylistDuplicate"
         android:layout_below="@+id/textView14"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
@@ -41,7 +41,7 @@
         android:text="Dupliquer"
         android:id="@+id/button9"
         android:onClick="startDuplication"
-        android:layout_below="@+id/editText13"
+        android:layout_below="@+id/etPlaylistDuplicate"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
 

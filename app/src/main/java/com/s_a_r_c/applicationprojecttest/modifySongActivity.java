@@ -1,17 +1,18 @@
 package com.s_a_r_c.applicationprojecttest;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 
@@ -26,6 +27,8 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class modifySongActivity extends AppCompatActivity {
     String strOwnerID = "";
@@ -56,9 +59,9 @@ public class modifySongActivity extends AppCompatActivity {
 
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, playlists);
-        Spinner spinner = (Spinner) findViewById(R.id.spinner1);
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerLstPlaylistTransfert);
         spinner.setAdapter(adapter);
-        Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
+        Spinner spinner2 = (Spinner) findViewById(R.id.spinnerLstPlaylistCopy);
         spinner2.setAdapter(adapter);
 
         DummyContent dummyContent = new DummyContent();
@@ -106,8 +109,14 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError", "Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -146,11 +155,11 @@ public class modifySongActivity extends AppCompatActivity {
 
             setTitle(strTitre + " - " + strArtiste);
 
-            EditText editText12 = (EditText) findViewById(R.id.editText12);
+            EditText editText12 = (EditText) findViewById(R.id.etTitleEditMusic);
             editText12.setText(strTitre);
-            EditText editText15 = (EditText) findViewById(R.id.editText15);
+            EditText editText15 = (EditText) findViewById(R.id.etArtistEditMusic);
             editText15.setText(strArtiste);
-            EditText editText16 = (EditText) findViewById(R.id.editText16);
+            EditText editText16 = (EditText) findViewById(R.id.etURLEditMusic);
             editText16.setText(strMusique);
             CheckBox checkBoxPublique = (CheckBox) findViewById(R.id.checkBox5);
             CheckBox checkBoxActive = (CheckBox) findViewById(R.id.checkBox6);
@@ -182,7 +191,22 @@ public class modifySongActivity extends AppCompatActivity {
 
 
     public void modifySong(View view) {
-        new DownloadJsonModifyAttept(null).execute("Useless");
+        EditText etTitleEditMusic = (EditText) findViewById(R.id.etTitleEditMusic);
+        EditText etArtistEditMusic = (EditText) findViewById(R.id.etArtistEditMusic);
+        EditText etURLEditMusic = (EditText) findViewById(R.id.etURLEditMusic);
+
+        if (etTitleEditMusic.getText().toString().trim().equals("")) {
+            hideKeyboardShowToast("Titre invalide");
+        } else if (etArtistEditMusic.getText().toString().trim().equals("")) {
+            hideKeyboardShowToast("Artiste invalide");
+        } else if (etURLEditMusic.getText().toString().trim().equals("") || checkIfYoutubeURL(etURLEditMusic.getText().toString().trim())) {
+            hideKeyboardShowToast("URL invalide");
+        } else {
+            new DownloadJsonModifyAttept(null).execute("Useless");
+        }
+
+
+
     }
 
 
@@ -235,8 +259,14 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError", "Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -272,11 +302,11 @@ public class modifySongActivity extends AppCompatActivity {
             Log.e("labo7", e.toString());
         }
 
-        EditText editText = (EditText) findViewById(R.id.editText12);
+        EditText editText = (EditText) findViewById(R.id.etTitleEditMusic);
         strTitre = editText.getText().toString();
-        EditText editText8 = (EditText) findViewById(R.id.editText15);
+        EditText editText8 = (EditText) findViewById(R.id.etArtistEditMusic);
         strArtiste = editText8.getText().toString();
-        EditText editText9 = (EditText) findViewById(R.id.editText16);
+        EditText editText9 = (EditText) findViewById(R.id.etURLEditMusic);
         strUrl = editText9.getText().toString();
         CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox5);
         CheckBox checkBox2 = (CheckBox) findViewById(R.id.checkBox6);
@@ -362,8 +392,10 @@ public class modifySongActivity extends AppCompatActivity {
             JSONObject lireJSON = new JSONObject(jsonSaved);
             String strSuccess = lireJSON.get("success").toString();
             if (strSuccess.equals("true")) {
+                hideKeyboardShowToast(lireJSON.get("reason").toString());
                 finish();
             } else {
+                hideKeyboardShowToast(lireJSON.get("reason").toString());
                 Log.e("Final Response", "Failure");
             }
 
@@ -405,8 +437,14 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError", "Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -439,9 +477,17 @@ public class modifySongActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e("labo7", e.toString());
         }
-        String strTargetPlaylistFull = ((Spinner) findViewById(R.id.spinner2)).getSelectedItem().toString();
-        strTargetPlaylist = strTargetPlaylistFull.split(";")[1];
-        new DownloadJsonCopyComplete(null).execute("Useless");
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerLstPlaylistCopy);
+
+        if(spinner != null && spinner.getSelectedItem() !=null ) {
+            String strTargetPlaylistFull = ((Spinner) findViewById(R.id.spinnerLstPlaylistCopy)).getSelectedItem().toString();
+            strTargetPlaylist = strTargetPlaylistFull.split(";")[1];
+            new DownloadJsonCopyComplete(null).execute("Useless");
+        } else  {
+            hideKeyboardShowToast("Aucune sélection !");
+        }
+
     }
 
 
@@ -483,8 +529,14 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError", "Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -540,8 +592,14 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError", "Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -574,9 +632,17 @@ public class modifySongActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e("labo7", e.toString());
         }
-        String strTargetPlaylistFull = ((Spinner) findViewById(R.id.spinner1)).getSelectedItem().toString();
-        strTargetPlaylist = strTargetPlaylistFull.split(";")[1];
-        new DownloadJsonTransferComplete(null).execute("Useless");
+
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerLstPlaylistTransfert);
+
+        if(spinner != null && spinner.getSelectedItem() !=null ) {
+            String strTargetPlaylistFull = ((Spinner) findViewById(R.id.spinnerLstPlaylistTransfert)).getSelectedItem().toString();
+            strTargetPlaylist = strTargetPlaylistFull.split(";")[1];
+            new DownloadJsonTransferComplete(null).execute("Useless");
+        } else  {
+            hideKeyboardShowToast("Aucune sélection !");
+        }
     }
 
 
@@ -618,8 +684,14 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError", "Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -676,13 +748,14 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
+                        strString = "";
                         InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
                         BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
                         StringBuilder stringBuilder1 = new StringBuilder();
-                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString+"\n");}
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
                         bufferedReader1.close();
-                        Log.e("bbbbbbbbbbbbbbbbbbbbbbb", stringBuilder1.toString());
-                        return null;
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -716,7 +789,7 @@ public class modifySongActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e("labo7", e.toString());
         }
-        String strTargetPlaylistFull = ((Spinner) findViewById(R.id.spinner2)).getSelectedItem().toString();
+        String strTargetPlaylistFull = ((Spinner) findViewById(R.id.spinnerLstPlaylistCopy)).getSelectedItem().toString();
         strTargetPlaylist = strTargetPlaylistFull.split(";")[1];
         new DownloadJsonDeleteComplete(null).execute("Useless");
     }
@@ -762,13 +835,14 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
+                        strString = "";
                         InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
                         BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
                         StringBuilder stringBuilder1 = new StringBuilder();
-                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString+"\n");}
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
                         bufferedReader1.close();
-                        Log.e("bbbbbbbbbbbbbbbbbbbbbbb", stringBuilder1.toString());
-                        return null;
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -790,5 +864,25 @@ public class modifySongActivity extends AppCompatActivity {
 
             finalResponse();
         }
+    }
+
+    private Boolean checkIfYoutubeURL(String strURL) {
+        String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
+
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(strURL);
+
+        if (matcher.find()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void hideKeyboardShowToast(String strMessage) {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        Toast toast = Toast.makeText(this, strMessage, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }
