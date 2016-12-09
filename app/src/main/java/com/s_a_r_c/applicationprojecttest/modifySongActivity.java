@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -62,6 +63,18 @@ public class modifySongActivity extends AppCompatActivity {
 
         DummyContent dummyContent = new DummyContent();
         new DownloadSong(null).execute("Useless");
+
+        if(DummyContent.getStrPlaylistSelected().equals(""))
+        {
+            Button button1 = (Button)findViewById(R.id.button8);
+            Button button2 = (Button)findViewById(R.id.button13);
+            Button button3 = (Button)findViewById(R.id.button14);
+            button1.setEnabled(false);
+            button2.setEnabled(false);
+            button3.setEnabled(false);
+
+        }
+
     }
 
     private class DownloadSong extends AsyncTask<String, Void, String> {
