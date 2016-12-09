@@ -64,8 +64,10 @@ public void confirmSuccesffulLoginAttempt()
 
                 //show his username
                 Map<String, String> userInfos = userDb.retournerInfosUser();
-                Log.d("alias of the dude", userInfos.get("alias"));
+                Log.d("alias of the dude", userInfos.get(userDb.USER_ALIAS));
 
+                //is he logged in
+                Log.d("loggedin or not", userDb.loggedIn().toString());
 
                 Intent intent = new Intent();
                 intent.putExtra("jsonSavedTransfer",jsonSaved);
@@ -153,7 +155,9 @@ public void confirmSuccesffulLoginAttempt()
 
             HttpURLConnection c = null;
             try {
-                  URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/connexion?courriel=groy@groy.com&mdp=0fe9a1b70ea556dc15ee1d152e424ee8");
+                  URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/connexion?" +
+                          "courriel=" + "groy@groy.com" +
+                          "&mdp=" + "0fe9a1b70ea556dc15ee1d152e424ee8");
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();

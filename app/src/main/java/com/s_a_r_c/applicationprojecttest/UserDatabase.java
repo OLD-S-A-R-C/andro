@@ -12,12 +12,12 @@
 
     public class UserDatabase extends SQLiteOpenHelper {
 
-        private static final String USER_ID = "id";
-        private static final String USER_ALIAS = "alias";
-        private static final String USER_EMAIL = "courriel";
-        private static final String USER_AVATAR_ID = "avatar_id";
-        private static final String USER_AVATAR_B64 = "avatar_b64";
-        private static final String USER_MD5_PASSWORD = "motdepasse";
+        public static final String USER_ID = "id";
+        public static final String USER_ALIAS = "alias";
+        public static final String USER_EMAIL = "courriel";
+        public static final String USER_AVATAR_ID = "avatar_id";
+        public static final String USER_AVATAR_B64 = "avatar_b64";
+        public static final String USER_MD5_PASSWORD = "motdepasse";
 
         public UserDatabase(Context context) {
             super(context, "projet_final", null, 1);
@@ -36,7 +36,7 @@
         }
 
         public void logInUser(int idUser, String alias, String email, int idAvatar, String avatarB64, String motdepasse) {
-            this.reinitialiser();
+            this.reset();
 
             SQLiteDatabase db = this.getWritableDatabase();
 
@@ -79,7 +79,7 @@
             return USER_ID;
         }
 
-        public int videOuNon() {
+        public int emptyOrNot() {
             String countQuery = "SELECT  * FROM USER_INFOS";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(countQuery, null);
@@ -90,11 +90,23 @@
             return rowCount;
         }
 
-        public void reinitialiser(){
+        public Boolean loggedIn() {
+            if (emptyOrNot() == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        public void reset(){
             SQLiteDatabase db = this.getWritableDatabase();
 
             db.delete("USER_INFOS", null, null);
             db.close();
+        }
+
+        public void logOut() {
+            reset();
         }
 
         //obligatoire sinon crash
