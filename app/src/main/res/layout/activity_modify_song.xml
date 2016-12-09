@@ -10,7 +10,7 @@
     tools:context="com.s_a_r_c.applicationprojecttest.modifySongActivity">
 
     <Spinner
-        android:id="@+id/spinner1"
+        android:id="@+id/spinnerLstPlaylistTransfert"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
@@ -20,12 +20,12 @@
         android:text="Transferer vers..."
         android:onClick="transferSong"
         android:id="@+id/button8"
-        android:layout_below="@+id/spinner1"
+        android:layout_below="@+id/spinnerLstPlaylistTransfert"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/spinner1" />
+        android:layout_alignEnd="@+id/spinnerLstPlaylistTransfert" />
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/spinnerLstPlaylistCopy"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button8"
@@ -37,8 +37,8 @@
         android:text="Copier vers..."
         android:id="@+id/button12"
         android:onClick="copySong"
-        android:layout_below="@+id/spinner2"
-        android:layout_alignEnd="@+id/spinner2"
+        android:layout_below="@+id/spinnerLstPlaylistCopy"
+        android:layout_alignEnd="@+id/spinnerLstPlaylistCopy"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -63,7 +63,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText12"
+        android:id="@+id/etTitleEditMusic"
         android:layout_below="@+id/textView13"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/button13" />
@@ -74,16 +74,16 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Artiste:"
         android:id="@+id/textView16"
-        android:layout_below="@+id/editText12"
+        android:layout_below="@+id/etTitleEditMusic"
         android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText15"
+        android:id="@+id/etArtistEditMusic"
         android:layout_below="@+id/textView16"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/editText12" />
+        android:layout_alignEnd="@+id/etTitleEditMusic" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -91,16 +91,16 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="URL:"
         android:id="@+id/textView17"
-        android:layout_below="@+id/editText15"
+        android:layout_below="@+id/etArtistEditMusic"
         android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText16"
+        android:id="@+id/etURLEditMusic"
         android:layout_below="@+id/textView17"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/editText15" />
+        android:layout_alignEnd="@+id/etArtistEditMusic" />
 
     <Button
         android:layout_width="wrap_content"
@@ -118,7 +118,7 @@
         android:text="Publique:"
         android:id="@+id/checkBox5"
         android:checked="false"
-        android:layout_below="@+id/editText16"
+        android:layout_below="@+id/etURLEditMusic"
         android:layout_alignParentStart="true" />
 
     <CheckBox
@@ -126,7 +126,7 @@
         android:layout_height="wrap_content"
         android:text="Active:"
         android:id="@+id/checkBox6"
-        android:layout_below="@+id/editText16"
+        android:layout_below="@+id/etURLEditMusic"
         android:layout_toEndOf="@+id/checkBox5"
         android:checked="false" />
 

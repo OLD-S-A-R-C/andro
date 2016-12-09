@@ -216,7 +216,6 @@ public class DummyContent extends Application{
 
             HttpURLConnection c = null;
             try {
-
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/getListesdelectureMusique");
                 c = (HttpURLConnection) u.openConnection();
                 c.connect();

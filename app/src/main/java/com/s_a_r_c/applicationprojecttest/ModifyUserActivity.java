@@ -1,18 +1,15 @@
 package com.s_a_r_c.applicationprojecttest;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,9 +53,9 @@ public class ModifyUserActivity extends AppCompatActivity {
             strAvatar = lireJSON.get("avatar").toString();
             strAlias = lireJSON.get("alias").toString();
             setTitle("Modification de "+strAlias);
-            EditText editText = (EditText) findViewById(R.id.editText4);
+            EditText editText = (EditText) findViewById(R.id.etEditUsername);
             editText.setText(strAlias);
-            EditText editText2 = (EditText) findViewById(R.id.editText5);
+            EditText editText2 = (EditText) findViewById(R.id.etEditEmail);
             editText2.setText(strCourriel);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -68,10 +65,12 @@ public class ModifyUserActivity extends AppCompatActivity {
 
     public void sendModifyLogin(View view)
     {
+        EditText EDalias = (EditText)findViewById(R.id.etEditUsername);
+        EditText EDcourriel = (EditText)findViewById(R.id.etEditEmail);
+        EditText EDpwd = (EditText)findViewById(R.id.etEditPassword);
+
+        /*
         new DownloadJsonModifyAttept(null).execute("Useless");
-        EditText EDalias = (EditText)findViewById(R.id.editText4);
-        EditText EDcourriel = (EditText)findViewById(R.id.editText5);
-        EditText EDpwd = (EditText)findViewById(R.id.editText6);
 
         MDstrAlias=EDalias.getText().toString();
         MDstrCourriel=EDcourriel.getText().toString();
@@ -83,6 +82,16 @@ public class ModifyUserActivity extends AppCompatActivity {
         else
         {
             MDstrMotDePasse = getMd5Hash(MDstrMotDePasse);
+        }*/
+
+        if (EDalias.getText().toString().trim().equals("")) {
+            hideKeyboardShowToast("Alias invalide");
+        } else if (EDcourriel.getText().toString().trim().equals("")) {
+            hideKeyboardShowToast("Courriel invalide");
+        } else if (EDpwd.getText().toString().trim().equals("")) {
+            hideKeyboardShowToast("Courriel invalide");
+        } else {
+            new DownloadJsonModifyAttept(null).execute("Useless");
         }
     }
 
@@ -134,8 +143,14 @@ public class ModifyUserActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -203,8 +218,14 @@ public class ModifyUserActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -232,10 +253,12 @@ public class ModifyUserActivity extends AppCompatActivity {
             String strSuccess =lireJSON.get("success").toString();
             if(strSuccess.equals("true"))
             {
+                hideKeyboardShowToast(lireJSON.get("reason").toString());
                 finish();
             }
             else
             {
+                hideKeyboardShowToast(lireJSON.get("reason").toString());
                 Log.e("Final Response","Failure");
             }
 
@@ -243,5 +266,12 @@ public class ModifyUserActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e("labo7",e.toString());
         }
+    }
+
+    private void hideKeyboardShowToast(String strMessage) {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        Toast toast = Toast.makeText(this, strMessage, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

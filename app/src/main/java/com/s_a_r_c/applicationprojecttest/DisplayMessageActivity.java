@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -27,6 +29,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 
@@ -36,6 +41,10 @@ public class DisplayMessageActivity extends AppCompatActivity {
     String strCaptcha = "";
     String strTicketID = "";
     String strSuccess = "";
+
+    String username = "";
+    String password = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +52,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
     }
 public void confirmSuccesffulLoginAttempt()
     {
-        Log.e("confirmSuccesffulLogin",jsonSaved+"Message");
+        Log.e("confirmSuccesffulLogin",jsonSaved);
         try {
             JSONObject lireJSON     = new JSONObject(jsonSaved);
             strSuccess =lireJSON.get("success").toString();
@@ -78,6 +87,7 @@ public void confirmSuccesffulLoginAttempt()
             {
                 TextView mTextView = (TextView) findViewById(R.id.textView4);
                 mTextView.setText(lireJSON.get("reason").toString());
+                showAlert(lireJSON.get("reason").toString());
             }
 
         } catch (JSONException e) {
@@ -110,13 +120,19 @@ public void confirmSuccesffulLoginAttempt()
 
         TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
         TextView tvPassword = (TextView) findViewById(R.id.tvPassword);
+        TextView tvCaptcha = (TextView) findViewById(R.id.tvCaptcha);
 
         if(tvUsername != null && tvUsername.getText().toString().trim().equals(""))
         {
+
             Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un nom d'utilisateur !", Snackbar.LENGTH_SHORT).show();
         } else if (tvPassword != null && tvPassword.getText().toString().trim().equals("")) {
             Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un mot de passe", Snackbar.LENGTH_SHORT).show();
         } else {
+            username = tvUsername.getText().toString().trim();
+            password = tvPassword.getText().toString().trim();
+            tvCaptcha.setText("");
+            tvCaptcha.requestFocus();
             Log.e("Login Attempt","Username");
             new DownloadJsonLoginAttempt(null).execute("Useless");
         }
@@ -124,7 +140,7 @@ public void confirmSuccesffulLoginAttempt()
     public void confirmLogin()
     {
         try {
-            JSONObject lireJSON     = new JSONObject(jsonSaved);
+            JSONObject lireJSON = new JSONObject(jsonSaved);
 
             String strCaptcha =lireJSON.get("captcha").toString();
             strTicketID =lireJSON.get("idTicket").toString();
@@ -153,11 +169,14 @@ public void confirmSuccesffulLoginAttempt()
 
         protected String doInBackground(String... url) {
 
+            TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
+            TextView tvPassword = (TextView) findViewById(R.id.tvPassword);
+
             HttpURLConnection c = null;
             try {
                   URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/connexion?" +
-                          "courriel=" + "groy@groy.com" +
-                          "&mdp=" + "0fe9a1b70ea556dc15ee1d152e424ee8");
+                          "courriel=" + username +
+                          "&mdp=" + md5(password));
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
@@ -173,7 +192,15 @@ public void confirmSuccesffulLoginAttempt()
                         }
                         br.close();
                         return sb.toString();
-
+                    case 400:
+                        String strString = "";
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }
 
             } catch (Exception ex) {
@@ -231,10 +258,10 @@ public void confirmSuccesffulLoginAttempt()
                         InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
                         BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
                         StringBuilder stringBuilder1 = new StringBuilder();
-                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString+"\n");}
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
-                        return "{\"success\":\"false\",\"reason\":" + stringBuilder1.toString() + "}";
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -247,14 +274,50 @@ public void confirmSuccesffulLoginAttempt()
         }
 
         protected void onPostExecute(String result) {
-            Log.e("onPostExecute",result+"Message");
-            jsonSaved = result;
-            confirmSuccesffulLoginAttempt();
+            if (result != null)
+            {
+                jsonSaved = result;
+                confirmSuccesffulLoginAttempt();
+            }
         }
+    }
+
+    public static String md5(String s)
+    {
+        MessageDigest digest;
+        try
+        {
+            digest = MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes(Charset.forName("US-ASCII")),0,s.length());
+            byte[] magnitude = digest.digest();
+            BigInteger bi = new BigInteger(1, magnitude);
+            String hash = String.format("%0" + (magnitude.length << 1) + "x", bi);
+            return hash;
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private void hideKeyboard() {
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    private void hideKeyboardShowSnackbar(String strMessage) {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un captcha complet", Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void showAlert(String strMessage) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage(strMessage);
+        builder1.setCancelable(true);
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 }
