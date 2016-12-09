@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -27,6 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 
@@ -36,6 +40,10 @@ public class DisplayMessageActivity extends AppCompatActivity {
     String strCaptcha = "";
     String strTicketID = "";
     String strSuccess = "";
+
+    String username = "";
+    String password = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,10 +121,13 @@ public void confirmSuccesffulLoginAttempt()
 
         if(tvUsername != null && tvUsername.getText().toString().trim().equals(""))
         {
+
             Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un nom d'utilisateur !", Snackbar.LENGTH_SHORT).show();
         } else if (tvPassword != null && tvPassword.getText().toString().trim().equals("")) {
             Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un mot de passe", Snackbar.LENGTH_SHORT).show();
         } else {
+            username = tvUsername.getText().toString().trim();
+            password = tvPassword.getText().toString().trim();
             Log.e("Login Attempt","Username");
             new DownloadJsonLoginAttempt(null).execute("Useless");
         }
@@ -124,7 +135,7 @@ public void confirmSuccesffulLoginAttempt()
     public void confirmLogin()
     {
         try {
-            JSONObject lireJSON     = new JSONObject(jsonSaved);
+            JSONObject lireJSON = new JSONObject(jsonSaved);
 
             String strCaptcha =lireJSON.get("captcha").toString();
             strTicketID =lireJSON.get("idTicket").toString();
@@ -153,11 +164,14 @@ public void confirmSuccesffulLoginAttempt()
 
         protected String doInBackground(String... url) {
 
+            TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
+            TextView tvPassword = (TextView) findViewById(R.id.tvPassword);
+
             HttpURLConnection c = null;
             try {
                   URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/connexion?" +
-                          "courriel=" + "groy@groy.com" +
-                          "&mdp=" + "0fe9a1b70ea556dc15ee1d152e424ee8");
+                          "courriel=" + username +
+                          "&mdp=" + md5(password));
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
@@ -251,6 +265,25 @@ public void confirmSuccesffulLoginAttempt()
             jsonSaved = result;
             confirmSuccesffulLoginAttempt();
         }
+    }
+
+    public static String md5(String s)
+    {
+        MessageDigest digest;
+        try
+        {
+            digest = MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes(Charset.forName("US-ASCII")),0,s.length());
+            byte[] magnitude = digest.digest();
+            BigInteger bi = new BigInteger(1, magnitude);
+            String hash = String.format("%0" + (magnitude.length << 1) + "x", bi);
+            return hash;
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private void hideKeyboard() {
