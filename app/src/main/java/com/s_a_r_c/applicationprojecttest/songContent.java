@@ -45,7 +45,14 @@ String jsonSaved = "";
             }
         });
 
-        new DownloadSong(null).execute("Useless");
+    try
+    { new DownloadSong(null).execute("Useless");}
+        catch (Exception e)
+        {
+            finish();
+        }
+
+
     }
     private class DownloadSong extends AsyncTask<String, Void, String> {
         String url;
