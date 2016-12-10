@@ -1,11 +1,24 @@
 package com.s_a_r_c.applicationprojecttest.dummy;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Looper;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 
+import com.s_a_r_c.applicationprojecttest.CriticalErrorLandingActivity;
 import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 
 import org.json.JSONArray;
@@ -58,6 +71,35 @@ public class DummyContent extends Application{
 
         FinalContent finalContent = new FinalContent();
         finalContent.onCreate();
+
+        final Context context = this.getApplicationContext();
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            public void uncaughtException(Thread thread, Throwable throwable) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                new Thread() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+
+                        builder.setTitle("");
+                        builder.create();
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("coucou",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        //some action
+                                    }
+                                });
+                        builder.setMessage("ahah");
+                        builder.show();
+
+                        Looper.loop();
+                    }
+                }.start();
+            }
+        });
     }
 
     public void refresh()
@@ -182,10 +224,12 @@ public class DummyContent extends Application{
         protected void onPostExecute(String result) {
             // bmImage.setImageBitmap(result);
             jsonSaved = result;
+jsonSaved=null;
+            createList();
             if (jsonSaved != null) {
                 createList();
             } else {
-                
+
             }
 
         }

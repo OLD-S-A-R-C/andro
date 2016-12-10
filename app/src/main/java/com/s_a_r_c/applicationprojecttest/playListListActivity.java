@@ -1,5 +1,7 @@
 package com.s_a_r_c.applicationprojecttest;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -92,6 +94,8 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         }
         DummyContent dummyContent = new DummyContent();
        // dummyContent.refresh();
+
+        String ok = "";
 
     }
 
