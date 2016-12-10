@@ -182,11 +182,25 @@ public class modifySongActivity extends AppCompatActivity {
     }
 
     public void transferSong(View view) {
-        new DownloadJsonTransferAttept(null).execute("Useless");
+
+        if ((Spinner)findViewById(R.id.spinnerLstPlaylistTransfert) == null) {
+            hideKeyboardShowToast("Transfert impossible");
+        } else {
+            new DownloadJsonTransferAttept(null).execute("Useless");
+        }
+
+
     }
 
     public void copySong(View view) {
-        new DownloadJsonCopyAttept(null).execute("Useless");
+        Spinner spinner = (Spinner)findViewById(R.id.spinnerLstPlaylistCopy);
+        if (spinner.getSelectedItem() == null) {
+            hideKeyboardShowToast("Copie impossible");
+        } else {
+            new DownloadJsonCopyAttept(null).execute("Useless");
+        }
+
+
     }
 
 
@@ -199,7 +213,7 @@ public class modifySongActivity extends AppCompatActivity {
             hideKeyboardShowToast("Titre invalide");
         } else if (etArtistEditMusic.getText().toString().trim().equals("")) {
             hideKeyboardShowToast("Artiste invalide");
-        } else if (etURLEditMusic.getText().toString().trim().equals("") || checkIfYoutubeURL(etURLEditMusic.getText().toString().trim())) {
+        } else if (etURLEditMusic.getText().toString().trim().equals("") || !checkIfYoutubeURL(etURLEditMusic.getText().toString().trim())) {
             hideKeyboardShowToast("URL invalide");
         } else {
             new DownloadJsonModifyAttept(null).execute("Useless");

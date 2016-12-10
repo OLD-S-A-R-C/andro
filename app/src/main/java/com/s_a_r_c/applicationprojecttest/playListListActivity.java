@@ -222,10 +222,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.main, menu);
-        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
-        menuDrawer = menu;
-
-
+        getMenuInflater().inflate(R.menu.main, menu);
 
         return true;
     }
@@ -301,7 +298,6 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                     strId = lireJSON.get("Id").toString();
                     strAvatar = lireJSON.get("avatar").toString();
                     strAlias = lireJSON.get("alias").toString();
-                    setTitle("Utilisateur: "+strAlias);
                     TextView textview = (TextView)findViewById(R.id.tvDrawerEmail);
                     textview.setText(strCourriel);
                     setDrawerAvatar(lireJSON.get("avatar").toString(), R.id.ivDrawerAvatar);
