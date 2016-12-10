@@ -181,7 +181,7 @@ public class playListDetailActivity extends AppCompatActivity {
             }
         }
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(SongContent.ITEMS));
-      //  Log.e("RecyclerView","////////////////////////////"+SongContent.ITEMS.size());
+        Log.e("RecyclerView","////////////////////////////"+SongContent.ITEMS.size());
         songContent.rebuildItems();
     }
 

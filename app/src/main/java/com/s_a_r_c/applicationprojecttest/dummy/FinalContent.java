@@ -42,46 +42,39 @@ public class FinalContent extends Application{
     public static final List<PlaylistITEM> ITEMS = new ArrayList<PlaylistITEM>();
 
     public static class PlaylistITEM {
-        public final String id;
-        public final String content;
-        public  List<SongItem> SONGITEMS = new ArrayList<SongItem>();
-        public String details;
+        public String id;
+        public String name;
         public String strListeDeLecture= "";
         public String owner = "";
+        public  List<SongItem> SONGITEMS = new ArrayList<SongItem>();
 
-        public PlaylistITEM(String id, String content, String details, String strId, String strOwner) {
-            this.id = id;
-            this.content = content;
-            this.details = strId;
+        public PlaylistITEM(String strNom, String strId, String strOwner) {
+            this.name = strNom;
+            this.id = strId;
             this.owner = strOwner;
-        }
-
-        @Override
-        public String toString() {
-            return content;
-        }
-        public void setSongItem(List<SongItem> songList)
-        {
-            SONGITEMS = songList;
+            Log.e("New Playlist Created","Name:"+name+" Id:"+strId+" Owner:"+strOwner);
         }
     }
 
     public static class SongItem {
-        public final String id;
-        public final String content;
-        public String details;
-        public String owner = "";
+        String strId;
+        String strOwnerID;
+        String strVignette;
+        String strTitre;
+        String strMusique;
+        String strPublique;
+        String strActive;
+        String strArtiste;
 
-        public SongItem(String id, String content, String details, String strId, String strOwner) {
-            this.id = id;
-            this.content = content;
-            this.details = strId;
-            this.owner = strOwner;
-        }
-
-        @Override
-        public String toString() {
-            return content;
+        public SongItem(String strId,String strOwnerID,String strVignette,String strTitre,String strMusique,String strPublique,String strActive,String strArtiste) {
+            this.strId = strId;
+            this.strOwnerID = strOwnerID;
+            this.strVignette =strVignette;
+            this.strTitre =strTitre;
+            this.strMusique =strMusique;
+            this.strPublique =strPublique;
+            this.strActive =strActive;
+            this.strArtiste =strArtiste;
         }
     }
 
@@ -167,22 +160,193 @@ public class FinalContent extends Application{
             JSONObject lireJSON     = new JSONObject(jsonSaved);
             JSONArray jsonArray = lireJSON.getJSONArray("Elements");
             int nbElements = lireJSON.getJSONArray("Elements").length();
-            JSONObject jsonMovie = new JSONObject();
+            JSONObject jsonMovie;
             for(int i = 0; i<nbElements;i++)
             {
+
                 jsonMovie = jsonArray.getJSONObject(i);
                 String strNom =jsonMovie.get("Nom").toString();
                 String strId =jsonMovie.get("Id").toString();
                 String strOwnerID =jsonMovie.get("Proprietaire").toString();
                 //addItem(createDummyItem(i,strNom,strId,strOwnerID));
+                PlaylistITEM  playlistITEM= new PlaylistITEM(strNom, strId, strOwnerID);
+                ITEMS.add(playlistITEM);
             }
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("labo7",e.toString());
         }
+        new DownloadListDeLecture(null).execute("Useless");
+    }
+    private class DownloadListDeLecture extends AsyncTask<String, Void, String> {
+        String url;
 
+        public DownloadListDeLecture(String url) {
 
+            this.url = url;
+        }
+
+        protected String doInBackground(String... url) {
+
+            HttpURLConnection c = null;
+            try {
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/getListesdelectureMusique");
+                c = (HttpURLConnection) u.openConnection();
+                c.connect();
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
+                    case 200:
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
+                if (c != null) {
+                    try {
+                        c.disconnect();
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
+                }
+            }
+            return null;
+        }
+        protected void onPostExecute(String result) {
+            // bmImage.setImageBitmap(result);
+            jsonSaved = result;
+            createListeDeLecture();
+        }
     }
 
+    public void createListeDeLecture()
+    {
+        Log.e("DownloadListDeLecture","DownloadListDeLecture has been called ITEMSIZE:"+ITEMS.size());
+        try {
+            JSONObject lireJSON = new JSONObject(jsonSaved);
+            JSONArray jsonArray = lireJSON.getJSONArray("Elements");
+            int nbElements = lireJSON.getJSONArray("Elements").length();
+            JSONObject jsonMovie;
+            for(int i = 0; i<nbElements;i++)
+            {
+                jsonMovie = jsonArray.getJSONObject(i);
+                String strListeDeLecture =jsonMovie.get("ListeDeLecture").toString();
+                String strMusique =jsonMovie.get("Musique").toString();
 
+                for(PlaylistITEM playlistITEM : ITEMS)
+                {
+                    if(playlistITEM.id.equals(strListeDeLecture))
+                    {
+                        playlistITEM.strListeDeLecture += strMusique+";";
+                    }
+                }
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("labo7",e.toString());
+        }
+        for(PlaylistITEM playlistITEM : ITEMS)
+        {
+            Log.e("PLAYLIST CREATRED","Name:"+playlistITEM.name+" List"+playlistITEM.strListeDeLecture);
+        }
+        new DownloadJsonMusic(null).execute("Useless");
+    }
+    private class DownloadJsonMusic extends AsyncTask<String, Void, String> {
+        String url;
+
+        public DownloadJsonMusic(String url) {
+
+            this.url = url;
+        }
+
+        protected String doInBackground(String... url) {
+
+            HttpURLConnection c = null;
+            try {
+
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/getMusique");
+                c = (HttpURLConnection) u.openConnection();
+                c.connect();
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
+                    case 200:
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
+                if (c != null) {
+                    try {
+                        c.disconnect();
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
+                }
+            }
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+            // bmImage.setImageBitmap(result);
+            jsonSaved = result;
+            createListMusic();
+        }
+    }
+    public void createListMusic()
+    {
+        try {
+
+            JSONObject lireJSON     = new JSONObject(jsonSaved);
+            JSONArray jsonArray = lireJSON.getJSONArray("Elements");
+            int nbElements = lireJSON.getJSONArray("Elements").length();
+            JSONObject jsonMovie;
+            for(int i = 0; i<nbElements;i++)
+            {
+                jsonMovie = jsonArray.getJSONObject(i);
+                String strID = jsonMovie.get("Id").toString();
+                String strOwnerID = jsonMovie.get("Proprietaire").toString();
+                String strVignette = jsonMovie.get("Vignette").toString();
+                String strTitre = jsonMovie.get("Titre").toString();
+                String strMusique = jsonMovie.get("Musique").toString();
+                String strPublique = jsonMovie.get("Publique").toString();
+                String strActive = jsonMovie.get("Active").toString();
+                String strArtiste = jsonMovie.get("Artiste").toString();
+
+                SongItem songItem = new SongItem(strID,strOwnerID,strVignette,strTitre,strMusique,strPublique,strActive,strArtiste);
+                Log.e("createListMusic","New song:"+strTitre+" Owner Id:"+strOwnerID);
+                //addItem(createDummyItem(i,strNom,strId));
+
+
+                for(PlaylistITEM playlistITEM : ITEMS)
+                {
+                    String[] strListeDeLecture = playlistITEM.strListeDeLecture.split(";");
+                    for(String strSingleListeDeLecture : strListeDeLecture)
+                    {
+                        if(strSingleListeDeLecture.equals(strID))
+                        {
+                            playlistITEM.SONGITEMS.add(songItem);
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("labo7",e.toString());
+        }
+        for(PlaylistITEM playlistITEM : ITEMS)
+        {
+            Log.e("PLAYLIST CREATRED","Name:"+playlistITEM.name+" List:"+playlistITEM.strListeDeLecture+" Size:"+playlistITEM.SONGITEMS.size());
+        }
+    }
 }
