@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
@@ -21,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
-import com.s_a_r_c.applicationprojecttest.dummy.Avatars;
+import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 
 import org.json.JSONException;
 import org.json.JSONObject;

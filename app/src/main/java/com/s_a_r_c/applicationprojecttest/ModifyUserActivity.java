@@ -20,7 +20,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
-import com.s_a_r_c.applicationprojecttest.dummy.Avatars;
+import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 
 import org.json.JSONException;
 import org.json.JSONObject;

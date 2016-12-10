@@ -1,4 +1,6 @@
-package com.s_a_r_c.applicationprojecttest.dummy;
+package com.s_a_r_c.applicationprojecttest.Helpers;
+
+import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
 
 import java.util.HashMap;
 

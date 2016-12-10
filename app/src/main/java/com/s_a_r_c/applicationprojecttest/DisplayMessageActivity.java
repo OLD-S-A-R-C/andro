@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
@@ -25,17 +24,16 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.s_a_r_c.applicationprojecttest.Helpers.UserDatabase;
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 
 public class DisplayMessageActivity extends AppCompatActivity {
@@ -67,7 +65,7 @@ public void confirmSuccesffulLoginAttempt()
 
                 dummyContent.connectUser(lireJSON.get("alias").toString(), lireJSON.get("courriel").toString(), lireJSON.get("motdepasse").toString(), lireJSON.get("Id").toString() );
 
-                UserDatabase userDb = new UserDatabase(getApplicationContext());
+                UserDatabase userDb = UserDatabase.getInstance(getApplicationContext());
                 Log.d("xxxxxxxxxxxxxxxxx", jsonSaved);
                 userDb.logInUser(Integer.valueOf(lireJSON.get("Id").toString()),
                         lireJSON.get("alias").toString(),
