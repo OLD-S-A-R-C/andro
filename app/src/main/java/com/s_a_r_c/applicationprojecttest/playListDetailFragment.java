@@ -59,7 +59,7 @@ public class playListDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.playlist_detail, container, false);
 
         strtext = getArguments().getString("userData");
-        Log.e("strArgument123",strtext+"");
+     //   Log.e("strArgument123",strtext+"");
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader

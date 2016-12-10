@@ -132,8 +132,12 @@ String jsonSaved = "";
     }
     public void confirmRequest() {
         try {
+<<<<<<< HEAD
+            JSONObject lireJSON     = new JSONObject(json);
+=======
 
             JSONObject lireJSON = new JSONObject(jsonSaved);
+>>>>>>> f9cb4e607737c427619fe3ee17a7d9737af23230
             //JSONObject jsonMovie = new JSONObject();
             String strCaptcha = lireJSON.get("captcha").toString();
             strTicketID = lireJSON.get("idTicket").toString();

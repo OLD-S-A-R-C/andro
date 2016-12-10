@@ -172,16 +172,16 @@ public class playListDetailActivity extends AppCompatActivity {
         SongContent songContent = new SongContent();
         for(DummyContent.DummyItem item1 : DummyContent.ITEMS) {
 
-            Log.e("EQUALSDUMMYCONTENT",item1.details+" size:"+DummyContent.ITEMS.size()+" "+item1.strListeDeLecture);
+           // Log.e("EQUALSDUMMYCONTENT",item1.details+" size:"+DummyContent.ITEMS.size()+" "+item1.strListeDeLecture);
             if(item1.details.equals(DummyContent.getStrPlaylistSelected())) {
-                Log.e("strListeDeLecture", "" + item1.strListeDeLecture);
-                Log.e("PURGELIST////","///////////"+item1.strListeDeLecture);
+        //        Log.e("strListeDeLecture", "" + item1.strListeDeLecture);
+          //      Log.e("PURGELIST////","///////////"+item1.strListeDeLecture);
                 songContent.purgeSongs(item1.strListeDeLecture);
 
             }
         }
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(SongContent.ITEMS));
-        Log.e("RecyclerView","////////////////////////////"+SongContent.ITEMS.size());
+      //  Log.e("RecyclerView","////////////////////////////"+SongContent.ITEMS.size());
         songContent.rebuildItems();
     }
 

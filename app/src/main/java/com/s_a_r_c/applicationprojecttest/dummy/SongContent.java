@@ -36,7 +36,7 @@ public class SongContent extends Application{
         ITEMS.clear();
 
         mContext = this;
-        Log.e("songContent","///////////////////////////////Called");
+       // Log.e("songContent","///////////////////////////////Called");
         new DownloadJson(null).execute("Useless");
 
     }
@@ -44,14 +44,14 @@ public class SongContent extends Application{
     {
         ITEMS.clear();
         SAVEDITEMS.clear();
-        Log.e("SIZE//////////////////",SAVEDITEMS.size()+" SAVED ITEMS////////////////////////////");
+     //   Log.e("SIZE//////////////////",SAVEDITEMS.size()+" SAVED ITEMS////////////////////////////");
         new DownloadJson(null).execute("Useless");
     }
     public void refreshList(String strID)
     {
         super.onCreate();
         mContext = this;
-        Log.e("songContent","///////////////////////////////Refresh");
+      //  Log.e("songContent","///////////////////////////////Refresh");
         strPlaylistID = strID;
 
 
@@ -180,7 +180,7 @@ public class SongContent extends Application{
                 jsonMovie = jsonArray.getJSONObject(i);
                String strNom =jsonMovie.get("Titre").toString();
                 String strId =jsonMovie.get("Id").toString();
-                Log.e("SONGLIST1",strNom+" "+strId);
+             //   Log.e("SONGLIST1",strNom+" "+strId);
                 addItem(createDummyItem(i,strNom,strId));
 
             }
@@ -206,7 +206,7 @@ public class SongContent extends Application{
                 if(item1.details.equals(strId))
                 {
                     PURGEDITEMS.add(item1);
-                    Log.e("PURGED ITEMS", item1.content+" "+ item1.details);
+                  //  Log.e("PURGED ITEMS", item1.content+" "+ item1.details);
                 }
 
 
