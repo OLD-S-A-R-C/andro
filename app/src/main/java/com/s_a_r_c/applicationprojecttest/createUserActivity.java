@@ -1,12 +1,9 @@
 package com.s_a_r_c.applicationprojecttest;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -34,10 +31,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 public class createUserActivity extends AppCompatActivity {
 
@@ -74,7 +71,6 @@ String jsonSaved = "";
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
 
             }
         });
@@ -108,20 +104,33 @@ String jsonSaved = "";
 
     public void sendCreateUserRequest(View view)
     {
-        EditText editText1 = (EditText)findViewById(R.id.editText7);
-        EditText editText2 = (EditText)findViewById(R.id.editText8);
-        EditText editText3 = (EditText)findViewById(R.id.editText9);
+        EditText editText1 = (EditText)findViewById(R.id.etNewUsername);
+        EditText editText2 = (EditText)findViewById(R.id.etNewEmail);
+        EditText editText3 = (EditText)findViewById(R.id.etNewPassword);
         strAlias = editText1.getText().toString();
         strEmail= editText2.getText().toString();
         strPassword = editText3.getText().toString();
-        new DownloadJsonCreatenAttempt(null).execute("Useless");
+
+        if (strAlias.trim().equals("")) {
+            hideKeyboardShowToast("Alias invalide");
+        } else if (strEmail.trim().equals("")) {
+            hideKeyboardShowToast("Courriel invalide");
+        } else if (strPassword.trim().equals("")) {
+            hideKeyboardShowToast("Mot de passde invalide");
+        } else {
+            new DownloadJsonCreatenAttempt(null).execute("Useless");
+        }
+
+
     }
-    public void confirmRequest()
+    public void confirmRequest(String json)
     {
-        Log.e("CreateUserRequest",jsonSaved+"message");
+        Log.e("xxxxxxxxxxxxxxxxxxxxxx",json);
         try {
 
-            JSONObject lireJSON     = new JSONObject(jsonSaved);
+            
+
+            JSONObject lireJSON     = new JSONObject(json);
             //JSONObject jsonMovie = new JSONObject();
             String strCaptcha =lireJSON.get("captcha").toString();
             strTicketID =lireJSON.get("idTicket").toString();
@@ -135,7 +144,6 @@ String jsonSaved = "";
             img.requestLayout();
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e("labo7",e.toString());
         }
     }
 
@@ -170,8 +178,6 @@ String jsonSaved = "";
 
             this.url = url;
         }
-
-
 
         protected String doInBackground(String... url) {
 
@@ -234,9 +240,8 @@ String jsonSaved = "";
 
             HttpURLConnection c = null;
             try {
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=12/04/2016%2017:19:11&idAvatar=1");
-              //  URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias=Alias&courriel=Courriel@courriel.com&mdp=5f4dcc3b5aa765d61d8327deb882cf99&actif=true&date=12/04/2016%2016:19:11&idAvatar=1");
-                Log.e("SendingJson","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=12/04/2016 17:19:11&idAvatar=1");
+                Log.d("WAIT", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(displayAvatar()));
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(displayAvatar()));
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
@@ -272,11 +277,13 @@ String jsonSaved = "";
 
         protected void onPostExecute(String result) {
             jsonSaved = result;
-            confirmRequest();
+
+                    confirmRequest(jsonSaved);
+
         }
     }
 
-    private void displayAvatar() {
+    private int displayAvatar() {
         Spinner spinnerNewUserAvatar = (Spinner) findViewById(R.id.spinnerNewUserAvatars);
 
         if (spinnerNewUserAvatar.getSelectedItem() != null) {
@@ -290,7 +297,11 @@ String jsonSaved = "";
                 img.getLayoutParams().height = 200;
                 img.getLayoutParams().width = 200;
                 img.requestLayout();
+                return avatarSelected.getId();
             }
+            return 1;
+        } else {
+            return 1;
         }
 
     }
