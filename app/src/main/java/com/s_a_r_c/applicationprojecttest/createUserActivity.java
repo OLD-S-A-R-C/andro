@@ -114,12 +114,16 @@ String jsonSaved = "";
         strEmail= editText2.getText().toString();
         strPassword = editText3.getText().toString();
 
+        Spinner spinner = (Spinner)findViewById(R.id.spinnerNewUserAvatars);
+
         if (strAlias.trim().equals("")) {
             hideKeyboardShowToast("Alias invalide");
         } else if (strEmail.trim().equals("") || !Patterns.EMAIL_ADDRESS.matcher(strEmail.trim()).matches()) {
             hideKeyboardShowToast("Courriel invalide");
         } else if (strPassword.trim().equals("")) {
-            hideKeyboardShowToast("Mot de passde invalide");
+            hideKeyboardShowToast("Mot de passe invalide");
+        } else if (spinner.getSelectedItem() == null) {
+            hideKeyboardShowToast("Avatar invalide");
         } else {
             new DownloadJsonCreatenAttempt(null).execute("Useless");
         }

@@ -54,7 +54,7 @@ public class addSongActivity extends AppCompatActivity {
             hideKeyboardShowToast("Titre invalide");
         } else if (etArtistNewMusic.getText().toString().trim().equals("")) {
             hideKeyboardShowToast("Artiste invalide");
-        } else if (etURLNewMusic.getText().toString().trim().equals("") || checkIfYoutubeURL(etURLNewMusic.getText().toString().trim())) {
+        } else if (etURLNewMusic.getText().toString().trim().equals("") || !checkIfYoutubeURL(etURLNewMusic.getText().toString().trim())) {
             hideKeyboardShowToast("URL invalide");
         } else {
             new DownloadJsonDeleteAttept(null).execute("Useless");

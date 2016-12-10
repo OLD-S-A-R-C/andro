@@ -56,7 +56,7 @@ public class ModifyUserActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Modification d'un utilisateur");
 
         Spinner spinnerEditUserAvatar = (Spinner) findViewById(R.id.spinnerEditUserAvatars);
-
+        /*
         Collection<AvatarContent> vals = Avatars.getInstance().getListAvatars().values();
         AvatarContent[] array = vals.toArray(new AvatarContent[vals.size()]);
         ArrayAdapter<AvatarContent> adapter = new ArrayAdapter<AvatarContent>(this,
@@ -74,7 +74,7 @@ public class ModifyUserActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> arg0) {
 
             }
-        });
+        });*/
 
         Intent intent = getIntent();
         String strMessage = intent.getStringExtra(playListListActivity.EXTRA_MESSAGE);
@@ -104,20 +104,10 @@ public class ModifyUserActivity extends AppCompatActivity {
         EditText EDcourriel = (EditText)findViewById(R.id.etEditEmail);
         EditText EDpwd = (EditText)findViewById(R.id.etEditPassword);
 
-        /*
-        new DownloadJsonModifyAttept(null).execute("Useless");
-
         MDstrAlias=EDalias.getText().toString();
         MDstrCourriel=EDcourriel.getText().toString();
         MDstrMotDePasse=EDpwd.getText().toString();
-        if(MDstrMotDePasse.equals(""))
-        {
-            MDstrMotDePasse=strMotDePasse;
-        }
-        else
-        {
-            MDstrMotDePasse = getMd5Hash(MDstrMotDePasse);
-        }*/
+        Spinner spinner = (Spinner)findViewById(R.id.spinnerEditUserAvatars);
 
         if (EDalias.getText().toString().trim().equals("")) {
             hideKeyboardShowToast("Alias invalide");
@@ -125,6 +115,8 @@ public class ModifyUserActivity extends AppCompatActivity {
             hideKeyboardShowToast("Courriel invalide");
         } else if (EDpwd.getText().toString().trim().equals("")) {
             hideKeyboardShowToast("Mot de passe invalide");
+        } else if (spinner.getSelectedItem() == null) {
+            hideKeyboardShowToast("Avatar invalide");
         } else {
             new DownloadJsonModifyAttept(null).execute("Useless");
         }
