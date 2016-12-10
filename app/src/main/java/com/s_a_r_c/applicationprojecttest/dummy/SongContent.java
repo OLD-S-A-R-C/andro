@@ -32,6 +32,9 @@ public class SongContent extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        SAVEDITEMS.clear();
+        ITEMS.clear();
+
         mContext = this;
         Log.e("songContent","///////////////////////////////Called");
         new DownloadJson(null).execute("Useless");

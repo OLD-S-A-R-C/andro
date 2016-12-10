@@ -14,6 +14,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -121,8 +123,8 @@ public class createNewPlaylist extends AppCompatActivity {
             HttpURLConnection c = null;
 
             try {
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+strCourriel);
-                Log.e("URL","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+strCourriel);
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+DummyContent.getCourriel());
+                Log.e("URL","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+DummyContent.getCourriel());
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("GET");
                 c.connect();
@@ -179,10 +181,10 @@ public class createNewPlaylist extends AppCompatActivity {
 
             HttpURLConnection c = null;
             try {
-                String strConfirmation = getMd5Hash(strMotDePasse+strCle);
+                String strConfirmation = getMd5Hash(DummyContent.getPassword()+strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=26&confirmation=75d1b2cd84e5b34ffc3761ea5c6527b2&action=nouvelleListeDeLecture&p1=9&p2=Jamaica&p3=true&p4=true&p5=12/06/2016 20:05:10
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=nouvelleListeDeLecture&p1="+strId+"&p2="+strPlaylistNom+"&p3="+strPublic+"&p4="+strActif+"&p5=12/06/2016%2020:05:10");
-                Log.e("Json","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande? idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=nouvelleListeDeLecture&p1="+strId+"&p2="+strPlaylistNom+"&p3="+strPublic+"&p4="+strActif+"&p5=12/06/2016%2020:05:10");
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=nouvelleListeDeLecture&p1="+ DummyContent.getId()+"&p2="+strPlaylistNom+"&p3="+strPublic+"&p4="+strActif+"&p5=12/06/2016%2020:05:10");
+                Log.e("Json","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande? idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=nouvelleListeDeLecture&p1="+DummyContent.getId()+"&p2="+strPlaylistNom+"&p3="+strPublic+"&p4="+strActif+"&p5=12/06/2016%2020:05:10");
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();

@@ -99,14 +99,15 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             mTwoPane = true;
         }
         DummyContent dummyContent = new DummyContent();
-        dummyContent.refresh();
+       // dummyContent.refresh();
 
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
 
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
-
+        Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
 
     }
 
@@ -117,6 +118,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
         public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
             mValues = items;
+            Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
         }
 
         @Override
