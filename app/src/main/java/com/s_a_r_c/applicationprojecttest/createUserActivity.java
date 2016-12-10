@@ -127,9 +127,6 @@ String jsonSaved = "";
     {
         Log.e("xxxxxxxxxxxxxxxxxxxxxx",json);
         try {
-
-            
-
             JSONObject lireJSON     = new JSONObject(json);
             //JSONObject jsonMovie = new JSONObject();
             String strCaptcha =lireJSON.get("captcha").toString();

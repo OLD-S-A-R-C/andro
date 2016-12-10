@@ -104,10 +104,10 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
+       // Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
 
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
-        Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
+      //  Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
 
     }
 
@@ -118,7 +118,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
         public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
             mValues = items;
-            Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
+          //  Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
         }
 
         @Override
@@ -152,11 +152,11 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                         DummyContent dummyContent = new DummyContent();
                       //  dummyContent.refresh();
 
-                        Log.e("MTWOPANEACTIVITY","/////////////////SELECTEDFALSE");
+                        //Log.e("MTWOPANEACTIVITY","/////////////////SELECTEDFALSE");
                         Context context = v.getContext();
                         Intent intent = new Intent(context, playListDetailActivity.class);
                        intent.putExtra(playListDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        Log.e("STRLICTEDELECTURE",holder.mItem.content+" "+holder.mItem.strListeDeLecture);
+                      //  Log.e("STRLICTEDELECTURE",holder.mItem.content+" "+holder.mItem.strListeDeLecture);
                         dummyContent.setStrPlaylistSelected(holder.mItem.details);
                         String message = "{\"action\":\""+holder.mItem.details+"\",\"success\":\"true\",\"Id\":\"" +strId+ "\",\"courriel\":\"" +strCourriel+ "\",\"motdepasse\":\"" +strMotDePasse+ "\",\"alias\":\"" +strAlias+ "\",\"avatar\":\"" +strAvatar+ "\"}";
                         intent.putExtra(EXTRA_MESSAGE, message);

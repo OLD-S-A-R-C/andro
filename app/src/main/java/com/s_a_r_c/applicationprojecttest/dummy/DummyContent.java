@@ -55,6 +55,9 @@ public class DummyContent extends Application{
 
         //get avatar
         new DownloadListAvatars(null).execute("Useless");
+
+        FinalContent finalContent = new FinalContent();
+        finalContent.onCreate();
     }
 
     public void refresh()
@@ -190,7 +193,6 @@ public class DummyContent extends Application{
         try {
 
             JSONObject lireJSON     = new JSONObject(jsonSaved);
-
           ///////  int nbElements =  Integer.parseInt( lireJSON.get("NbFilms").toString());
            JSONArray jsonArray = lireJSON.getJSONArray("Elements");
             int nbElements = lireJSON.getJSONArray("Elements").length();
@@ -200,7 +202,6 @@ public class DummyContent extends Application{
                 jsonMovie = jsonArray.getJSONObject(i);
                String strNom =jsonMovie.get("Nom").toString();
                 String strId =jsonMovie.get("Id").toString();
-                Log.e("THISNEEDSTOBECALLEDLOTS",i+" "+strNom+" "+strId);
 
                 String strOwnerID =jsonMovie.get("Proprietaire").toString();
                 addItem(createDummyItem(i,strNom,strId,strOwnerID));
@@ -317,7 +318,6 @@ public class DummyContent extends Application{
     public void createListeDeLecture()
     {
         try {
-            Log.e("////CREATELIST////",jsonSaved+"1");
 
             JSONObject lireJSON = new JSONObject(jsonSaved);
             JSONArray jsonArray = lireJSON.getJSONArray("Elements");
@@ -346,7 +346,6 @@ public class DummyContent extends Application{
 
         for(DummyItem item1 : ITEMS) {
 
-            Log.e("CREATELISTEDELECTURE",item1.content+" "+item1.strListeDeLecture+"");
         }
     }
 
@@ -378,7 +377,6 @@ public class DummyContent extends Application{
 
         for(DummyItem item1 : ITEMS) {
 
-            Log.e("CREATELISTEDELECTURE",item1.content+" "+item1.strListeDeLecture+"");
         }
     }
 
@@ -509,7 +507,6 @@ public class DummyContent extends Application{
 
             JSONObject lireJSON = new JSONObject(jsonSaved);
             strTicketID = lireJSON.get("idTicket").toString();
-            Log.e("strTicketID",strTicketID+" ticket");
             strCle = lireJSON.get("cle").toString();
         } catch (JSONException e) {
             e.printStackTrace();
