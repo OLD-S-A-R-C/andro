@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -33,6 +35,7 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 
 public class DisplayMessageActivity extends AppCompatActivity {
@@ -49,6 +52,8 @@ public class DisplayMessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_message);
+
+        getSupportActionBar().setTitle("Listes de musiques");
     }
 public void confirmSuccesffulLoginAttempt()
     {
@@ -122,9 +127,8 @@ public void confirmSuccesffulLoginAttempt()
         TextView tvPassword = (TextView) findViewById(R.id.tvPassword);
         TextView tvCaptcha = (TextView) findViewById(R.id.tvCaptcha);
 
-        if(tvUsername != null && tvUsername.getText().toString().trim().equals(""))
+        if(tvUsername != null && tvUsername.getText().toString().trim().equals("") && !Patterns.EMAIL_ADDRESS.matcher(tvUsername.getText().toString().trim()).matches())
         {
-
             Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un nom d'utilisateur !", Snackbar.LENGTH_SHORT).show();
         } else if (tvPassword != null && tvPassword.getText().toString().trim().equals("")) {
             Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un mot de passe", Snackbar.LENGTH_SHORT).show();

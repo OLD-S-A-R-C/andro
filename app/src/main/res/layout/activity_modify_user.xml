@@ -63,13 +63,29 @@
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/etEditEmail" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivAvatar"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:src="@android:drawable/sym_def_app_icon"
+        android:scaleType="fitEnd"
+        android:layout_below="@+id/etEditPassword"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/spinnerEditUserAvatars"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivAvatar"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Modifier"
         android:onClick="sendModifyLogin"
         android:id="@+id/button3"
-        android:layout_below="@+id/etEditPassword"
+        android:layout_below="@+id/spinnerEditUserAvatars"
         android:layout_alignParentStart="true" />
 
 
