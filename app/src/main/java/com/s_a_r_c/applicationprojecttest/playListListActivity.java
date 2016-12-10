@@ -282,7 +282,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                     strAvatar = lireJSON.get("avatar").toString();
                     strAlias = lireJSON.get("alias").toString();
                     setTitle("Utilisateur: "+strAlias);
-                    TextView textview = (TextView)findViewById(R.id.textView);
+                    TextView textview = (TextView)findViewById(R.id.tvDrawerEmail);
                     textview.setText(strCourriel);
                 } catch (JSONException e) {
                     e.printStackTrace();
