@@ -179,7 +179,12 @@ public class DummyContent extends Application{
         protected void onPostExecute(String result) {
             // bmImage.setImageBitmap(result);
             jsonSaved = result;
-            createList();
+            if (jsonSaved != null) {
+                createList();
+            } else {
+                
+            }
+
         }
     }
     public void createList()
@@ -500,7 +505,10 @@ public class DummyContent extends Application{
         protected void onPostExecute(String result) {
             jsonSaved = result;
             //confirmLogin();
-            receivedDeleteResponse();
+            if (jsonSaved != null) {
+                receivedDeleteResponse();
+            }
+
         }
     }
 
