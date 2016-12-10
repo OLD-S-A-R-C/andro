@@ -13,10 +13,16 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
+import com.s_a_r_c.applicationprojecttest.dummy.Avatars;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +34,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class createUserActivity extends AppCompatActivity {
 
@@ -38,10 +48,38 @@ String jsonSaved = "";
     String strEmail = "";
     String strCaptcha = "";
     String strSuccess = "";
+
+    String[] avatarArray;
+    HashMap<Integer, AvatarContent> avatarMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_user);
+
+        Spinner spinnerNewUserAvatar = (Spinner) findViewById(R.id.spinnerNewUserAvatars);
+
+        Collection<AvatarContent> vals = Avatars.getInstance().getListAvatars().values();
+        AvatarContent[] array = vals.toArray(new AvatarContent[vals.size()]);
+        ArrayAdapter<AvatarContent> adapter = new ArrayAdapter<AvatarContent>(this,
+                android.R.layout.simple_spinner_item,
+                array);
+        spinnerNewUserAvatar.setAdapter(adapter);
+        spinnerNewUserAvatar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int pos, long id) {
+                displayAvatar();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        //hideKeyboardShowToast(String.valueOf(Avatars.getInstance().getListAvatars().size()));
     }
 
     public void confirmSuccesffulLoginAttempt()
@@ -236,6 +274,25 @@ String jsonSaved = "";
             jsonSaved = result;
             confirmRequest();
         }
+    }
+
+    private void displayAvatar() {
+        Spinner spinnerNewUserAvatar = (Spinner) findViewById(R.id.spinnerNewUserAvatars);
+
+        if (spinnerNewUserAvatar.getSelectedItem() != null) {
+            AvatarContent avatarSelected = Avatars.getInstance().getListAvatars().get(spinnerNewUserAvatar.getSelectedItem().toString());
+            if (avatarSelected != null) {
+                byte[] decodedString = Base64.decode(avatarSelected.getAvatarB64(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                ImageView img = (ImageView) findViewById(R.id.ivAvatar);
+                img.setImageBitmap(decodedByte);
+                img.requestLayout();
+                img.getLayoutParams().height = 200;
+                img.getLayoutParams().width = 200;
+                img.requestLayout();
+            }
+        }
+
     }
 
     private void hideKeyboardShowToast(String strMessage) {
