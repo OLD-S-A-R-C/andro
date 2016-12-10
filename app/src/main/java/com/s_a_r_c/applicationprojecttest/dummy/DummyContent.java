@@ -367,7 +367,7 @@ public class DummyContent extends Application{
                 String strAvatarB64 = jsonAvatar.get("Avatar").toString();
                 AvatarContent newAvatar = new AvatarContent();
                 newAvatar.setAvatar(id, strNom, strAvatarB64);
-                Avatars.getInstance().getListAvatars().put(strNom, newAvatar);
+                Avatars.getInstance().addAvatar(newAvatar);
             }
 
 

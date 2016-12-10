@@ -28,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
+import com.s_a_r_c.applicationprojecttest.dummy.Avatars;
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 
 import org.json.JSONException;
@@ -284,6 +286,8 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                     setTitle("Utilisateur: "+strAlias);
                     TextView textview = (TextView)findViewById(R.id.tvDrawerEmail);
                     textview.setText(strCourriel);
+                    setDrawerAvatar(lireJSON.get("avatar").toString(), R.id.ivDrawerAvatar);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e("labo7",e.toString());
@@ -291,6 +295,24 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             }
         }
         Log.e("StrSuccess",strResultIntent);
+    }
+
+    private void setDrawerAvatar(String avatarId, int idComponent) {
+        AvatarContent avatarFound = Avatars.getInstance().getListAvatarsById().get(Integer.valueOf(avatarId));
+        if (avatarFound != null) {
+            ImageView avatar = (ImageView) findViewById(R.id.ivDrawerAvatar);
+            byte[] decodedString = Base64.decode(avatarFound.getAvatarB64(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ImageView img = (ImageView) findViewById(R.id.ivDrawerAvatar);
+            img.setImageBitmap(decodedByte);
+            img.requestLayout();
+            img.getLayoutParams().height = 200;
+            img.getLayoutParams().width = 200;
+            img.requestLayout();
+        } else {
+            Log.v("ERREUR DRAWER AVAR", "WAIT WHAT");
+        }
+
     }
 
 }
