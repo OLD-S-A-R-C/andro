@@ -52,6 +52,9 @@ public class DummyContent extends Application{
         SongContent songContent = new SongContent();
         songContent.onCreate();
         new DownloadListDeLecture(null).execute("Useless");
+
+        //get avatar
+        new DownloadListAvatars(null).execute("Useless");
     }
 
     public void refresh()
@@ -264,6 +267,53 @@ public class DummyContent extends Application{
             createListeDeLecture();
         }
     }
+
+    private class DownloadListAvatars extends AsyncTask<String, Void, String> {
+        String url;
+
+        public DownloadListAvatars(String url) {
+
+            this.url = url;
+        }
+
+        protected String doInBackground(String... url) {
+
+            HttpURLConnection c = null;
+            try {
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Avatar/getAvatar");
+                c = (HttpURLConnection) u.openConnection();
+                c.connect();
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
+                    case 200:
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        Log.e("JsonRetrieveError","Status 400");
+                        return null;
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
+                if (c != null) {
+                    try {
+                        c.disconnect();
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
+                }
+            }
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+            // bmImage.setImageBitmap(result);
+            jsonSaved = result;
+            createListAvatars(jsonSaved);
+        }
+    }
+
     public void createListeDeLecture()
     {
         try {
@@ -299,6 +349,39 @@ public class DummyContent extends Application{
             Log.e("CREATELISTEDELECTURE",item1.content+" "+item1.strListeDeLecture+"");
         }
     }
+
+
+    public void createListAvatars(String json)
+    {
+        try {
+            Log.d("AVATARAAAAAAAAAAAAAA", " jjjjj");
+            JSONObject lireJSON = new JSONObject(json);
+            JSONArray jsonArray = lireJSON.getJSONArray("Elements");
+            int nbElements = lireJSON.getJSONArray("Elements").length();
+            JSONObject jsonAvatar = new JSONObject();
+            for(int i = 0; i<nbElements;i++)
+            {
+                jsonAvatar = jsonArray.getJSONObject(i);
+                int id = Integer.valueOf(jsonAvatar.get("Id").toString());
+                String strNom = jsonAvatar.get("Nom").toString();
+                String strAvatarB64 = jsonAvatar.get("Avatar").toString();
+                AvatarContent newAvatar = new AvatarContent();
+                newAvatar.setAvatar(id, strNom, strAvatarB64);
+                Avatars.getInstance().getListAvatars().put(strNom, newAvatar);
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("labo7",e.toString());
+        }
+
+        for(DummyItem item1 : ITEMS) {
+
+            Log.e("CREATELISTEDELECTURE",item1.content+" "+item1.strListeDeLecture+"");
+        }
+    }
+
     public void connectUser(String alias, String courriel, String password, String ID )
     {
         Log.e("DUMMYCONTENTCONNECTED"," LOGGED IN "+alias);
@@ -311,7 +394,7 @@ public class DummyContent extends Application{
     {
         strSongSelected = strElement;
     }
-//Test 
+
     public static void setStrPlaylistSelected(String strElement)
     {
         strPlaylistSelected = strElement;
