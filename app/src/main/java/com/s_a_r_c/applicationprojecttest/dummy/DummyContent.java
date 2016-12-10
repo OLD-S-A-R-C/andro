@@ -224,8 +224,6 @@ public class DummyContent extends Application{
         protected void onPostExecute(String result) {
             // bmImage.setImageBitmap(result);
             jsonSaved = result;
-jsonSaved=null;
-            createList();
             if (jsonSaved != null) {
                 createList();
             } else {
