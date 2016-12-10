@@ -11,11 +11,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,11 +20,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.s_a_r_c.applicationprojecttest.Helpers.UserDatabase;
+import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
+import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 
 import org.json.JSONException;
@@ -60,6 +59,8 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
     String strAlias = "";
     private boolean mTwoPane;
 
+    private Menu menuDrawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,15 +78,6 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         View recyclerView = findViewById(R.id.playlist_list);
         assert recyclerView != null;
@@ -108,6 +100,30 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
       //  Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+
+        if (UserDatabase.getInstance(getApplicationContext()).loggedIn()) {
+            nav_Menu.findItem(R.id.submenu_actions).setVisible(true);
+            nav_Menu.findItem(R.id.menu_edit_profile).setVisible(true);
+            nav_Menu.findItem(R.id.menu_logout).setVisible(true);
+            nav_Menu.findItem(R.id.menu_new_user).setVisible(false);
+            nav_Menu.findItem(R.id.menu_login).setVisible(false);
+        } else {
+            nav_Menu.findItem(R.id.submenu_actions).setVisible(false);
+            nav_Menu.findItem(R.id.menu_edit_profile).setVisible(false);
+            nav_Menu.findItem(R.id.menu_logout).setVisible(false);
+            nav_Menu.findItem(R.id.menu_new_user).setVisible(true);
+            nav_Menu.findItem(R.id.menu_login).setVisible(true);
+        }
+
 
     }
 
@@ -206,7 +222,11 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.main, menu);
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
+        menuDrawer = menu;
+
+
+
         return true;
     }
 
@@ -217,11 +237,6 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -231,38 +246,38 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
         DummyContent dummyContent = new DummyContent();
         dummyContent.refresh();
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.menu_import_song) {
             Log.e("nav_camera","Selected");
             Intent intent = new Intent(this, visualizeSongsActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.menu_new_user) {
             Log.e("nav_gallery","Selected");
             Intent intent = new Intent(this, createUserActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.menu_login) {
             Intent intent = new Intent(this, DisplayMessageActivity.class);
             String message = "Message";
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivityForResult(intent,1);
             Log.e("nav_slideshow","Selected");
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.menu_edit_profile) {
             Intent intent = new Intent(this, ModifyUserActivity.class);
             String message = strResultIntent;
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
             Log.e("nav_manage","Selected");
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.menu_new_playlist) {
             Log.e("nav_share","Selected");
             Intent intent = new Intent(this, createNewPlaylist.class);
             String message = strResultIntent;
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.menu_new_song) {
             Log.e("nav_send","Selected");
             Intent intent = new Intent(this, addSongActivity.class);
             startActivity(intent);
@@ -287,8 +302,10 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                     strAvatar = lireJSON.get("avatar").toString();
                     strAlias = lireJSON.get("alias").toString();
                     setTitle("Utilisateur: "+strAlias);
-                    TextView textview = (TextView)findViewById(R.id.textView);
+                    TextView textview = (TextView)findViewById(R.id.tvDrawerEmail);
                     textview.setText(strCourriel);
+                    setDrawerAvatar(lireJSON.get("avatar").toString(), R.id.ivDrawerAvatar);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e("labo7",e.toString());
@@ -296,6 +313,24 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             }
         }
         Log.e("StrSuccess",strResultIntent);
+    }
+
+    private void setDrawerAvatar(String avatarId, int idComponent) {
+        AvatarContent avatarFound = Avatars.getInstance().getListAvatarsById().get(Integer.valueOf(avatarId));
+        if (avatarFound != null) {
+            ImageView avatar = (ImageView) findViewById(R.id.ivDrawerAvatar);
+            byte[] decodedString = Base64.decode(avatarFound.getAvatarB64(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ImageView img = (ImageView) findViewById(R.id.ivDrawerAvatar);
+            img.setImageBitmap(decodedByte);
+            img.requestLayout();
+            img.getLayoutParams().height = 200;
+            img.getLayoutParams().width = 200;
+            img.requestLayout();
+        } else {
+            Log.v("ERREUR DRAWER AVAR", "WAIT WHAT");
+        }
+
     }
 
 }

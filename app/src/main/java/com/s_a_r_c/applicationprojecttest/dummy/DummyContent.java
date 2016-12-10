@@ -4,9 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
-import android.widget.Spinner;
 
+
+import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -366,7 +366,7 @@ public class DummyContent extends Application{
                 String strAvatarB64 = jsonAvatar.get("Avatar").toString();
                 AvatarContent newAvatar = new AvatarContent();
                 newAvatar.setAvatar(id, strNom, strAvatarB64);
-                Avatars.getInstance().getListAvatars().put(strNom, newAvatar);
+                Avatars.getInstance().addAvatar(newAvatar);
             }
 
 

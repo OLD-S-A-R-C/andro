@@ -2,14 +2,25 @@ package com.s_a_r_c.applicationprojecttest;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
+import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +32,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
 
 public class ModifyUserActivity extends AppCompatActivity {
     String jsonSaved = "";
@@ -40,6 +52,29 @@ public class ModifyUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_user);
+
+        getSupportActionBar().setTitle("Modification d'un utilisateur");
+
+        Spinner spinnerEditUserAvatar = (Spinner) findViewById(R.id.spinnerEditUserAvatars);
+
+        Collection<AvatarContent> vals = Avatars.getInstance().getListAvatars().values();
+        AvatarContent[] array = vals.toArray(new AvatarContent[vals.size()]);
+        ArrayAdapter<AvatarContent> adapter = new ArrayAdapter<AvatarContent>(this,
+                android.R.layout.simple_spinner_item,
+                array);
+        spinnerEditUserAvatar.setAdapter(adapter);
+        spinnerEditUserAvatar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int pos, long id) {
+                displayAvatar();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+            }
+        });
 
         Intent intent = getIntent();
         String strMessage = intent.getStringExtra(playListListActivity.EXTRA_MESSAGE);
@@ -86,10 +121,10 @@ public class ModifyUserActivity extends AppCompatActivity {
 
         if (EDalias.getText().toString().trim().equals("")) {
             hideKeyboardShowToast("Alias invalide");
-        } else if (EDcourriel.getText().toString().trim().equals("")) {
+        } else if (EDcourriel.getText().toString().trim().equals("") || !Patterns.EMAIL_ADDRESS.matcher(EDcourriel.getText().toString().trim()).matches()) {
             hideKeyboardShowToast("Courriel invalide");
         } else if (EDpwd.getText().toString().trim().equals("")) {
-            hideKeyboardShowToast("Courriel invalide");
+            hideKeyboardShowToast("Mot de passe invalide");
         } else {
             new DownloadJsonModifyAttept(null).execute("Useless");
         }
@@ -203,7 +238,7 @@ public class ModifyUserActivity extends AppCompatActivity {
 
 
                 String strConfirmation = getMd5Hash(strMotDePasse+strCle);
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=modifierUser&p1="+strId+"&p2="+MDstrCourriel+"&p3="+MDstrMotDePasse+"&p4="+MDstrAlias+"&p5="+strAvatar+"&p6=true");
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=modifierUser&p1="+strId+"&p2="+MDstrCourriel+"&p3="+MDstrMotDePasse+"&p4="+MDstrAlias+"&p5="+String.valueOf(idAvatarSelected())+"&p6=true");
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
@@ -265,6 +300,42 @@ public class ModifyUserActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("labo7",e.toString());
+        }
+    }
+
+    private void displayAvatar() {
+        Spinner spinnerEditUserAvatar = (Spinner) findViewById(R.id.spinnerEditUserAvatars);
+
+        if (spinnerEditUserAvatar.getSelectedItem() != null) {
+            AvatarContent avatarSelected = Avatars.getInstance().getListAvatars().get(spinnerEditUserAvatar.getSelectedItem().toString());
+            if (avatarSelected != null) {
+                byte[] decodedString = Base64.decode(avatarSelected.getAvatarB64(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                ImageView img = (ImageView) findViewById(R.id.ivAvatar);
+                img.setImageBitmap(decodedByte);
+                img.requestLayout();
+                img.getLayoutParams().height = 200;
+                img.getLayoutParams().width = 200;
+                img.requestLayout();
+            }
+
+        }
+
+    }
+
+    private int idAvatarSelected() {
+        Spinner spinnerEditUserAvatar = (Spinner) findViewById(R.id.spinnerEditUserAvatars);
+
+        if (spinnerEditUserAvatar.getSelectedItem() != null) {
+            AvatarContent avatarSelected = Avatars.getInstance().getListAvatars().get(spinnerEditUserAvatar.getSelectedItem().toString());
+            if (avatarSelected != null) {
+                return avatarSelected.getId();
+            } else {
+                return 1;
+            }
+
+        } else {
+            return 1;
         }
     }
 

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -19,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
-import com.s_a_r_c.applicationprojecttest.dummy.Avatars;
+import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,6 +54,8 @@ String jsonSaved = "";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_user);
+
+        getSupportActionBar().setTitle("Création d'un utilisateur");
 
         Spinner spinnerNewUserAvatar = (Spinner) findViewById(R.id.spinnerNewUserAvatars);
 
@@ -113,7 +116,7 @@ String jsonSaved = "";
 
         if (strAlias.trim().equals("")) {
             hideKeyboardShowToast("Alias invalide");
-        } else if (strEmail.trim().equals("")) {
+        } else if (strEmail.trim().equals("") || !Patterns.EMAIL_ADDRESS.matcher(strEmail.trim()).matches()) {
             hideKeyboardShowToast("Courriel invalide");
         } else if (strPassword.trim().equals("")) {
             hideKeyboardShowToast("Mot de passde invalide");
@@ -123,17 +126,20 @@ String jsonSaved = "";
 
 
     }
-    public void confirmRequest(String json)
-    {
-        Log.e("xxxxxxxxxxxxxxxxxxxxxx",json);
+    public void confirmRequest() {
         try {
+<<<<<<< HEAD
             JSONObject lireJSON     = new JSONObject(json);
+=======
+
+            JSONObject lireJSON = new JSONObject(jsonSaved);
+>>>>>>> f9cb4e607737c427619fe3ee17a7d9737af23230
             //JSONObject jsonMovie = new JSONObject();
-            String strCaptcha =lireJSON.get("captcha").toString();
-            strTicketID =lireJSON.get("idTicket").toString();
+            String strCaptcha = lireJSON.get("captcha").toString();
+            strTicketID = lireJSON.get("idTicket").toString();
             byte[] decodedString = Base64.decode(strCaptcha, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            ImageView img= (ImageView) findViewById(R.id.imageView3);
+            ImageView img = (ImageView) findViewById(R.id.imageView3);
             img.setImageBitmap(decodedByte);
             img.requestLayout();
             img.getLayoutParams().height = 200;
@@ -142,6 +148,7 @@ String jsonSaved = "";
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
     public void confirmUserCreation(View view)
@@ -237,8 +244,8 @@ String jsonSaved = "";
 
             HttpURLConnection c = null;
             try {
-                Log.d("WAIT", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(displayAvatar()));
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(displayAvatar()));
+                //Log.d("WAIT", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(displayAvatar()));
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(idAvatarSelected()));
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
@@ -275,12 +282,12 @@ String jsonSaved = "";
         protected void onPostExecute(String result) {
             jsonSaved = result;
 
-                    confirmRequest(jsonSaved);
+            confirmRequest();
 
         }
     }
 
-    private int displayAvatar() {
+    private void displayAvatar() {
         Spinner spinnerNewUserAvatar = (Spinner) findViewById(R.id.spinnerNewUserAvatars);
 
         if (spinnerNewUserAvatar.getSelectedItem() != null) {
@@ -294,13 +301,26 @@ String jsonSaved = "";
                 img.getLayoutParams().height = 200;
                 img.getLayoutParams().width = 200;
                 img.requestLayout();
-                return avatarSelected.getId();
             }
-            return 1;
+
+        }
+
+    }
+
+    private int idAvatarSelected() {
+        Spinner spinnerNewUserAvatar = (Spinner) findViewById(R.id.spinnerNewUserAvatars);
+
+        if (spinnerNewUserAvatar.getSelectedItem() != null) {
+            AvatarContent avatarSelected = Avatars.getInstance().getListAvatars().get(spinnerNewUserAvatar.getSelectedItem().toString());
+            if (avatarSelected != null) {
+                return avatarSelected.getId();
+            } else {
+                return 1;
+            }
+
         } else {
             return 1;
         }
-
     }
 
     private void hideKeyboardShowToast(String strMessage) {
