@@ -79,8 +79,8 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist_list);
 
-        FinalContent finalContent = new FinalContent();
-        finalContent.onCreate();
+       // FinalContent finalContent = new FinalContent();
+    //    finalContent.onCreate();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
