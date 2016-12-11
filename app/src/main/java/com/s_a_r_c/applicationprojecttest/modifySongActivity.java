@@ -2,8 +2,11 @@ package com.s_a_r_c.applicationprojecttest;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.util.DiffUtil;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -66,35 +69,36 @@ public class modifySongActivity extends AppCompatActivity {
         Spinner spinner2 = (Spinner) findViewById(R.id.spinnerLstPlaylistCopy);
         spinner2.setAdapter(adapter);
 
-        DummyContent dummyContent = new DummyContent();
-        new DownloadSong(null).execute("Useless");
+       DummyContent dummyContent = new DummyContent();
+        renderJson();
+
+
+
+        Button button1 = (Button)findViewById(R.id.button8);
+        Button button2 = (Button)findViewById(R.id.button13);
+        Button button3 = (Button)findViewById(R.id.button14);
+        Button button4 = (Button)findViewById(R.id.button12);
         if(DummyContent.getStrSoloMusic().equals(DummyContent.getId()))
         {
-            Button button1 = (Button)findViewById(R.id.button8);
-            Button button2 = (Button)findViewById(R.id.button13);
-            Button button3 = (Button)findViewById(R.id.button14);
             button1.setEnabled(true);
             button2.setEnabled(true);
             button3.setEnabled(true);
+            button4.setEnabled(true);
         }
         else
         {
-            Button button1 = (Button)findViewById(R.id.button8);
-            Button button2 = (Button)findViewById(R.id.button13);
-            Button button3 = (Button)findViewById(R.id.button14);
             button1.setEnabled(true);
             button2.setEnabled(true);
             button3.setEnabled(true);
+            button4.setEnabled(true);
         }
 
         if(DummyContent.getId().equals(""))
         {
-            Button button1 = (Button)findViewById(R.id.button8);
-            Button button2 = (Button)findViewById(R.id.button13);
-            Button button3 = (Button)findViewById(R.id.button14);
             button1.setEnabled(false);
             button2.setEnabled(false);
             button3.setEnabled(false);
+            button4.setEnabled(false);
         }
 
 
@@ -164,18 +168,31 @@ public class modifySongActivity extends AppCompatActivity {
     }
 
     public void renderJson() {
-        try {
+            for(FinalContent.SongItem songItem: FinalContent.SONGITEMSPRIMAL)
+            {
+                if(songItem.strId.equals(DummyContent.strSongSelected))
+                {
+                    strOwnerID = songItem.strOwnerID;
+                    strVignette = songItem.strVignette;
+                    strTitre = songItem.strTitre;
+                    strMusique = songItem.strMusique;
+                    strPublique = songItem.strPublique;
+                    strActive = songItem.strActive;
+                    strArtiste = songItem.strArtiste;
+                }
+            }
 
-            JSONObject lireJSON = new JSONObject(jsonSaved);
-            String strProprietaire = lireJSON.get("proprietaire").toString();
-            JSONObject lireJSON2 = new JSONObject(strProprietaire);
+            //JSONObject lireJSON = new JSONObject(jsonSaved);
+           // String strProprietaire = lireJSON.get("proprietaire").toString();
+           // JSONObject lireJSON2 = new JSONObject(strProprietaire);
+            /*
             strOwnerID = lireJSON2.get("id").toString();
             strVignette = lireJSON.get("vignette").toString();
             strTitre = lireJSON.get("titre").toString();
             strMusique = lireJSON.get("musique").toString();
             strPublique = lireJSON.get("publique").toString();
             strActive = lireJSON.get("active").toString();
-            strArtiste = lireJSON.get("artiste").toString();
+            strArtiste = lireJSON.get("artiste").toString();*/
 
             setTitle(strTitre + " - " + strArtiste);
 
@@ -193,11 +210,6 @@ public class modifySongActivity extends AppCompatActivity {
             if (strActive.equals("true")) {
                 checkBoxActive.setChecked(true);
             }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("labo7", e.toString());
-        }
     }
 
     public void deleteSong(View view) {

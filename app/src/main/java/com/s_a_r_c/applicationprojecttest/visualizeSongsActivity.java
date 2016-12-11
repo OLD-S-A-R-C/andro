@@ -37,7 +37,7 @@ public class visualizeSongsActivity extends AppCompatActivity {
         ArrayList<String> playlists = new ArrayList<String>();
         final HashMap<Integer, FinalContent.SongItem> songsMaps = new HashMap<Integer, FinalContent.SongItem>();
         int count = 0;
-        if(DummyContent.getStrSoloMusic().equals("true")&&!DummyContent.getId().equals(""))
+        if(DummyContent.getStrSoloMusic().equals("true")&&!DummyContent.getId().equals("")&&false==true)
         {
             Log.e("OFFLINE","OFFLINE");
             for(FinalContent.SongItem songItem : FinalContent.SONGITEMSPRIMAL) {
@@ -110,7 +110,7 @@ public class visualizeSongsActivity extends AppCompatActivity {
                 String[] strSplit = mListView.getItemAtPosition(position).toString().split(";");
                 DummyContent.setStrPlaylistSelected("");
                 DummyContent.setStrSongSelected(strSplit[1]);
-                if(!DummyContent.getId().equals("")) {
+                if(!DummyContent.getId().equals("")&&DummyContent.getStrSeeMusic().equals("")) {
                     Intent intent = new Intent(getBaseContext(), modifySongActivity.class);
                     startActivity(intent);
                 }

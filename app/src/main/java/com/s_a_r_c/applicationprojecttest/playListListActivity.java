@@ -152,6 +152,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
     @Override
     public void onResume() {
+
         super.onResume();  // Always call the superclass method first
 ///////////////////////////////////////////////////////////////////////////
         ListView = (ListView) findViewById(R.id.listViewPlaylist);
@@ -159,12 +160,17 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         final HashMap<Integer, FinalContent.PlaylistITEM> playlistsMaps = new HashMap<Integer, FinalContent.PlaylistITEM>();
         int count = 0;
         for(FinalContent.PlaylistITEM playlistITEM : FinalContent.ITEMS) {
-            playlists.add(playlistITEM.name+" ("+playlistITEM.id+")");
+            playlists.add(playlistITEM.name+" ;"+playlistITEM.id);
             playlistsMaps.put(count, playlistITEM);
             count++;
         }
+<<<<<<< HEAD
+        DummyContent.setStrSeeMusic("");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  playlists) {
+=======
 
         adapter = new ArrayAdapter<String>(this, R.layout.listview_custom,  playlists) {
+>>>>>>> a406556115e810cf99b2b1da1376707d3e3b422f
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -203,8 +209,8 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
-                String[] strSplit = ListView.getItemAtPosition(pos).toString().split("[(]");
-                DummyContent.setStrPlaylistSelected(strSplit[1].split("[)]")[0]);
+                String[] strSplit = ListView.getItemAtPosition(pos).toString().split(";");
+                DummyContent.setStrPlaylistSelected(strSplit[1]);
                 Intent intent = new Intent(getBaseContext(), playListDetailActivity.class);
                 startActivityForResult(intent,1);
             }
@@ -295,6 +301,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         else if (id == R.id.menu_your_song) {
             Log.e("nav_camera","Selected");
             DummyContent.setStrSoloMusic("true");
+            DummyContent.setStrSeeMusic("true");
             Intent intent = new Intent(this, visualizeSongsActivity.class);
             startActivity(intent);
 
