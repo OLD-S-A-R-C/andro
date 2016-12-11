@@ -25,6 +25,9 @@ import com.s_a_r_c.applicationprojecttest.CriticalErrorLandingActivity;
 import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 import com.s_a_r_c.applicationprojecttest.playListListActivity;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -95,19 +98,28 @@ public class FinalContent extends Application{
         mContext = this;
         ITEMS = new ArrayList<PlaylistITEM>();
         SONGITEMSPRIMAL = new ArrayList<SongItem>();
-
+        try {
         if(DummyContent.getId().equals(""))
         {
             Log.e("STATUSLOGIN","OFFLINE");
-            new DownloadJson(null).execute("Useless");
+            new DownloadJson(null).execute("Useless").get(3000, TimeUnit.MILLISECONDS);
         }
         else
         {
             Log.e("STATUSLOGIN","ONLINE");
-            new DownloadJsonDeleteAttept(null).execute("Useless");
+            new DownloadJsonDeleteAttept(null).execute("Useless").get(3000, TimeUnit.MILLISECONDS);
         }
 
-        new DownloadListAvatars(null).execute("Useless");
+
+            new DownloadListAvatars(null).execute("Useless");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+        ;
     }
 
 

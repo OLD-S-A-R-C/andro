@@ -81,6 +81,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
     ListView ListView;
 
+    int compteur;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,18 +107,22 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         navigationView.setNavigationItemSelectedListener(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabRefresh);
+        compteur = 0;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Refreshing data", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                FinalContent finalContent = new FinalContent();
-                finalContent.onCreate();
-                if (adapter != null)  {
 
+                //finalContent.onCreate();
+                if (adapter != null && compteur % 2 == 0)  {
+                    FinalContent finalContent = new FinalContent();
+                    finalContent.onCreate();
+                } else {
                     onResume();
                     adapter.notifyDataSetChanged();
-
                 }
+
+                compteur++;
 
             }
         });

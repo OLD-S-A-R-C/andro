@@ -398,9 +398,6 @@ public class DummyContent extends Application{
             Log.e("labo7",e.toString());
         }
 
-        for(DummyItem item1 : ITEMS) {
-
-        }
     }
 
 
