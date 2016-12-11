@@ -68,8 +68,26 @@ public class modifySongActivity extends AppCompatActivity {
 
         DummyContent dummyContent = new DummyContent();
         new DownloadSong(null).execute("Useless");
+        if(DummyContent.getStrSoloMusic().equals(DummyContent.getId()))
+        {
+            Button button1 = (Button)findViewById(R.id.button8);
+            Button button2 = (Button)findViewById(R.id.button13);
+            Button button3 = (Button)findViewById(R.id.button14);
+            button1.setEnabled(true);
+            button2.setEnabled(true);
+            button3.setEnabled(true);
+        }
+        else
+        {
+            Button button1 = (Button)findViewById(R.id.button8);
+            Button button2 = (Button)findViewById(R.id.button13);
+            Button button3 = (Button)findViewById(R.id.button14);
+            button1.setEnabled(true);
+            button2.setEnabled(true);
+            button3.setEnabled(true);
+        }
 
-        if(DummyContent.getStrPlaylistSelected().equals(""))
+        if(DummyContent.getId().equals(""))
         {
             Button button1 = (Button)findViewById(R.id.button8);
             Button button2 = (Button)findViewById(R.id.button13);
@@ -77,8 +95,10 @@ public class modifySongActivity extends AppCompatActivity {
             button1.setEnabled(false);
             button2.setEnabled(false);
             button3.setEnabled(false);
-
         }
+
+
+
 
     }
 

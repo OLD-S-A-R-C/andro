@@ -39,6 +39,11 @@
                 android:id="@+id/menu_import_song"
                 android:icon="@drawable/ic_menu_add_song"
                 android:title="Importer une musique" />
+
+            <item
+                android:id="@+id/menu_your_song"
+                android:icon="@drawable/ic_menu_add_song"
+                android:title="Visualiser votre musique" />
         </menu>
     </item>
 

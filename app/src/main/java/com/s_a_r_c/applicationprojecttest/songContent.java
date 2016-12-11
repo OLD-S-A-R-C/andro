@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
+import com.s_a_r_c.applicationprojecttest.dummy.FinalContent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,6 +75,7 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
         } catch (Exception e) {
             finish();
         }
+
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -202,6 +205,7 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
             String strProprietaire = lireJSON.get("proprietaire").toString();
             JSONObject lireJSON2 = new JSONObject(strProprietaire);
             strOwnerID = lireJSON2.get("id").toString();
+            DummyContent.setStrSoloMusic(strOwnerID);
             strVignette = lireJSON.get("vignette").toString();
             strTitre = lireJSON.get("titre").toString();
             strMusique = lireJSON.get("musique").toString();

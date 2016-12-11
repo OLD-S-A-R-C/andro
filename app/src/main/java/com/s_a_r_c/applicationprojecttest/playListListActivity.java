@@ -252,11 +252,17 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
         if (id == R.id.menu_import_song) {
             Log.e("nav_camera","Selected");
+            Intent intent = new Intent(this, visualizeSongsActivity.class);
+            startActivity(intent);
+
+        }
+        else if (id == R.id.menu_your_song) {
+            Log.e("nav_camera","Selected");
             DummyContent.setStrSoloMusic("true");
             Intent intent = new Intent(this, visualizeSongsActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.menu_new_user) {
+        }else if (id == R.id.menu_new_user) {
             Log.e("nav_gallery","Selected");
             Intent intent = new Intent(this, createUserActivity.class);
             startActivity(intent);
