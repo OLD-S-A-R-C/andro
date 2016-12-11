@@ -46,12 +46,11 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-<<<<<<< HEAD
+
 
         <activity android:name=".CriticalErrorLandingActivity" />
         <activity android:name=".Refresh"></activity>
-=======
->>>>>>> f67d757892d3a448c28b20529cab3da8b518d8b2
+
     </application>
 
 </manifest>
