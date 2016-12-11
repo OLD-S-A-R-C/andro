@@ -81,7 +81,7 @@ public class playListDetailActivity extends AppCompatActivity {
 
 
         for(FinalContent.PlaylistITEM playlistITEM : FinalContent.ITEMS) {
-                    if(playlistITEM.owner.equals(DummyContent.getId()))
+                    if(playlistITEM.owner.equals(DummyContent.getId())&&playlistITEM.id.equals(DummyContent.getStrPlaylistSelected()))
                     {
                         fab.setVisibility(View.VISIBLE);
                     }
