@@ -21,6 +21,11 @@
             android:icon="@drawable/ic_menu_edit"
             android:title="Modifier votre profil"
             android:visible="false"/>
+
+        <item
+            android:id="@+id/menu_your_song"
+            android:icon="@drawable/ic_menu_add_song"
+            android:title="Visualiser votre musique" />
     </group>
 
     <item android:id="@+id/submenu_actions"
@@ -40,10 +45,7 @@
                 android:icon="@drawable/ic_menu_add_song"
                 android:title="Importer une musique" />
 
-            <item
-                android:id="@+id/menu_your_song"
-                android:icon="@drawable/ic_menu_add_song"
-                android:title="Visualiser votre musique" />
+
         </menu>
     </item>
 
