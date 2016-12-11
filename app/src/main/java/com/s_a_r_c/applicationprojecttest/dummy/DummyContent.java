@@ -77,6 +77,7 @@ public class DummyContent extends Application{
 
     }
 
+
     public void refresh()
     {
         ITEMS.clear();
@@ -482,6 +483,10 @@ public class DummyContent extends Application{
     public static String getId()
     {
         return strID;
+    }
+    public static void setId(String stuff)
+    {
+        strID =  stuff;
     }
     public static String getStrSongSelected()
     {

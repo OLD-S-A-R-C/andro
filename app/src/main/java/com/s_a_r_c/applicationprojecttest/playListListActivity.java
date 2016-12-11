@@ -321,6 +321,8 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             startActivity(intent);
         } else if (id == R.id.menu_logout) {
             UserDatabase.getInstance(getApplicationContext()).logOut();
+
+            DummyContent.setId("");
             this.recreate();
         }
 
