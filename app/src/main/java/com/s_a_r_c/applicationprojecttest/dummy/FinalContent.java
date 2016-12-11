@@ -490,7 +490,7 @@ public class FinalContent extends Application{
             HttpURLConnection c = null;
             try {
 
-                String strConfirmation = getMd5Hash(DummyContent.getPassword() + strCle);
+                String strConfirmation = DummyContent.encryptMD5(DummyContent.getPassword() + strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=337&confirmation=26b15445192a07d528d0e70c2c58264d&action=supprimerMusiqueListe&p1=9&p2=16&p3=148
                 //Playlist Public+Owner : http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +ticket.idTicket + "&confirmation=" + md5(motdepasse + ticket.cle) +"&action=afficherToutesLesListes&p1=" + utilisateurID
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=afficherToutesLesListes&p1=" + DummyContent.getId());
@@ -544,22 +544,7 @@ public class FinalContent extends Application{
     }
 
 
-    public static String getMd5Hash(String input) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(input.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5 = number.toString(16);
 
-            while (md5.length() < 32)
-                md5 = "0" + md5;
-
-            return md5;
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("MD5", e.getLocalizedMessage());
-            return null;
-        }
-    }
 
     private class DownloadJsonMusicAttept extends AsyncTask<String, Void, String> {
         String url;
@@ -655,7 +640,7 @@ public class FinalContent extends Application{
             HttpURLConnection c = null;
             try {
 
-                String strConfirmation = getMd5Hash(DummyContent.getPassword() + strCle);
+                String strConfirmation = DummyContent.encryptMD5(DummyContent.getPassword() + strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=337&confirmation=26b15445192a07d528d0e70c2c58264d&action=supprimerMusiqueListe&p1=9&p2=16&p3=148
                 //Playlist Public+Owner : http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +ticket.idTicket + "&confirmation=" + md5(motdepasse + ticket.cle) +"&action=afficherToutesLesListes&p1=" + utilisateurID
                // "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" + ticket.idTicket + "&confirmation=" + $.md5(Cookies.get('motdepasse') + ticket.cle) +"&action=afficherToutesLesMusiques&p1=" + Cookies.get('utilisateurID')

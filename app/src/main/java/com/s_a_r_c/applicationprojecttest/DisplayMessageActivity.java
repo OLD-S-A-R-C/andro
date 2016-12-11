@@ -178,7 +178,7 @@ public void confirmSuccesffulLoginAttempt()
             try {
                   URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/connexion?" +
                           "courriel=" + username +
-                          "&mdp=" + md5(password));
+                          "&mdp=" + DummyContent.encryptMD5(password));
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
@@ -291,24 +291,7 @@ public void confirmSuccesffulLoginAttempt()
         }
     }
 
-    public static String md5(String s)
-    {
-        MessageDigest digest;
-        try
-        {
-            digest = MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes(Charset.forName("US-ASCII")),0,s.length());
-            byte[] magnitude = digest.digest();
-            BigInteger bi = new BigInteger(1, magnitude);
-            String hash = String.format("%0" + (magnitude.length << 1) + "x", bi);
-            return hash;
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-            e.printStackTrace();
-        }
-        return "";
-    }
+
 
     private void hideKeyboard() {
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
