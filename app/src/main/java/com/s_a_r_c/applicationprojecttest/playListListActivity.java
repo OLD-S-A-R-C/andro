@@ -112,14 +112,12 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-<<<<<<< HEAD
-=======
+
         DummyContent dummyContent = new DummyContent();
        // dummyContent.refresh();
 
         String ok = "";
 
->>>>>>> f67d757892d3a448c28b20529cab3da8b518d8b2
     }
 
 
@@ -224,6 +222,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
         if (id == R.id.menu_import_song) {
             Log.e("nav_camera","Selected");
+            DummyContent.setStrSoloMusic("true");
             Intent intent = new Intent(this, visualizeSongsActivity.class);
             startActivity(intent);
 

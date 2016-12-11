@@ -24,12 +24,24 @@ public class visualizeSongsActivity extends AppCompatActivity {
         setTitle("Song List");
 
         final ListView mListView = (ListView) findViewById(R.id.listView);
-
         ArrayList<String> playlists = new ArrayList<String>();
-        for(FinalContent.SongItem songItem : FinalContent.SONGITEMSPRIMAL) {
-            playlists.add(songItem.strTitre+" ;"+songItem.strId);
+        if(DummyContent.getStrSoloMusic().equals("true"))
+        {
+
+            for(FinalContent.SongItem songItem : FinalContent.SONGITEMSPRIMAL) {
+                if(songItem.strOwnerID.equals(DummyContent.getId()))
+                playlists.add(songItem.strTitre+" ;"+songItem.strId);
+            }
+        }
+        else
+        {
+
+            for(FinalContent.SongItem songItem : FinalContent.SONGITEMSPRIMAL) {
+                playlists.add(songItem.strTitre+" ;"+songItem.strId);
+            }
         }
 
+    DummyContent.setStrSoloMusic("");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(visualizeSongsActivity.this, android.R.layout.simple_list_item_1, playlists);
         mListView.setAdapter(adapter);
