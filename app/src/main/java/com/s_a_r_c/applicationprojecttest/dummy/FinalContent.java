@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.s_a_r_c.applicationprojecttest.CriticalErrorLandingActivity;
+import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 import com.s_a_r_c.applicationprojecttest.playListListActivity;
 import java.util.Map;
 
@@ -105,6 +106,8 @@ public class FinalContent extends Application{
             Log.e("STATUSLOGIN","ONLINE");
             new DownloadJsonDeleteAttept(null).execute("Useless");
         }
+
+        new DownloadListAvatars(null).execute("Useless");
     }
 
 
@@ -701,6 +704,93 @@ public class FinalContent extends Application{
             //finalResponse();
             createListMusic();
         }
+    }
+
+    private class DownloadListAvatars extends AsyncTask<String, Void, String> {
+        String url;
+
+        public DownloadListAvatars(String url) {
+
+            this.url = url;
+        }
+
+        protected String doInBackground(String... url) {
+
+            HttpURLConnection c = null;
+            try {
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Avatar/getAvatar");
+                c = (HttpURLConnection) u.openConnection();
+                c.connect();
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
+                    case 200:
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
+                if (c != null) {
+                    try {
+                        c.disconnect();
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
+                }
+            }
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+
+            jsonSaved = result;
+
+            if (result == null) {
+                Intent intent = new Intent(getApplicationContext(), CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+
+            createListAvatars(jsonSaved);
+        }
+    }
+
+    public void createListAvatars(String json)
+    {
+        try {
+            Log.d("AVATARAAAAAAAAAAAAAA", " jjjjj");
+            JSONObject lireJSON = new JSONObject(json);
+            JSONArray jsonArray = lireJSON.getJSONArray("Elements");
+            int nbElements = lireJSON.getJSONArray("Elements").length();
+            JSONObject jsonAvatar = new JSONObject();
+            for(int i = 0; i<nbElements;i++)
+            {
+                jsonAvatar = jsonArray.getJSONObject(i);
+                int id = Integer.valueOf(jsonAvatar.get("Id").toString());
+                String strNom = jsonAvatar.get("Nom").toString();
+                String strAvatarB64 = jsonAvatar.get("Avatar").toString();
+                AvatarContent newAvatar = new AvatarContent();
+                newAvatar.setAvatar(id, strNom, strAvatarB64);
+                Avatars.getInstance().addAvatar(newAvatar);
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("labo7",e.toString());
+        }
+
     }
 
 }

@@ -358,13 +358,14 @@ public class DummyContent extends Application{
         }
 
         protected void onPostExecute(String result) {
+
+            jsonSaved = result;
+            createListAvatars(jsonSaved);
             if (result == null) {
                 Intent intent = new Intent(getApplicationContext(), CriticalErrorLandingActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
-            jsonSaved = result;
-            createListAvatars(jsonSaved);
         }
     }
 
