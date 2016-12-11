@@ -46,7 +46,10 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+<<<<<<< HEAD
+=======
 
+>>>>>>> 19e6a0f26d57c268757adb81216fee9fcceb41cf
         <activity android:name=".Refresh"></activity>
 
     </application>

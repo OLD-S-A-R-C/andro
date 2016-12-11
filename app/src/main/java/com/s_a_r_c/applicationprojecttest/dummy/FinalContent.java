@@ -86,17 +86,20 @@ public class FinalContent extends Application{
 
     @Override
     public void onCreate() {
-        ITEMS = new ArrayList<PlaylistITEM>();
-        SONGITEMSPRIMAL = new ArrayList<SongItem>();
+
         super.onCreate();
         mContext = this;
+        ITEMS = new ArrayList<PlaylistITEM>();
+        SONGITEMSPRIMAL = new ArrayList<SongItem>();
 
         if(DummyContent.getId().equals(""))
         {
+            Log.e("STATUSLOGIN","OFFLINE");
             new DownloadJson(null).execute("Useless");
         }
         else
         {
+            Log.e("STATUSLOGIN","ONLINE");
             new DownloadJsonDeleteAttept(null).execute("Useless");
         }
     }
@@ -173,6 +176,7 @@ public class FinalContent extends Application{
     }
     public void createList()
     {
+        ITEMS = new ArrayList<PlaylistITEM>();
         try {
             JSONObject lireJSON     = new JSONObject(jsonSaved);
             Log.e("JSONSAVED",jsonSaved+"1");
@@ -188,7 +192,6 @@ public class FinalContent extends Application{
                 String strOwnerID =jsonMovie.get("Proprietaire").toString();
                 String strActive = jsonMovie.get("Active").toString();
                 String strPublique = jsonMovie.get("Publique").toString();
-                //addItem(createDummyItem(i,strNom,strId,strOwnerID));
                 PlaylistITEM  playlistITEM= new PlaylistITEM(strNom, strId, strOwnerID, strPublique, strActive);
                 ITEMS.add(playlistITEM);
             }
@@ -339,7 +342,7 @@ public class FinalContent extends Application{
     }
     public void createListMusic()
     {
-
+        SONGITEMSPRIMAL = new ArrayList<SongItem>();
         try {
 
             JSONObject lireJSON     = new JSONObject(jsonSaved);
@@ -365,10 +368,15 @@ public class FinalContent extends Application{
 
                 Log.e("createListMusic","New song:"+strTitre+" Owner Id:"+strOwnerID);
                 //addItem(createDummyItem(i,strNom,strId));
+              /*  for(PlaylistITEM playlistITEM : ITEMS) {
+                    playlistITEM.SONGITEMS = new ArrayList<SongItem>();
+                }
 
-
+*/
                 for(PlaylistITEM playlistITEM : ITEMS)
                 {
+                   // playlistITEM.SONGITEMS = new ArrayList<SongItem>();
+                 //   playlistITEM.SONGITEMS = new ArrayList<SongItem>();
                     String[] strListeDeLecture = playlistITEM.strListeDeLecture.split(";");
                     for(String strSingleListeDeLecture : strListeDeLecture)
                     {

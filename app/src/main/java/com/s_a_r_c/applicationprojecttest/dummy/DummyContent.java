@@ -47,6 +47,7 @@ public class DummyContent extends Application{
     String jsonSaved = "";
     public static String strID = "";
     public static String strAlias = "";
+    public static String strSoloMusic = "";
     public static String strPassword = "";
     public static String strCourriel = "";
     public static String strSongSelected = "";
@@ -69,8 +70,13 @@ public class DummyContent extends Application{
         //get avatar
         new DownloadListAvatars(null).execute("Useless");
 
+<<<<<<< HEAD
+       // FinalContent finalContent = new FinalContent();
+       // finalContent.onCreate();
+=======
         FinalContent finalContent = new FinalContent();
         //finalContent.onCreate();
+>>>>>>> 19e6a0f26d57c268757adb81216fee9fcceb41cf
 
     }
 
@@ -489,6 +495,8 @@ public class DummyContent extends Application{
     {
         return strPlaylistSelected;
     }
+    public static String getStrSoloMusic(){return strSoloMusic;}
+    public static void setStrSoloMusic(String strThing){strSoloMusic = strThing;}
 
     private class DownloadJsonDeleteAttept extends AsyncTask<String, Void, String> {
         String url;

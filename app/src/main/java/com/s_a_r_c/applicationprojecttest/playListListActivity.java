@@ -240,6 +240,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
         if (id == R.id.menu_import_song) {
             Log.e("nav_camera","Selected");
+            DummyContent.setStrSoloMusic("true");
             Intent intent = new Intent(this, visualizeSongsActivity.class);
             startActivity(intent);
 
