@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -20,19 +19,17 @@ import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 import com.s_a_r_c.applicationprojecttest.Helpers.UserDatabase;
+import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 
@@ -65,13 +62,15 @@ public void confirmSuccesffulLoginAttempt()
 
                 dummyContent.connectUser(lireJSON.get("alias").toString(), lireJSON.get("courriel").toString(), lireJSON.get("motdepasse").toString(), lireJSON.get("Id").toString() );
 
+                AvatarContent avatarFound = Avatars.getInstance().getListAvatarsById().get(Integer.valueOf(lireJSON.get("avatar").toString()));
+
                 UserDatabase userDb = UserDatabase.getInstance(getApplicationContext());
                 Log.d("xxxxxxxxxxxxxxxxx", jsonSaved);
                 userDb.logInUser(Integer.valueOf(lireJSON.get("Id").toString()),
                         lireJSON.get("alias").toString(),
                         lireJSON.get("courriel").toString(),
                         Integer.valueOf(lireJSON.get("avatar").toString()),
-                        "",
+                        (avatarFound != null ? avatarFound.getAvatarB64() : ""),
                         lireJSON.get("motdepasse").toString());
 
                 //show his username
@@ -119,8 +118,8 @@ public void confirmSuccesffulLoginAttempt()
     public void sendLoginAttempt(View view) {
         hideKeyboard();
 
-        TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
-        TextView tvPassword = (TextView) findViewById(R.id.tvPassword);
+        TextView tvUsername = (TextView) findViewById(R.id.etNewUserEmail);
+        TextView tvPassword = (TextView) findViewById(R.id.etNewUserPassword);
         TextView tvCaptcha = (TextView) findViewById(R.id.tvCaptcha);
 
         if(tvUsername != null && tvUsername.getText().toString().trim().equals("") && !Patterns.EMAIL_ADDRESS.matcher(tvUsername.getText().toString().trim()).matches())
@@ -168,9 +167,6 @@ public void confirmSuccesffulLoginAttempt()
         }
 
         protected String doInBackground(String... url) {
-
-            TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
-            TextView tvPassword = (TextView) findViewById(R.id.tvPassword);
 
             HttpURLConnection c = null;
             try {

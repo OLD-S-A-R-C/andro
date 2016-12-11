@@ -1,17 +1,10 @@
 package com.s_a_r_c.applicationprojecttest;
 
-import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -19,7 +12,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
@@ -30,10 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.s_a_r_c.applicationprojecttest.Helpers.UserDatabase;
@@ -41,14 +33,12 @@ import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
 import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 import com.s_a_r_c.applicationprojecttest.dummy.FinalContent;
-import com.s_a_r_c.applicationprojecttest.dummy.SongContent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * An activity representing a list of PlayLists. This activity
@@ -111,15 +101,15 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Refreshing data", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
-                //finalContent.onCreate();
                 if (adapter != null && compteur % 2 == 0)  {
                     FinalContent finalContent = new FinalContent();
                     finalContent.onCreate();
+                    Snackbar.make(view, "Râfraichissement des données en cours...", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 } else {
                     onResume();
                     adapter.notifyDataSetChanged();
+                    Snackbar.make(view, "Changements appliqués", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
 
                 compteur++;
@@ -366,7 +356,6 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
     private void setDrawerAvatar(String avatarId, int idComponent) {
         AvatarContent avatarFound = Avatars.getInstance().getListAvatarsById().get(Integer.valueOf(avatarId));
         if (avatarFound != null) {
-            ImageView avatar = (ImageView) findViewById(R.id.ivDrawerAvatar);
             byte[] decodedString = Base64.decode(avatarFound.getAvatarB64(), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             ImageView img = (ImageView) findViewById(R.id.ivDrawerAvatar);
