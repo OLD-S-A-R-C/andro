@@ -58,6 +58,11 @@ public class visualizeSongsActivity extends AppCompatActivity {
                     Intent intent = new Intent(getBaseContext(), modifySongActivity.class);
                     startActivity(intent);
                 }
+                else
+                {
+                    Intent intent = new Intent(getBaseContext(), songContent.class);
+                    startActivity(intent);
+                }
             }
         });
      }
