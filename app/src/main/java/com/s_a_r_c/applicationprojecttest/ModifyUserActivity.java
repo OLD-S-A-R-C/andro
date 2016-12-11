@@ -224,8 +224,8 @@ public class ModifyUserActivity extends AppCompatActivity {
 
             HttpURLConnection c = null;
             try {
-                String strConfirmation = DummyContent.encryptMD5(strMotDePasse+strCle);
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=modifierUser&p1="+strId+"&p2="+MDstrCourriel+"&p3="+ DummyContent.encryptMD5(MDstrMotDePasse)+"&p4="+MDstrAlias.trim().replace(" ", "%20")+"&p5="+String.valueOf(idAvatarSelected())+"&p6=true");
+                String strConfirmation = DummyContent.encryptMD5(UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_MD5_PASSWORD)+strCle);
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=modifierUser&p1="+strId+"&p2="+MDstrCourriel+"&p3="+ UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_MD5_PASSWORD)+"&p4="+MDstrAlias.trim().replace(" ", "%20")+"&p5="+String.valueOf(idAvatarSelected())+"&p6=true");
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
@@ -278,6 +278,12 @@ public class ModifyUserActivity extends AppCompatActivity {
             {
                 hideKeyboardShowToast(lireJSON.get("reason").toString());
                 setDrawerInfos();
+                UserDatabase.getInstance(getApplicationContext()).updateAfterEdit(
+                        lireJSON.get("alias").toString(),
+                        lireJSON.get("courriel").toString(),
+                        lireJSON.get("motdepasse").toString(),
+                        lireJSON.get("avatar").toString()
+                        );
                 finish();
             }
             else

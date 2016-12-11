@@ -15,7 +15,8 @@
         <activity
             android:name=".playListListActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,22 +27,23 @@
             android:name=".playListDetailActivity"
             android:label="@string/title_playlist_detail"
             android:parentActivityName=".playListListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.s_a_r_c.applicationprojecttest.playListListActivity" />
         </activity>
-        <activity android:name=".DisplayMessageActivity" />
-        <activity android:name=".ModifyUserActivity" />
-        <activity android:name=".createUserActivity" />
-        <activity android:name=".createNewPlaylist" />
-        <activity android:name=".modifyPlaylist" />
-        <activity android:name=".songContent" />
-        <activity android:name=".modifySongActivity" />
-        <activity android:name=".visualizeSongsActivity" />
-        <activity android:name=".addSongActivity" />
+        <activity android:name=".DisplayMessageActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ModifyUserActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".createUserActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".createNewPlaylist" android:screenOrientation="portrait"/>
+        <activity android:name=".modifyPlaylist" android:screenOrientation="portrait"/>
+        <activity android:name=".songContent" android:screenOrientation="portrait"/>
+        <activity android:name=".modifySongActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".visualizeSongsActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".addSongActivity" android:screenOrientation="portrait"/>
 
-        <activity android:name=".CriticalErrorLandingActivity" />
+        <activity android:name=".CriticalErrorLandingActivity" android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

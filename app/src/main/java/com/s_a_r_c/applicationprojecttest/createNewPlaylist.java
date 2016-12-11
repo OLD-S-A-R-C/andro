@@ -58,7 +58,6 @@ public class createNewPlaylist extends AppCompatActivity {
             strId = lireJSON.get("Id").toString();
             strAvatar = lireJSON.get("avatar").toString();
             strAlias = lireJSON.get("alias").toString();
-            setTitle("Modification de "+strAlias);
             Log.e("Logged in as:",strCourriel+" 1");
         } catch (JSONException e) {
             e.printStackTrace();

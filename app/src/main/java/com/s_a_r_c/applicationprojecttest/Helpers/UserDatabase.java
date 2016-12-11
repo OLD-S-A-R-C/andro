@@ -144,6 +144,19 @@ public class UserDatabase extends SQLiteOpenHelper {
         //db.close();
     }
 
+    public void updateAfterEdit(String alias, String email, String password, String avatarID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(USER_ALIAS, alias);
+        values.put(USER_EMAIL, email);
+        values.put(USER_MD5_PASSWORD, email);
+        values.put(USER_AVATAR_ID, email);
+
+        db.update("USER_INFOS", values, USER_ID + "=" + this.retournerInfosUser().get(USER_ID), null);
+        //db.close();
+    }
+
     //obligatoire sinon crash
     @Override
     public void onUpgrade(SQLiteDatabase db, int intOld, int intNew) {
