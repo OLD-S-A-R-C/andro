@@ -70,7 +70,7 @@ public class DummyContent extends Application{
         new DownloadListAvatars(null).execute("Useless");
 
         FinalContent finalContent = new FinalContent();
-        finalContent.onCreate();
+        //finalContent.onCreate();
 
     }
 
