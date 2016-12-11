@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:showIn="@layout/app_bar_main"
-    tools:context=".playListListActivity">
+    tools:context=".playListListActivity"
+    >
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:paddingTop="30dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -43,7 +45,7 @@
         </FrameLayout>
 
         <ListView
-            android:paddingTop="40dp"
+            android:paddingTop="70dp"
             android:id="@+id/listViewPlaylist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -62,7 +64,7 @@
         android:id="@+id/fabRefresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/stat_notify_chat"
+        android:src="@drawable/ic_action_name"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
