@@ -87,6 +87,7 @@ public class modifyPlaylist extends AppCompatActivity {
                 strActive = playlistITEMFinal.active;
                 strNom =  playlistITEMFinal.name;
                 strPublique =  playlistITEMFinal.publique;
+        strPlaylistID = DummyContent.getStrPlaylistSelected();
                 setTitle("Modification de "+ strNom);
 
 
