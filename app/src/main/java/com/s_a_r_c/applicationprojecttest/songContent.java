@@ -164,7 +164,6 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        strString = "";
                         InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
                         BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
                         StringBuilder stringBuilder1 = new StringBuilder();
@@ -172,6 +171,8 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();

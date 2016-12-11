@@ -84,7 +84,7 @@ public class modifyPlaylist extends AppCompatActivity {
                 Log.e("labo7", e.toString());
             }
 
-        EditText editText = (EditText)findViewById(R.id.editText14);
+        EditText editText = (EditText)findViewById(R.id.etPlaylistName);
         editText.setText(strNom);
         EditText editText2 = (EditText)findViewById(R.id.etPlaylistDuplicate);
         editText2.setText(strNom+"(DUP)");
@@ -137,6 +137,8 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -204,6 +206,8 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -264,8 +268,9 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur ticket est survenue !" + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -317,7 +322,7 @@ public class modifyPlaylist extends AppCompatActivity {
             Log.e("labo7",e.toString());
         }
 
-        EditText editText = (EditText)findViewById(R.id.editText14);
+        EditText editText = (EditText)findViewById(R.id.etPlaylistName);
         MDstrNom = editText.getText().toString();
         CheckBox checkBoxPublique = (CheckBox)findViewById(R.id.checkBox3);
         if(checkBoxPublique.isChecked())
@@ -401,6 +406,8 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -462,6 +469,8 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -545,6 +554,8 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -623,6 +634,8 @@ public class modifyPlaylist extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {

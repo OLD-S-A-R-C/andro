@@ -128,6 +128,23 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             nav_Menu.findItem(R.id.menu_login).setVisible(true);
         }
 
+        try {
+            Log.d("AVATAR", "A LAIDE DE USERDATABASE");
+            byte[] decodedString = Base64.decode((String) UserDatabase.getInstance(this).retournerInfosUser().get(UserDatabase.USER_AVATAR_B64), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ImageView img = (ImageView) findViewById(R.id.ivDrawerAvatar);
+            img.setImageBitmap(decodedByte);
+            img.requestLayout();
+            img.getLayoutParams().height = 200;
+            img.getLayoutParams().width = 200;
+            img.requestLayout();
+
+            TextView tvEmail = (TextView) findViewById(R.id.tvDrawerEmail);
+            tvEmail.setText((String) UserDatabase.getInstance(this).retournerInfosUser().get(UserDatabase.USER_EMAIL));
+        }catch (Exception e) {
+            Log.d("AVATAR CRASH", e.getMessage());
+        }
+
 
     }
 

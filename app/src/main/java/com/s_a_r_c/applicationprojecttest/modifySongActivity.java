@@ -117,6 +117,8 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -281,6 +283,8 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -377,8 +381,15 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError", "Status 400");
-                        return null;
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -459,6 +470,8 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -551,6 +564,8 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -614,6 +629,8 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -706,6 +723,8 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -770,6 +789,8 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -857,6 +878,8 @@ public class modifySongActivity extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();

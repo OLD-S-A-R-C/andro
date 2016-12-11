@@ -213,6 +213,8 @@ String jsonSaved = "";
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -246,7 +248,7 @@ String jsonSaved = "";
             HttpURLConnection c = null;
             try {
                 //Log.d("WAIT", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(displayAvatar()));
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(idAvatarSelected()));
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias.trim().replace(" ", "%20")+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(idAvatarSelected()));
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
@@ -269,6 +271,8 @@ String jsonSaved = "";
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {

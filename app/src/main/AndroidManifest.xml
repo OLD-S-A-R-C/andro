@@ -41,14 +41,7 @@
         <activity android:name=".visualizeSongsActivity" />
         <activity android:name=".addSongActivity" />
 
-        <activity android:name=".CriticalErrorLandingActivity"
-            android:process=":report_process"
-            android:taskAffinity="org.example.package.TASK.ExceptionDisplay">
-            <intent-filter>
-                <action android:name="com.error.activity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".CriticalErrorLandingActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"
