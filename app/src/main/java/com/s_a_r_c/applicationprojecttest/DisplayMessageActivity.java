@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -23,11 +24,11 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.s_a_r_c.applicationprojecttest.Helpers.UserDatabase;
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -49,6 +50,8 @@ public class DisplayMessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_message);
+
+        getSupportActionBar().setTitle("Listes de musiques");
     }
 public void confirmSuccesffulLoginAttempt()
     {
@@ -62,7 +65,7 @@ public void confirmSuccesffulLoginAttempt()
 
                 dummyContent.connectUser(lireJSON.get("alias").toString(), lireJSON.get("courriel").toString(), lireJSON.get("motdepasse").toString(), lireJSON.get("Id").toString() );
 
-                UserDatabase userDb = new UserDatabase(getApplicationContext());
+                UserDatabase userDb = UserDatabase.getInstance(getApplicationContext());
                 Log.d("xxxxxxxxxxxxxxxxx", jsonSaved);
                 userDb.logInUser(Integer.valueOf(lireJSON.get("Id").toString()),
                         lireJSON.get("alias").toString(),
@@ -122,9 +125,8 @@ public void confirmSuccesffulLoginAttempt()
         TextView tvPassword = (TextView) findViewById(R.id.tvPassword);
         TextView tvCaptcha = (TextView) findViewById(R.id.tvCaptcha);
 
-        if(tvUsername != null && tvUsername.getText().toString().trim().equals(""))
+        if(tvUsername != null && tvUsername.getText().toString().trim().equals("") && !Patterns.EMAIL_ADDRESS.matcher(tvUsername.getText().toString().trim()).matches())
         {
-
             Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un nom d'utilisateur !", Snackbar.LENGTH_SHORT).show();
         } else if (tvPassword != null && tvPassword.getText().toString().trim().equals("")) {
             Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un mot de passe", Snackbar.LENGTH_SHORT).show();
@@ -201,6 +203,8 @@ public void confirmSuccesffulLoginAttempt()
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
 
             } catch (Exception ex) {
@@ -220,7 +224,10 @@ public void confirmSuccesffulLoginAttempt()
 
         protected void onPostExecute(String result) {
             jsonSaved = result;
-            confirmLogin();
+            if (result != null) {
+                confirmLogin();
+            }
+
         }
     }
 
@@ -262,6 +269,8 @@ public void confirmSuccesffulLoginAttempt()
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {

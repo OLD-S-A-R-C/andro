@@ -131,6 +131,8 @@ public class playListDetailActivity extends AppCompatActivity {
             bundle.putString("userData", strCourriel+";"+strMotDePasse+";"+strId);
             playListDetailFragment fragment = new playListDetailFragment();
 
+
+
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().add(R.id.playlist_detail_container, fragment).commit();
         }
@@ -169,10 +171,11 @@ public class playListDetailActivity extends AppCompatActivity {
 
         SongContent songContent = new SongContent();
         for(DummyContent.DummyItem item1 : DummyContent.ITEMS) {
-            Log.e("EQUALSDUMMYCONTENT",item1.details+" size:"+DummyContent.ITEMS.size());
+
+           // Log.e("EQUALSDUMMYCONTENT",item1.details+" size:"+DummyContent.ITEMS.size()+" "+item1.strListeDeLecture);
             if(item1.details.equals(DummyContent.getStrPlaylistSelected())) {
-                Log.e("strListeDeLecture", "" + item1.strListeDeLecture);
-                Log.e("PURGELIST////","///////////"+item1.strListeDeLecture);
+        //        Log.e("strListeDeLecture", "" + item1.strListeDeLecture);
+          //      Log.e("PURGELIST////","///////////"+item1.strListeDeLecture);
                 songContent.purgeSongs(item1.strListeDeLecture);
 
             }

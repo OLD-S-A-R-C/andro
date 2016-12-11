@@ -1,12 +1,25 @@
 package com.s_a_r_c.applicationprojecttest.dummy;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Looper;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import com.s_a_r_c.applicationprojecttest.R;
+
+import com.s_a_r_c.applicationprojecttest.CriticalErrorLandingActivity;
+import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,8 +27,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +51,8 @@ public class DummyContent extends Application{
     public static String strCourriel = "";
     public static String strSongSelected = "";
     public static String strPlaylistSelected = "";
+    public String strTicketID = "";
+    public String strCle = "";
     //public static String strOwner = "";
     private static Context mContext;
 
@@ -47,13 +65,29 @@ public class DummyContent extends Application{
         SongContent songContent = new SongContent();
         songContent.onCreate();
         new DownloadListDeLecture(null).execute("Useless");
+
+        //get avatar
+        new DownloadListAvatars(null).execute("Useless");
+
+        FinalContent finalContent = new FinalContent();
+        finalContent.onCreate();
+
     }
 
     public void refresh()
     {
         ITEMS.clear();
-        new DownloadJson(null).execute("Useless");
+        if(!strID.equals("")) {
+           //new DownloadJson(null).execute("Useless");
+           new DownloadJsonDeleteAttept(null).execute("Useless");
+        }
+        else
+        {
+            new DownloadJson(null).execute("Useless");
+        }
         //songContent.refresh();
+        SongContent songContent = new SongContent();
+        songContent.onCreate();
         new DownloadListDeLecture(null).execute("Useless");
     }
 
@@ -131,6 +165,7 @@ public class DummyContent extends Application{
             HttpURLConnection c = null;
             try {
 
+                //Playlist Public+Owner : http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +ticket.idTicket + "&confirmation=" + md5(motdepasse + ticket.cle) +"&action=afficherToutesLesListes&p1=" + utilisateurID
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/getListesDeLecture");
                 c = (HttpURLConnection) u.openConnection();
                 c.connect();
@@ -145,8 +180,15 @@ public class DummyContent extends Application{
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -159,9 +201,16 @@ public class DummyContent extends Application{
         }
 
         protected void onPostExecute(String result) {
-            // bmImage.setImageBitmap(result);
+
             jsonSaved = result;
-            createList();
+            if (jsonSaved != null) {
+                createList();
+            } else {
+                Intent intent = new Intent(getApplicationContext(), CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+
         }
     }
     public void createList()
@@ -172,7 +221,6 @@ public class DummyContent extends Application{
         try {
 
             JSONObject lireJSON     = new JSONObject(jsonSaved);
-
           ///////  int nbElements =  Integer.parseInt( lireJSON.get("NbFilms").toString());
            JSONArray jsonArray = lireJSON.getJSONArray("Elements");
             int nbElements = lireJSON.getJSONArray("Elements").length();
@@ -182,7 +230,6 @@ public class DummyContent extends Application{
                 jsonMovie = jsonArray.getJSONObject(i);
                String strNom =jsonMovie.get("Nom").toString();
                 String strId =jsonMovie.get("Id").toString();
-                Log.e("MOVIELIST1",strNom+" "+strId);
 
                 String strOwnerID =jsonMovie.get("Proprietaire").toString();
                 addItem(createDummyItem(i,strNom,strId,strOwnerID));
@@ -230,8 +277,15 @@ public class DummyContent extends Application{
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -244,16 +298,78 @@ public class DummyContent extends Application{
         }
 
         protected void onPostExecute(String result) {
-            // bmImage.setImageBitmap(result);
+            if (result == null) {
+                Intent intent = new Intent(getApplicationContext(), CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
             jsonSaved = result;
             createListeDeLecture();
         }
     }
+
+    private class DownloadListAvatars extends AsyncTask<String, Void, String> {
+        String url;
+
+        public DownloadListAvatars(String url) {
+
+            this.url = url;
+        }
+
+        protected String doInBackground(String... url) {
+
+            HttpURLConnection c = null;
+            try {
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Avatar/getAvatar");
+                c = (HttpURLConnection) u.openConnection();
+                c.connect();
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
+                    case 200:
+                        InputStreamReader  inputStreamReader =new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null){stringBuilder.append(strString+"\n");}
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
+                }}
+            catch (Exception ex) {return ex.toString();} finally {
+                if (c != null) {
+                    try {
+                        c.disconnect();
+                    } catch (Exception ex) {Log.e("JsonRetrieveError","Error fielded");}
+                }
+            }
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+            if (result == null) {
+                Intent intent = new Intent(getApplicationContext(), CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+            jsonSaved = result;
+            createListAvatars(jsonSaved);
+        }
+    }
+
     public void createListeDeLecture()
     {
         try {
 
-            JSONObject lireJSON     = new JSONObject(jsonSaved);
+            JSONObject lireJSON = new JSONObject(jsonSaved);
             JSONArray jsonArray = lireJSON.getJSONArray("Elements");
             int nbElements = lireJSON.getJSONArray("Elements").length();
             JSONObject jsonMovie = new JSONObject();
@@ -280,9 +396,40 @@ public class DummyContent extends Application{
 
         for(DummyItem item1 : ITEMS) {
 
-            Log.e("CREATELISTEDELECTURE",item1.content+" "+item1.strListeDeLecture+"");
         }
     }
+
+
+    public void createListAvatars(String json)
+    {
+        try {
+            Log.d("AVATARAAAAAAAAAAAAAA", " jjjjj");
+            JSONObject lireJSON = new JSONObject(json);
+            JSONArray jsonArray = lireJSON.getJSONArray("Elements");
+            int nbElements = lireJSON.getJSONArray("Elements").length();
+            JSONObject jsonAvatar = new JSONObject();
+            for(int i = 0; i<nbElements;i++)
+            {
+                jsonAvatar = jsonArray.getJSONObject(i);
+                int id = Integer.valueOf(jsonAvatar.get("Id").toString());
+                String strNom = jsonAvatar.get("Nom").toString();
+                String strAvatarB64 = jsonAvatar.get("Avatar").toString();
+                AvatarContent newAvatar = new AvatarContent();
+                newAvatar.setAvatar(id, strNom, strAvatarB64);
+                Avatars.getInstance().addAvatar(newAvatar);
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("labo7",e.toString());
+        }
+
+        for(DummyItem item1 : ITEMS) {
+
+        }
+    }
+
     public void connectUser(String alias, String courriel, String password, String ID )
     {
         Log.e("DUMMYCONTENTCONNECTED"," LOGGED IN "+alias);
@@ -295,10 +442,27 @@ public class DummyContent extends Application{
     {
         strSongSelected = strElement;
     }
-//Test 
+
     public static void setStrPlaylistSelected(String strElement)
     {
         strPlaylistSelected = strElement;
+    }
+
+    public static String getMd5Hash(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(input.getBytes());
+            BigInteger number = new BigInteger(1, messageDigest);
+            String md5 = number.toString(16);
+
+            while (md5.length() < 32)
+                md5 = "0" + md5;
+
+            return md5;
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("MD5", e.getLocalizedMessage());
+            return null;
+        }
     }
 
     public static String getAlias()
@@ -325,4 +489,162 @@ public class DummyContent extends Application{
     {
         return strPlaylistSelected;
     }
+
+    private class DownloadJsonDeleteAttept extends AsyncTask<String, Void, String> {
+        String url;
+
+        public DownloadJsonDeleteAttept(String url) {
+
+            this.url = url;
+        }
+
+
+        protected String doInBackground(String... url) {
+
+            HttpURLConnection c = null;
+            try {
+
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/" + DummyContent.getCourriel());
+                Log.e("URL", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/" + DummyContent.getCourriel());
+                c = (HttpURLConnection) u.openConnection();
+                c.setRequestMethod("GET");
+                c.connect();
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
+                    case 200:
+                        InputStreamReader inputStreamReader = new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(strString + "\n");
+                        }
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
+                }
+            } catch (Exception ex) {
+                return ex.toString();
+            } finally {
+                if (c != null) {
+                    try {
+                        c.disconnect();
+                    } catch (Exception ex) {
+                        Log.e("JsonRetrieveError", "Error fielded");
+                    }
+                }
+            }
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+            if (result == null) {
+                Intent intent = new Intent(getApplicationContext(), CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+            jsonSaved = result;
+            if (jsonSaved != null) {
+                receivedDeleteResponse();
+            }
+
+        }
+    }
+
+    public void receivedDeleteResponse() {
+        try {
+
+            JSONObject lireJSON = new JSONObject(jsonSaved);
+            strTicketID = lireJSON.get("idTicket").toString();
+            strCle = lireJSON.get("cle").toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("labo7", e.toString());
+        }
+
+        new DownloadJsonDeleteComplete(null).execute("Useless");
+    }
+
+
+    private class DownloadJsonDeleteComplete extends AsyncTask<String, Void, String> {
+        String url;
+
+        public DownloadJsonDeleteComplete(String url) {
+
+            this.url = url;
+        }
+
+
+        protected String doInBackground(String... url) {
+
+            HttpURLConnection c = null;
+            try {
+
+                String strConfirmation = getMd5Hash(DummyContent.getPassword() + strCle);
+                //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=337&confirmation=26b15445192a07d528d0e70c2c58264d&action=supprimerMusiqueListe&p1=9&p2=16&p3=148
+                //Playlist Public+Owner : http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +ticket.idTicket + "&confirmation=" + md5(motdepasse + ticket.cle) +"&action=afficherToutesLesListes&p1=" + utilisateurID
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=afficherToutesLesListes&p1=" + DummyContent.getId());
+                Log.e("Error", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=afficherToutesLesListes&p1=" + DummyContent.getId());
+                c = (HttpURLConnection) u.openConnection();
+                c.setRequestMethod("PUT");
+                c.connect();
+                int intStatusRetrieved = c.getResponseCode();
+                String strString;
+                switch (intStatusRetrieved) {
+                    case 200:
+                        InputStreamReader inputStreamReader = new InputStreamReader(c.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while ((strString = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(strString + "\n");
+                        }
+                        bufferedReader.close();
+                        return stringBuilder.toString();
+                    case 400:
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
+                }
+            } catch (Exception ex) {
+                return ex.toString();
+            } finally {
+                if (c != null) {
+                    try {
+                        c.disconnect();
+                    } catch (Exception ex) {
+                        Log.e("JsonRetrieveError", "Error fielded");
+                    }
+                }
+            }
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+
+            if (result == null) {
+
+                Intent intent = new Intent(getApplicationContext(), CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+            jsonSaved = result;
+            createList();
+        }
+    }
+
 }

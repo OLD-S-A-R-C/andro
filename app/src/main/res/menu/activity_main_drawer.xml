@@ -1,35 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/menu_new_user"
+            android:icon="@drawable/ic_menu_new_user"
+            android:title="Nouvel utilisateur" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Create User" />
+            android:id="@+id/menu_login"
+            android:icon="@drawable/ic_menu_login"
+            android:title="Connexion" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Login" />
+            android:id="@+id/menu_logout"
+            android:icon="@drawable/ic_menu_logout"
+            android:title="Déconnexion"
+            android:visible="false"/>
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Modify" />
+            android:id="@+id/menu_edit_profile"
+            android:icon="@drawable/ic_menu_edit"
+            android:title="Modifier votre profil"
+            android:visible="false"/>
     </group>
 
-    <item android:title="Administrative Actions">
+    <item android:id="@+id/submenu_actions"
+          android:title="Actions"
+          android:visible="false">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Add New Playlist" />
+                android:id="@+id/menu_new_playlist"
+                android:icon="@drawable/ic_menu_add_list"
+                android:title="Nouvelle liste de musiques" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Add New Song" />
+                android:id="@+id/menu_new_song"
+                android:icon="@drawable/ic_menu_add_song"
+                android:title="Nouvelle musique" />
+            <item
+                android:id="@+id/menu_import_song"
+                android:icon="@drawable/ic_menu_add_song"
+                android:title="Importer une musique" />
         </menu>
     </item>
 

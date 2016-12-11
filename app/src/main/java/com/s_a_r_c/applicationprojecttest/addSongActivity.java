@@ -55,7 +55,7 @@ public class addSongActivity extends AppCompatActivity {
             hideKeyboardShowToast("Titre invalide");
         } else if (etArtistNewMusic.getText().toString().trim().equals("")) {
             hideKeyboardShowToast("Artiste invalide");
-        } else if (etURLNewMusic.getText().toString().trim().equals("") || checkIfYoutubeURL(etURLNewMusic.getText().toString().trim())) {
+        } else if (etURLNewMusic.getText().toString().trim().equals("") || !checkIfYoutubeURL(etURLNewMusic.getText().toString().trim())) {
             hideKeyboardShowToast("URL invalide");
         } else {
             new DownloadJsonDeleteAttept(null).execute("Useless");
@@ -98,7 +98,6 @@ public class addSongActivity extends AppCompatActivity {
             try {
 
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+DummyContent.getCourriel());
-                Log.e("URL","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+DummyContent.getCourriel());
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("GET");
                 c.connect();
@@ -121,6 +120,8 @@ public class addSongActivity extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -156,7 +157,7 @@ public class addSongActivity extends AppCompatActivity {
         EditText editText8 = (EditText)findViewById(R.id.etArtistNewMusic);
         strArtiste = editText8.getText().toString();
         EditText editText9 = (EditText)findViewById(R.id.etURLNewMusic);
-        strUrl = editText9.getText().toString();
+        strUrl = editText9.getText().toString().replace(" ", "%20");
         CheckBox checkBox = (CheckBox)findViewById(R.id.checkBox7);
         CheckBox checkBox2 = (CheckBox)findViewById(R.id.checkBox8);
         if(checkBox.isChecked())
@@ -201,9 +202,8 @@ public class addSongActivity extends AppCompatActivity {
                 String strConfirmation = getMd5Hash(DummyContent.getPassword()+strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=184&confirmation=99fee649e6b6e7680a094d49cec71961&action=nouvelleMusique&p1=9&p2=testestTitre&p3=testtestArtiste&p4=testTestURL&p5=true&p6=true
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=181&confirmation=cc8e336a813dff682d64349fa4374724&action=nouvelleMusique&p1=9&p2=TestTitre&p3=TestArtiste&p4=https://www.youtube.com/watch?v=Pw-0pbY9JeU&p5=true&p6=true
-                Log.e("P%P%P%P%P%P%P%P%P%",strPublique+"");
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=nouvelleMusique&p1="+DummyContent.getId()+"&p2="+strTitre+"&p3="+strArtiste+"&p4="+strUrl+"&p5="+strPublique+"&p6="+strActive);
-                Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=nouvelleMusique&p1="+DummyContent.getId()+"&p2="+strTitre+"&p3="+strArtiste+"&p4="+strUrl+"&p5="+strPublique+"&p6="+strActive);
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=nouvelleMusique&p1="+DummyContent.getId()+"&p2="+strTitre+"&p3="+strArtiste+"&p4="+strUrl.replace(" ", "%20")+"&p5="+strPublique+"&p6="+strActive);
+                Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=nouvelleMusique&p1="+DummyContent.getId()+"&p2="+strTitre+"&p3="+strArtiste+"&p4="+strUrl.replace(" ", "%20")+"&p5="+strPublique+"&p6="+strActive);
 
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
@@ -227,6 +227,8 @@ public class addSongActivity extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -241,7 +243,10 @@ public class addSongActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             jsonSaved = result;
             Log.e("FinalResponse",jsonSaved+"");
-            finalResponse();
+            if (result != null || jsonSaved != null) {
+                finalResponse();
+            }
+
         }
     }
     public void finalResponse()

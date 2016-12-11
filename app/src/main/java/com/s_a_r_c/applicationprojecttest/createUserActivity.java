@@ -1,22 +1,26 @@
 package com.s_a_r_c.applicationprojecttest;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
+import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +32,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class createUserActivity extends AppCompatActivity {
 
@@ -38,10 +46,39 @@ String jsonSaved = "";
     String strEmail = "";
     String strCaptcha = "";
     String strSuccess = "";
+
+    String[] avatarArray;
+    HashMap<Integer, AvatarContent> avatarMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_user);
+
+        getSupportActionBar().setTitle("Création d'un utilisateur");
+
+        Spinner spinnerNewUserAvatar = (Spinner) findViewById(R.id.spinnerNewUserAvatars);
+
+        Collection<AvatarContent> vals = Avatars.getInstance().getListAvatars().values();
+        AvatarContent[] array = vals.toArray(new AvatarContent[vals.size()]);
+        ArrayAdapter<AvatarContent> adapter = new ArrayAdapter<AvatarContent>(this,
+                android.R.layout.simple_spinner_item,
+                array);
+        spinnerNewUserAvatar.setAdapter(adapter);
+        spinnerNewUserAvatar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int pos, long id) {
+                displayAvatar();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+            }
+        });
+
+        //hideKeyboardShowToast(String.valueOf(Avatars.getInstance().getListAvatars().size()));
     }
 
     public void confirmSuccesffulLoginAttempt()
@@ -70,26 +107,40 @@ String jsonSaved = "";
 
     public void sendCreateUserRequest(View view)
     {
-        EditText editText1 = (EditText)findViewById(R.id.editText7);
-        EditText editText2 = (EditText)findViewById(R.id.editText8);
-        EditText editText3 = (EditText)findViewById(R.id.editText9);
+        EditText editText1 = (EditText)findViewById(R.id.etNewUsername);
+        EditText editText2 = (EditText)findViewById(R.id.etNewEmail);
+        EditText editText3 = (EditText)findViewById(R.id.etNewPassword);
         strAlias = editText1.getText().toString();
         strEmail= editText2.getText().toString();
         strPassword = editText3.getText().toString();
-        new DownloadJsonCreatenAttempt(null).execute("Useless");
+
+        Spinner spinner = (Spinner)findViewById(R.id.spinnerNewUserAvatars);
+
+        if (strAlias.trim().equals("")) {
+            hideKeyboardShowToast("Alias invalide");
+        } else if (strEmail.trim().equals("") || !Patterns.EMAIL_ADDRESS.matcher(strEmail.trim()).matches()) {
+            hideKeyboardShowToast("Courriel invalide");
+        } else if (strPassword.trim().equals("")) {
+            hideKeyboardShowToast("Mot de passe invalide");
+        } else if (spinner.getSelectedItem() == null) {
+            hideKeyboardShowToast("Avatar invalide");
+        } else {
+            new DownloadJsonCreatenAttempt(null).execute("Useless");
+        }
+
+
     }
-    public void confirmRequest()
-    {
-        Log.e("CreateUserRequest",jsonSaved+"message");
+    public void confirmRequest() {
         try {
 
-            JSONObject lireJSON     = new JSONObject(jsonSaved);
+
+            JSONObject lireJSON = new JSONObject(jsonSaved);
             //JSONObject jsonMovie = new JSONObject();
-            String strCaptcha =lireJSON.get("captcha").toString();
-            strTicketID =lireJSON.get("idTicket").toString();
+            String strCaptcha = lireJSON.get("captcha").toString();
+            strTicketID = lireJSON.get("idTicket").toString();
             byte[] decodedString = Base64.decode(strCaptcha, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            ImageView img= (ImageView) findViewById(R.id.imageView3);
+            ImageView img = (ImageView) findViewById(R.id.imageView3);
             img.setImageBitmap(decodedByte);
             img.requestLayout();
             img.getLayoutParams().height = 200;
@@ -97,8 +148,8 @@ String jsonSaved = "";
             img.requestLayout();
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e("labo7",e.toString());
         }
+
     }
 
     public void confirmUserCreation(View view)
@@ -133,8 +184,6 @@ String jsonSaved = "";
             this.url = url;
         }
 
-
-
         protected String doInBackground(String... url) {
 
             HttpURLConnection c = null;
@@ -164,6 +213,8 @@ String jsonSaved = "";
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -196,9 +247,8 @@ String jsonSaved = "";
 
             HttpURLConnection c = null;
             try {
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=12/04/2016%2017:19:11&idAvatar=1");
-              //  URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias=Alias&courriel=Courriel@courriel.com&mdp=5f4dcc3b5aa765d61d8327deb882cf99&actif=true&date=12/04/2016%2016:19:11&idAvatar=1");
-                Log.e("SendingJson","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=12/04/2016 17:19:11&idAvatar=1");
+                //Log.d("WAIT", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(displayAvatar()));
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias.trim().replace(" ", "%20")+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(idAvatarSelected()));
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
@@ -221,6 +271,8 @@ String jsonSaved = "";
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -234,7 +286,45 @@ String jsonSaved = "";
 
         protected void onPostExecute(String result) {
             jsonSaved = result;
+
             confirmRequest();
+
+        }
+    }
+
+    private void displayAvatar() {
+        Spinner spinnerNewUserAvatar = (Spinner) findViewById(R.id.spinnerNewUserAvatars);
+
+        if (spinnerNewUserAvatar.getSelectedItem() != null) {
+            AvatarContent avatarSelected = Avatars.getInstance().getListAvatars().get(spinnerNewUserAvatar.getSelectedItem().toString());
+            if (avatarSelected != null) {
+                byte[] decodedString = Base64.decode(avatarSelected.getAvatarB64(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                ImageView img = (ImageView) findViewById(R.id.ivAvatar);
+                img.setImageBitmap(decodedByte);
+                img.requestLayout();
+                img.getLayoutParams().height = 200;
+                img.getLayoutParams().width = 200;
+                img.requestLayout();
+            }
+
+        }
+
+    }
+
+    private int idAvatarSelected() {
+        Spinner spinnerNewUserAvatar = (Spinner) findViewById(R.id.spinnerNewUserAvatars);
+
+        if (spinnerNewUserAvatar.getSelectedItem() != null) {
+            AvatarContent avatarSelected = Avatars.getInstance().getListAvatars().get(spinnerNewUserAvatar.getSelectedItem().toString());
+            if (avatarSelected != null) {
+                return avatarSelected.getId();
+            } else {
+                return 1;
+            }
+
+        } else {
+            return 1;
         }
     }
 
