@@ -6,7 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,18 +22,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.s_a_r_c.applicationprojecttest.Helpers.UserDatabase;
 import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
 import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
+import com.s_a_r_c.applicationprojecttest.dummy.FinalContent;
+import com.s_a_r_c.applicationprojecttest.dummy.SongContent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,10 +70,13 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
     private Menu menuDrawer;
 
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist_list);
+
+        FinalContent finalContent = new FinalContent();
+        finalContent.onCreate();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,9 +91,17 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View recyclerView = findViewById(R.id.playlist_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabRefresh);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Refreshing data", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                FinalContent finalContent = new FinalContent();
+                finalContent.onCreate();
+
+            }
+        });
+
 
         if (findViewById(R.id.playlist_detail_container) != null) {
             // The detail container view will be present only in the
@@ -90,23 +110,33 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-        DummyContent dummyContent = new DummyContent();
-       // dummyContent.refresh();
-
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-       // Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
-
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
-      //  Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
-
-    }
 
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
+///////////////////////////////////////////////////////////////////////////
+        final ListView ListView = (ListView) findViewById(R.id.listViewPlaylist);
+        ArrayList<String> playlists = new ArrayList<String>();
+        for(FinalContent.PlaylistITEM playlistITEM : FinalContent.ITEMS) {
+            playlists.add(playlistITEM.name+" ;"+playlistITEM.id);
+        }
 
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playlists);
+        ListView.setAdapter(adapter);
+
+        ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
+                String[] strSplit = ListView.getItemAtPosition(pos).toString().split(";");
+                DummyContent.setStrPlaylistSelected(strSplit[1]);
+                Intent intent = new Intent(getBaseContext(), playListDetailActivity.class);
+                startActivityForResult(intent,1);
+            }
+        });
+////////////////////////////////////////////////////////////////////////////
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
 
@@ -127,86 +157,6 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private final List<DummyContent.DummyItem> mValues;
-
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-            mValues = items;
-          //  Log.e("DUMMYCONTENTITEMSSIZE","SIZE:"+DummyContent.ITEMS.size());
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.playlist_list_content, parent, false);
-            return new ViewHolder(view);
-        }
-
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mTwoPane) {
-                        /*
-                        Bundle arguments = new Bundle();
-                        arguments.putString(playListDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        playListDetailFragment fragment = new playListDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.playlist_detail_container, fragment)
-                                .commit();
-*/
-                    } else {
-                        DummyContent dummyContent = new DummyContent();
-                      //  dummyContent.refresh();
-
-                        //Log.e("MTWOPANEACTIVITY","/////////////////SELECTEDFALSE");
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, playListDetailActivity.class);
-                       intent.putExtra(playListDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                      //  Log.e("STRLICTEDELECTURE",holder.mItem.content+" "+holder.mItem.strListeDeLecture);
-                        dummyContent.setStrPlaylistSelected(holder.mItem.details);
-                        String message = "{\"action\":\""+holder.mItem.details+"\",\"success\":\"true\",\"Id\":\"" +strId+ "\",\"courriel\":\"" +strCourriel+ "\",\"motdepasse\":\"" +strMotDePasse+ "\",\"alias\":\"" +strAlias+ "\",\"avatar\":\"" +strAvatar+ "\"}";
-                        intent.putExtra(EXTRA_MESSAGE, message);
-                        context.startActivity(intent);
-
-                    }
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
-            }
-        }
-    }
 
     @Override
     public void onBackPressed() {
@@ -241,8 +191,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        DummyContent dummyContent = new DummyContent();
-        dummyContent.refresh();
+
 
         int id = item.getItemId();
 
@@ -257,11 +206,16 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             startActivity(intent);
 
         } else if (id == R.id.menu_login) {
+
+
             Intent intent = new Intent(this, DisplayMessageActivity.class);
             String message = "Message";
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivityForResult(intent,1);
             Log.e("nav_slideshow","Selected");
+
+
+
         } else if (id == R.id.menu_edit_profile) {
             Intent intent = new Intent(this, ModifyUserActivity.class);
             String message = strResultIntent;

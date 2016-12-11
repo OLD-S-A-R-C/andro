@@ -26,6 +26,8 @@
 
 
 
+
+
     <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -44,6 +46,11 @@
             <include layout="@layout/playlist_list" />
         </FrameLayout>
 
+        <ListView
+            android:id="@+id/listViewPlaylist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
@@ -53,6 +60,17 @@
             app:headerLayout="@layout/nav_header_main"
             app:menu="@menu/activity_main_drawer" />
     </android.support.v4.widget.DrawerLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/stat_notify_chat"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="top|right" />
 
 
 </android.support.design.widget.CoordinatorLayout>

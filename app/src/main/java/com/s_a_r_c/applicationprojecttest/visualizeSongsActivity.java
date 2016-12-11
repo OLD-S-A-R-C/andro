@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
+import com.s_a_r_c.applicationprojecttest.dummy.FinalContent;
 import com.s_a_r_c.applicationprojecttest.dummy.SongContent;
 
 import java.util.ArrayList;
@@ -25,8 +26,8 @@ public class visualizeSongsActivity extends AppCompatActivity {
         final ListView mListView = (ListView) findViewById(R.id.listView);
 
         ArrayList<String> playlists = new ArrayList<String>();
-        for(SongContent.DummyItem item1 : SongContent.SAVEDITEMS) {
-            playlists.add(item1.content+" ;"+item1.details);
+        for(FinalContent.SongItem songItem : FinalContent.SONGITEMSPRIMAL) {
+            playlists.add(songItem.strTitre+" ;"+songItem.strId);
         }
 
 

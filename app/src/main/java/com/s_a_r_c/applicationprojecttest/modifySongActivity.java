@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
+import com.s_a_r_c.applicationprojecttest.dummy.FinalContent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,14 +50,14 @@ public class modifySongActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_song);
 
+
         ArrayList<String> playlists = new ArrayList<String>();
-        for (DummyContent.DummyItem item1 : DummyContent.ITEMS) {
+        for (FinalContent.PlaylistITEM item1 : FinalContent.ITEMS) {
 
-            if (!item1.details.equals(DummyContent.getStrPlaylistSelected())) {
+            if (!item1.id.equals(DummyContent.getStrPlaylistSelected())) {
                 if (item1.owner.equals(DummyContent.getId()))
-                    playlists.add(item1.content + " ;" + item1.details);
+                    playlists.add(item1.name + " ;" + item1.id);
             }
-
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, playlists);
         Spinner spinner = (Spinner) findViewById(R.id.spinnerLstPlaylistTransfert);

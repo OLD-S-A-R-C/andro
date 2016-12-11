@@ -65,8 +65,9 @@ public class playListDetailFragment extends Fragment {
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             mItem = SongContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-
+ /*
             Activity activity = this.getActivity();
+
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.content);
@@ -79,7 +80,7 @@ public class playListDetailFragment extends Fragment {
                 intent.putExtra(EXTRA_MESSAGE, mItem.content+";"+mItem.details+";"+mItem.id+";"+strtext);
                 startActivity(intent);
 
-            }
+            }*/
        }
 
         // Show the dummy content as text in a TextView.

@@ -12,6 +12,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
+import com.s_a_r_c.applicationprojecttest.dummy.FinalContent;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,9 +28,6 @@ import java.security.NoSuchAlgorithmException;
 
 public class modifyPlaylist extends AppCompatActivity {
     String jsonSaved = "";
-    String strMotDePasse = "";
-    String strCourriel = "";
-    String strId = "";
     String strAvatar = "";
     String strAlias = "";
     String strTicketID = "";
@@ -47,8 +47,9 @@ public class modifyPlaylist extends AppCompatActivity {
         Intent intent = getIntent();
         String strMessage = intent.getStringExtra(playListListActivity.EXTRA_MESSAGE);
         strMessage = strMessage+"";
+        fillUpActivity();
 
-
+/*
         if(!strMessage.equals("null")) {
             try {
 
@@ -66,23 +67,28 @@ public class modifyPlaylist extends AppCompatActivity {
             }
             Log.e("strMessage","StrMessage "+strMessage+" StrID:"+strPlaylistID);
             new DownloadPlaylistDetailsJson(null).execute("Useless");
-        }
+        }*/
 
     }
     public void fillUpActivity()
     {
 
-            try {
 
-                JSONObject lireJSON = new JSONObject(jsonSaved);
-                strActive = lireJSON.get("active").toString();
-                strNom = lireJSON.get("nom").toString();
-                strPublique = lireJSON.get("publique").toString();
+        Log.e("FINALCONTENTLISTESELECT",DummyContent.getStrPlaylistSelected()+"");
+                FinalContent.PlaylistITEM playlistITEMFinal = new FinalContent.PlaylistITEM("","","","","");
+                for(FinalContent.PlaylistITEM playlistITEM : FinalContent.ITEMS)
+                {
+                    if(playlistITEM.id.equals(DummyContent.getStrPlaylistSelected()))
+                    {
+                        playlistITEMFinal = playlistITEM;
+                    }
+                }
+
+                strActive = playlistITEMFinal.active;
+                strNom =  playlistITEMFinal.name;
+                strPublique =  playlistITEMFinal.publique;
                 setTitle("Modification de "+ strNom);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Log.e("labo7", e.toString());
-            }
+
 
         EditText editText = (EditText)findViewById(R.id.editText14);
         editText.setText(strNom);
@@ -180,8 +186,8 @@ public class modifyPlaylist extends AppCompatActivity {
 
             HttpURLConnection c = null;
             try {
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+strCourriel);
-                Log.e("URL","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+strCourriel);
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+DummyContent.getCourriel());
+                Log.e("URL","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+DummyContent.getCourriel());
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("GET");
                 c.connect();
@@ -248,8 +254,8 @@ public class modifyPlaylist extends AppCompatActivity {
 
             HttpURLConnection c = null;
             try {
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+strCourriel);
-                Log.e("URL","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+strCourriel);
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+DummyContent.getCourriel());
+                Log.e("URL","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+DummyContent.getCourriel());
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("GET");
                 c.connect();
@@ -341,6 +347,12 @@ public class modifyPlaylist extends AppCompatActivity {
         }
         new DownloadJsonModifyComplete(null).execute("Useless");
     }
+    public void visualsong(View view)
+    {
+        Intent intent = new Intent(this, visualizeSongsActivity.class);
+        startActivity(intent);
+    }
+
     public static String getMd5Hash(String input) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -374,10 +386,10 @@ public class modifyPlaylist extends AppCompatActivity {
                 //$.md5(Cookies.get('motdepasse') + ticket.cle)
 
                 MDstrNom = MDstrNom.replaceAll(" ", "%20");
-                String strConfirmation = getMd5Hash(strMotDePasse+strCle);
+                String strConfirmation = getMd5Hash(DummyContent.getPassword()+strCle);
                 //$.put("http://localhost:8080/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" + ticket.idTicket + "&confirmation=" + $.md5(Cookies.get('motdepasse') + ticket.cle) + "&action=afficherListeDeLecture&p1=" + id,
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=modifierListeDeLecture&p1=" + strPlaylistID + "&p2=" + strId + "&p3=" + MDstrNom + "&p4=" + MDstrPublique + "&p5=" + MDstrActive + "&p6=12/06/2016%2020:05:10");
-                Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=modifierListeDeLecture&p1=" + strPlaylistID + "&p2=" + strId + "&p3=" + MDstrNom + "&p4=" + MDstrPublique + "&p5=" + MDstrActive + "&p6=12/06/2016%2020:05:10");
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=modifierListeDeLecture&p1=" + strPlaylistID + "&p2=" + DummyContent.getId() + "&p3=" + MDstrNom + "&p4=" + MDstrPublique + "&p5=" + MDstrActive + "&p6=12/06/2016%2020:05:10");
+                Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=modifierListeDeLecture&p1=" + strPlaylistID + "&p2=" + DummyContent.getId() + "&p3=" + MDstrNom + "&p4=" + MDstrPublique + "&p5=" + MDstrActive + "&p6=12/06/2016%2020:05:10");
                 //URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=modifierUser&p1="+strId+"&p2="+MDstrCourriel+"&p3="+MDstrMotDePasse+"&p4="+MDstrAlias+"&p5="+strAvatar+"&p6=true");
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
@@ -436,9 +448,9 @@ public class modifyPlaylist extends AppCompatActivity {
                 //$.md5(Cookies.get('motdepasse') + ticket.cle)
 
                 MDstrNom = MDstrNom.replaceAll(" ", "%20");
-                String strConfirmation = getMd5Hash(strMotDePasse+strCle);
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=dupliquerListeDeLecture&p1=" + strId + "&p2=" +  strPlaylistID+ "&p3=" + MDstrNom);
-                Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=dupliquerListeDeLecture&p1=" + strId + "&p2=" +  strPlaylistID+ "&p3=" + MDstrNom);
+                String strConfirmation = getMd5Hash(DummyContent.getPassword()+strCle);
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=dupliquerListeDeLecture&p1=" + DummyContent.getId() + "&p2=" +  strPlaylistID+ "&p3=" + MDstrNom);
+                Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=dupliquerListeDeLecture&p1=" + DummyContent.getId() + "&p2=" +  strPlaylistID+ "&p3=" + MDstrNom);
 
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
@@ -521,8 +533,8 @@ public class modifyPlaylist extends AppCompatActivity {
 
             HttpURLConnection c = null;
             try {
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+strCourriel);
-                Log.e("URL","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+strCourriel);
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+DummyContent.getCourriel());
+                Log.e("URL","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/getTicket/"+DummyContent.getCourriel());
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("GET");
                 c.connect();
@@ -596,10 +608,10 @@ public class modifyPlaylist extends AppCompatActivity {
                 //$.md5(Cookies.get('motdepasse') + ticket.cle)
 
                 MDstrNom = MDstrNom.replaceAll(" ", "%20");
-                String strConfirmation = getMd5Hash(strMotDePasse+strCle);
+                String strConfirmation = getMd5Hash(DummyContent.getPassword()+strCle);
                // http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=145&confirmation=3f268243b7bb9a831e32b16a9a54e3ff&action=supprimerListe&p1=9&p2=20
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=supprimerListe&p1=" + strId + "&p2=" +  strPlaylistID);
-                Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=dupliquerListeDeLecture&p1=" + strId + "&p2=" +  strPlaylistID);
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=supprimerListe&p1=" + DummyContent.getId() + "&p2=" +  strPlaylistID);
+                Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=dupliquerListeDeLecture&p1=" + DummyContent.getId() + "&p2=" +  strPlaylistID);
 
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
