@@ -150,13 +150,13 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             playlistsMaps.put(count, playlistITEM);
             count++;
         }
-<<<<<<< HEAD
+
         DummyContent.setStrSeeMusic("");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  playlists) {
-=======
+       // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  playlists) {
+
 
         adapter = new ArrayAdapter<String>(this, R.layout.listview_custom,  playlists) {
->>>>>>> a406556115e810cf99b2b1da1376707d3e3b422f
+
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 
