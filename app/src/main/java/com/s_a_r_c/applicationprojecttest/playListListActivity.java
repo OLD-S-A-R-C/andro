@@ -138,7 +138,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         super.onResume();  // Always call the superclass method first
 ///////////////////////////////////////////////////////////////////////////
         ListView = (ListView) findViewById(R.id.listViewPlaylist);
-        ArrayList<String> playlists = new ArrayList<String>();
+        final ArrayList<String> playlists = new ArrayList<String>();
         final HashMap<Integer, FinalContent.PlaylistITEM> playlistsMaps = new HashMap<Integer, FinalContent.PlaylistITEM>();
         int count = 0;
         for(FinalContent.PlaylistITEM playlistITEM : FinalContent.ITEMS) {
@@ -168,6 +168,9 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                 if (UserDatabase.getInstance(getApplicationContext()).loggedIn() && playlistsMaps.get(position).owner.equals((UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)))) {
                     textView.setTextColor(Color.parseColor("#00ff00"));
                 }
+
+                if (playlistsMaps.get(position).active.equals("false"))
+                    textView.setText("Inactive" + " - Id : " + playlistsMaps.get(position).id);
 
                 return rowView;
             }
