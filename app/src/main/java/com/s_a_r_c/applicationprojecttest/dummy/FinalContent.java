@@ -2,6 +2,7 @@ package com.s_a_r_c.applicationprojecttest.dummy;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -19,6 +20,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import com.s_a_r_c.applicationprojecttest.CriticalErrorLandingActivity;
 import com.s_a_r_c.applicationprojecttest.playListListActivity;
 import java.util.Map;
 
@@ -171,7 +174,13 @@ public class FinalContent extends Application{
 
         protected void onPostExecute(String result) {
             jsonSaved = result;
-            createList();
+            if (jsonSaved != null)
+                createList();
+            else {
+                Intent intent = new Intent(mContext, CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         }
     }
     public void createList()

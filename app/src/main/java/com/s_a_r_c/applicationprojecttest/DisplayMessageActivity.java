@@ -90,12 +90,10 @@ public void confirmSuccesffulLoginAttempt()
             {
                 TextView mTextView = (TextView) findViewById(R.id.textView4);
                 mTextView.setText(lireJSON.get("reason").toString());
-                showAlert(lireJSON.get("reason").toString());
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e("labo7",e.toString());
         }
 
     }
@@ -304,12 +302,4 @@ public void confirmSuccesffulLoginAttempt()
         Snackbar.make(findViewById(android.R.id.content),"Veuillez entrer un captcha complet", Snackbar.LENGTH_SHORT).show();
     }
 
-    private void showAlert(String strMessage) {
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setMessage(strMessage);
-        builder1.setCancelable(true);
-
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
-    }
 }

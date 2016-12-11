@@ -31,7 +31,7 @@ public class visualizeSongsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualize_songs);
-        setTitle("Song List");
+        setTitle("Listes des musiques");
 
         final ListView mListView = (ListView) findViewById(R.id.listView);
         ArrayList<String> playlists = new ArrayList<String>();
