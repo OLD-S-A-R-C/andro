@@ -2,8 +2,11 @@ package com.s_a_r_c.applicationprojecttest.dummy;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.s_a_r_c.applicationprojecttest.CriticalErrorLandingActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +38,7 @@ public class SongContent extends Application{
         SAVEDITEMS.clear();
         ITEMS.clear();
 
-        mContext = this;
+        mContext = getApplicationContext();
        // Log.e("songContent","///////////////////////////////Called");
         new DownloadJson(null).execute("Useless");
 
@@ -159,7 +162,14 @@ public class SongContent extends Application{
         protected void onPostExecute(String result) {
             // bmImage.setImageBitmap(result);
             jsonSaved = result;
-            createList();
+
+            if (jsonSaved != null)
+                createList();
+            else {
+                Intent intent = new Intent(mContext, CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         }
     }
     public void createList()

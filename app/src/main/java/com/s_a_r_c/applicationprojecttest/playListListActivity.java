@@ -75,6 +75,10 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
     private Menu menuDrawer;
 
+    ArrayAdapter<String> adapter;
+
+    ListView ListView;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +110,11 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                 Snackbar.make(view, "Refreshing data", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 FinalContent finalContent = new FinalContent();
                 finalContent.onCreate();
+                if (adapter != null)  {
+                    onResume();
+                    adapter.notifyDataSetChanged();
+
+                }
 
             }
         });
@@ -132,7 +141,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
         super.onResume();  // Always call the superclass method first
 ///////////////////////////////////////////////////////////////////////////
-        final ListView ListView = (ListView) findViewById(R.id.listViewPlaylist);
+        ListView = (ListView) findViewById(R.id.listViewPlaylist);
         ArrayList<String> playlists = new ArrayList<String>();
         final HashMap<Integer, FinalContent.PlaylistITEM> playlistsMaps = new HashMap<Integer, FinalContent.PlaylistITEM>();
         int count = 0;
@@ -141,12 +150,25 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             playlistsMaps.put(count, playlistITEM);
             count++;
         }
+<<<<<<< HEAD
         DummyContent.setStrSeeMusic("");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  playlists) {
+=======
+
+        adapter = new ArrayAdapter<String>(this, R.layout.listview_custom,  playlists) {
+>>>>>>> a406556115e810cf99b2b1da1376707d3e3b422f
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 
-                TextView textView = (TextView) super.getView(position, convertView, parent);
+                View rowView = LayoutInflater.from(getApplicationContext()).
+                        inflate(R.layout.listview_custom, parent, false);
+
+                TextView textView = (TextView) rowView.findViewById(R.id.tvTitre);
+                ImageView icon = (ImageView) rowView.findViewById(R.id.listviewVignette);
+
+                textView.setText(playlistsMaps.get(position).name + " - " + playlistsMaps.get(position).id);
+
+                icon.setImageResource(R.drawable.ic_playlist);
 
                 if (UserDatabase.getInstance(getApplicationContext()).loggedIn())
                     Log.e("LISTVIEW COLORS" , playlistsMaps.get(position).owner + "~" + (UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)));
@@ -154,7 +176,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                     textView.setTextColor(Color.parseColor("#00ff00"));
                 }
 
-                return textView;
+                return rowView;
             }
 
             @Override
@@ -168,6 +190,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             }
         };
         ListView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -300,6 +323,9 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             Log.e("nav_send","Selected");
             Intent intent = new Intent(this, addSongActivity.class);
             startActivity(intent);
+        } else if (id == R.id.menu_logout) {
+            UserDatabase.getInstance(getApplicationContext()).logOut();
+            this.recreate();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

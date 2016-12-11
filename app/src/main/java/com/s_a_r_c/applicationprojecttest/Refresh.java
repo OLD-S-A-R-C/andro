@@ -11,8 +11,8 @@ public class Refresh extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_refresh);
 
-        RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
-        rb.setRating(5);
+        //RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
+        //rb.setRating(5);
     }
 
     public void refresh()

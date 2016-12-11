@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.s_a_r_c.applicationprojecttest.playListDetailActivity"
-    tools:ignore="MergeRootFrame">
+    tools:ignore="MergeRootFrame"
+    >
 
 
 
@@ -13,34 +14,44 @@
         android:id="@+id/playlist_detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:paddingTop="30dp">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"></android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
-    <ListView
-        android:id="@+id/listViewSong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabPlaylist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/stat_notify_chat"
+        android:src="@drawable/ic_menu_edit"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        app:layout_anchor="@+id/listViewSong"
-        app:layout_anchorGravity="top|right"
-        android:layout_gravity="bottom|left" />
+        android:layout_gravity="top|right" />
+
+    <ListView
+        android:paddingTop="70dp"
+        android:id="@+id/listViewSong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
 
 </android.support.design.widget.CoordinatorLayout>

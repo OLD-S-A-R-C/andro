@@ -11,7 +11,7 @@
     tools:context="com.s_a_r_c.applicationprojecttest.Refresh">
 
     <TextView
-        android:text="Android: Final Application"
+        android:text="Chargement..."
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,12 +29,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="41dp" />
 
-    <RatingBar
-        android:layout_width="wrap_content"
+    <ProgressBar
+        android:id="@+id/progress_horizontal"
+        android:indeterminateOnly="false"
+        android:indeterminateDrawable="@drawable/progress_indeterminate_horizontal"
+        android:progressDrawable="@drawable/progress_horizontal"
+        android:minHeight="24dip"
+        android:maxHeight="24dip"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ratingBar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="33dp"
-        android:layout_below="@+id/textView22"
-        android:layout_alignEnd="@+id/textView21" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />/>
 </RelativeLayout>

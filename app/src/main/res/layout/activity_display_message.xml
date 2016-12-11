@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Courriel:"
+        android:text="Courriel"
         android:id="@+id/textView2"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
@@ -26,13 +26,13 @@
         android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:text="groy@groy.com" />
+        android:text="" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Mot de passe:"
+        android:text="Mot de passe"
         android:id="@+id/textView3"
         android:layout_below="@+id/tvUsername"
         android:layout_alignParentStart="true" />
@@ -40,7 +40,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="Se connecter"
         android:id="@+id/button"
         android:onClick="sendLoginAttempt"
         android:layout_below="@+id/tvPassword"
@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Captcha:"
+        android:text="Captcha"
         android:id="@+id/textView4"
         android:layout_below="@+id/imageView2"
         android:layout_alignParentStart="true" />
@@ -68,7 +68,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Confirm Captcha"
+        android:text="Confirmer"
         android:onClick="sendConfirmCaptcha"
         android:id="@+id/button2"
         android:layout_below="@+id/tvCaptcha"
@@ -90,5 +90,5 @@
         android:id="@+id/tvPassword"
         android:layout_below="@+id/textView3"
         android:layout_alignParentStart="true"
-        android:text="groy" />
+        android:text="" />
 </RelativeLayout>
