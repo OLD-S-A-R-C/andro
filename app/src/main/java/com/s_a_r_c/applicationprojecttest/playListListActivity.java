@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -79,6 +81,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
     ListView ListView;
 
+    int compteur;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,17 +107,22 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         navigationView.setNavigationItemSelectedListener(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabRefresh);
+        compteur = 0;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Refreshing data", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                FinalContent finalContent = new FinalContent();
-                finalContent.onCreate();
-                if (adapter != null)  {
+
+                //finalContent.onCreate();
+                if (adapter != null && compteur % 2 == 0)  {
+                    FinalContent finalContent = new FinalContent();
+                    finalContent.onCreate();
+                } else {
                     onResume();
                     adapter.notifyDataSetChanged();
-
                 }
+
+                compteur++;
 
             }
         });
@@ -150,6 +158,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             playlistsMaps.put(count, playlistITEM);
             count++;
         }
+<<<<<<< HEAD
 
         DummyContent.setStrSeeMusic("");
        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  playlists) {
@@ -157,6 +166,11 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
         adapter = new ArrayAdapter<String>(this, R.layout.listview_custom,  playlists) {
 
+=======
+        DummyContent.setStrSeeMusic("");
+
+        adapter = new ArrayAdapter<String>(this, R.layout.listview_custom,  playlists) {
+>>>>>>> 26553f60a16eaf709545d2749e99afef4b6e4f70
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 
