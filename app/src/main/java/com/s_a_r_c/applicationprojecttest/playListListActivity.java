@@ -169,7 +169,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                     textView.setTextColor(Color.parseColor("#00ff00"));
                 }
 
-                if (playlistsMaps.get(position).active.equals("false"))
+                if(playlistsMaps.get(position).active.equals("false") && !(UserDatabase.getInstance(getApplicationContext()).loggedIn() && playlistsMaps.get(position).owner.equals((UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)))))
                     textView.setText("Inactive" + " - Id : " + playlistsMaps.get(position).id);
 
                 return rowView;

@@ -77,7 +77,7 @@ public class visualizeSongsActivity extends AppCompatActivity {
                     text1.setTextColor(Color.parseColor("#00ff00"));
                 }
 
-                if (songsMaps.get(position).strActive.equals("false")) {
+                if(songsMaps.get(position).strActive.equals("false") && !(UserDatabase.getInstance(getApplicationContext()).loggedIn() && songsMaps.get(position).strOwnerID.equals((UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID))))) {
                     text1.setText("Inactive" + " - Id : " + songsMaps.get(position).strId);
                 } else {
                     byte[] decodedString = Base64.decode(songsMaps.get(position).strVignette, Base64.DEFAULT);
