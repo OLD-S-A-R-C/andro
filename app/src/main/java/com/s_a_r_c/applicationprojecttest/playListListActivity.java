@@ -113,18 +113,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                 FinalContent finalContent = new FinalContent();
                 finalContent.onCreate();
                 if (adapter != null)  {
-                    new CountDownTimer(7000, 7000) {
-                        public void onTick(long millisUntilFinished) {
-                            // You can monitor the progress here as well by changing the onTick() time
-                        }
-                        public void onFinish() {
-                            // stop async task if not in progress
-                            if (asyncObject.getStatus() == AsyncTask.Status.RUNNING) {
-                                asyncObject.cancel(false);
-                                // Add any specific task you wish to do as your extended class variable works here as well.
-                            }
-                        }
-                    }.start();
+
                     onResume();
                     adapter.notifyDataSetChanged();
 
@@ -164,13 +153,9 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             playlistsMaps.put(count, playlistITEM);
             count++;
         }
-<<<<<<< HEAD
         DummyContent.setStrSeeMusic("");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  playlists) {
-=======
 
         adapter = new ArrayAdapter<String>(this, R.layout.listview_custom,  playlists) {
->>>>>>> a406556115e810cf99b2b1da1376707d3e3b422f
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 
