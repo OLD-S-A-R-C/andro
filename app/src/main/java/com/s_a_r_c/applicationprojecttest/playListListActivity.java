@@ -80,8 +80,6 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
        FinalContent finalContent = new FinalContent();
         finalContent.onCreate();
 
-        Intent intent = new Intent(this, Refresh.class);
-        startActivity(intent);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -148,19 +146,10 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             playlistsMaps.put(count, playlistITEM);
             count++;
         }
-<<<<<<< HEAD
 
-        DummyContent.setStrSeeMusic("");
-       // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  playlists) {
-
-
-        adapter = new ArrayAdapter<String>(this, R.layout.listview_custom,  playlists) {
-
-=======
         DummyContent.setStrSeeMusic("");
 
         adapter = new ArrayAdapter<String>(this, R.layout.listview_custom,  playlists) {
->>>>>>> 26553f60a16eaf709545d2749e99afef4b6e4f70
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 
