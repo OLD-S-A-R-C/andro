@@ -101,7 +101,7 @@ public class playListDetailActivity extends AppCompatActivity {
                 int count = 0;
                 for(FinalContent.SongItem songItem : playlistITEM.SONGITEMS)
                 {
-                    playlists.add(songItem.strTitre+" ;"+songItem.strId);
+                    playlists.add(songItem.strTitre+" ("+songItem.strId+")");
                     songsMaps.put(count, songItem);
                     count++;
                 }
@@ -142,8 +142,8 @@ public class playListDetailActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(getBaseContext(), songContent.class);
 
-                String[] strSplit = ListView.getItemAtPosition(pos).toString().split(";");
-                DummyContent.setStrSongSelected(strSplit[1]);
+                String[] strSplit = ListView.getItemAtPosition(pos).toString().split("[(]");
+                DummyContent.setStrSongSelected(strSplit[1].split("[)]")[0]);
                 startActivityForResult(intent,1);
             }
         });

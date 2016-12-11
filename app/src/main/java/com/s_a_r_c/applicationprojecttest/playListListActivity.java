@@ -83,6 +83,9 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
        FinalContent finalContent = new FinalContent();
         finalContent.onCreate();
 
+        Intent intent = new Intent(this, Refresh.class);
+        startActivity(intent);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
@@ -133,7 +136,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         final HashMap<Integer, FinalContent.PlaylistITEM> playlistsMaps = new HashMap<Integer, FinalContent.PlaylistITEM>();
         int count = 0;
         for(FinalContent.PlaylistITEM playlistITEM : FinalContent.ITEMS) {
-            playlists.add(playlistITEM.name+" ;"+playlistITEM.id);
+            playlists.add(playlistITEM.name+" ("+playlistITEM.id+")");
             playlistsMaps.put(count, playlistITEM);
             count++;
         }
@@ -168,8 +171,8 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
-                String[] strSplit = ListView.getItemAtPosition(pos).toString().split(";");
-                DummyContent.setStrPlaylistSelected(strSplit[1]);
+                String[] strSplit = ListView.getItemAtPosition(pos).toString().split("[(]");
+                DummyContent.setStrPlaylistSelected(strSplit[1].split("[)]")[0]);
                 Intent intent = new Intent(getBaseContext(), playListDetailActivity.class);
                 startActivityForResult(intent,1);
             }
@@ -184,12 +187,14 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             nav_Menu.findItem(R.id.menu_logout).setVisible(true);
             nav_Menu.findItem(R.id.menu_new_user).setVisible(false);
             nav_Menu.findItem(R.id.menu_login).setVisible(false);
+            nav_Menu.findItem(R.id.menu_your_song).setVisible(true);
         } else {
             nav_Menu.findItem(R.id.submenu_actions).setVisible(false);
             nav_Menu.findItem(R.id.menu_edit_profile).setVisible(false);
             nav_Menu.findItem(R.id.menu_logout).setVisible(false);
             nav_Menu.findItem(R.id.menu_new_user).setVisible(true);
             nav_Menu.findItem(R.id.menu_login).setVisible(true);
+            nav_Menu.findItem(R.id.menu_your_song).setVisible(true);
         }
 
         try {

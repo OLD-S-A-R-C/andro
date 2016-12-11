@@ -10,12 +10,31 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.s_a_r_c.applicationprojecttest.Refresh">
 
-    <Button
-        android:text="Refresh"
+    <TextView
+        android:text="Android: Final Application"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:id="@+id/textView21"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:onClick="refresh"
-        android:id="@+id/button16" />
+        android:layout_marginTop="77dp" />
+
+    <TextView
+        android:text="Benacef N. and Gabriel R."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView22"
+        android:layout_below="@+id/textView21"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ratingBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="33dp"
+        android:layout_below="@+id/textView22"
+        android:layout_alignEnd="@+id/textView21" />
 </RelativeLayout>
