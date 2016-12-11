@@ -44,6 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -128,20 +129,29 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 ///////////////////////////////////////////////////////////////////////////
         final ListView ListView = (ListView) findViewById(R.id.listViewPlaylist);
         ArrayList<String> playlists = new ArrayList<String>();
+        final HashMap<Integer, FinalContent.PlaylistITEM> playlistsMaps = new HashMap<Integer, FinalContent.PlaylistITEM>();
+        int count = 0;
         for(FinalContent.PlaylistITEM playlistITEM : FinalContent.ITEMS) {
             playlists.add(playlistITEM.name+" ;"+playlistITEM.id);
+            playlistsMaps.put(count, playlistITEM);
+            count++;
         }
-
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  playlists) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
+
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                // Set the color here
-                textView.setTextColor(Color.parseColor("#000000"));
+
+                Log.e("LISTVIEW COLORS" , playlistsMaps.get(position).owner + "~" + UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID));
+                if (Integer.valueOf(playlistsMaps.get(position).owner) == UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)) {
+                    textView.setTextColor(Color.parseColor("#00ff00"));
+                }
+
                 return textView;
             }
         };
+        ListView.setAdapter(adapter);
 
         ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
