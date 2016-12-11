@@ -2,6 +2,7 @@ package com.s_a_r_c.applicationprojecttest;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -24,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.s_a_r_c.applicationprojecttest.Helpers.UserDatabase;
 import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 import com.s_a_r_c.applicationprojecttest.dummy.FinalContent;
 import com.s_a_r_c.applicationprojecttest.dummy.SongContent;
@@ -33,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -90,22 +93,47 @@ public class playListDetailActivity extends AppCompatActivity {
 
 
         ArrayList<String> playlists = new ArrayList<String>();
+        final HashMap<Integer, FinalContent.SongItem> songsMaps = new HashMap<Integer, FinalContent.SongItem>();
         for(FinalContent.PlaylistITEM playlistITEM : FinalContent.ITEMS) {
 
             if(playlistITEM.id.equals(DummyContent.getStrPlaylistSelected()))
             {
+                int count = 0;
                 for(FinalContent.SongItem songItem : playlistITEM.SONGITEMS)
                 {
                     playlists.add(songItem.strTitre+" ;"+songItem.strId);
+                    songsMaps.put(count, songItem);
+                    count++;
                 }
             }
 
         }
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,   playlists) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
 
+                TextView textView = (TextView) super.getView(position, convertView, parent);
 
+                if (UserDatabase.getInstance(getApplicationContext()).loggedIn())
+                    Log.e("LISTVIEW COLORS" , songsMaps.get(position).strId + "~" + (UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)));
+                if (UserDatabase.getInstance(getApplicationContext()).loggedIn() && songsMaps.get(position).strOwnerID.equals((UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)))) {
+                    textView.setTextColor(Color.parseColor("#00ff00"));
+                }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playlists);
+                return textView;
+            }
+
+            @Override
+            public boolean isEnabled(int position){
+
+                if(songsMaps.get(position).strActive.equals("false") && !(UserDatabase.getInstance(getApplicationContext()).loggedIn() && songsMaps.get(position).strOwnerID.equals((UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)))))
+                    return false;
+                else
+                    return true;
+
+            }
+        };
         ListView.setAdapter(adapter);
 
         ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

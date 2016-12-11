@@ -1,5 +1,6 @@
 package com.s_a_r_c.applicationprojecttest;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -143,12 +144,23 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
                 TextView textView = (TextView) super.getView(position, convertView, parent);
 
-                Log.e("LISTVIEW COLORS" , playlistsMaps.get(position).owner + "~" + (UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)));
-                if (Integer.valueOf(playlistsMaps.get(position).owner) == Integer.valueOf((String)(UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)))) {
+                if (UserDatabase.getInstance(getApplicationContext()).loggedIn())
+                    Log.e("LISTVIEW COLORS" , playlistsMaps.get(position).owner + "~" + (UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)));
+                if (UserDatabase.getInstance(getApplicationContext()).loggedIn() && playlistsMaps.get(position).owner.equals((UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)))) {
                     textView.setTextColor(Color.parseColor("#00ff00"));
                 }
 
                 return textView;
+            }
+
+            @Override
+            public boolean isEnabled(int position){
+
+                if(playlistsMaps.get(position).active.equals("false") && !(UserDatabase.getInstance(getApplicationContext()).loggedIn() && playlistsMaps.get(position).owner.equals((UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)))))
+                    return false;
+                else
+                    return true;
+
             }
         };
         ListView.setAdapter(adapter);
