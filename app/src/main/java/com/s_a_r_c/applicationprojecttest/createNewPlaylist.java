@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
@@ -186,8 +187,10 @@ public class createNewPlaylist extends AppCompatActivity {
             try {
                 String strConfirmation = DummyContent.encryptMD5(DummyContent.getPassword()+strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=26&confirmation=75d1b2cd84e5b34ffc3761ea5c6527b2&action=nouvelleListeDeLecture&p1=9&p2=Jamaica&p3=true&p4=true&p5=12/06/2016 20:05:10
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=nouvelleListeDeLecture&p1="+ DummyContent.getId()+"&p2="+strPlaylistNom+"&p3="+strPublic+"&p4="+strActif+"&p5=12/06/2016%2020:05:10");
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=nouvelleListeDeLecture&p1="+ DummyContent.getId()+"&p2="+URLEncoder.encode(strPlaylistNom, "UTF-8")+"&p3="+strPublic+"&p4="+strActif+"&p5=12/06/2016%2020:05:10");
                 Log.e("Json","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=nouvelleListeDeLecture&p1="+DummyContent.getId()+"&p2="+ URLEncoder.encode(strPlaylistNom, "UTF-8")+"&p3="+strPublic+"&p4="+strActif+"&p5=12/06/2016%2020:05:10");
+                URI uri = new URI(u.getProtocol(), u.getUserInfo(), u.getHost(), u.getPort(), u.getPath(), u.getQuery(), u.getRef());
+                u = uri.toURL();
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();

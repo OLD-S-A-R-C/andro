@@ -75,6 +75,10 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
 
     private Menu menuDrawer;
 
+    ArrayAdapter<String> adapter;
+
+    ListView ListView;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +110,11 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                 Snackbar.make(view, "Refreshing data", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 FinalContent finalContent = new FinalContent();
                 finalContent.onCreate();
+                if (adapter != null)  {
+                    onResume();
+                    adapter.notifyDataSetChanged();
+
+                }
 
             }
         });
@@ -131,7 +140,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 ///////////////////////////////////////////////////////////////////////////
-        final ListView ListView = (ListView) findViewById(R.id.listViewPlaylist);
+        ListView = (ListView) findViewById(R.id.listViewPlaylist);
         ArrayList<String> playlists = new ArrayList<String>();
         final HashMap<Integer, FinalContent.PlaylistITEM> playlistsMaps = new HashMap<Integer, FinalContent.PlaylistITEM>();
         int count = 0;
@@ -141,7 +150,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             count++;
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  playlists) {
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  playlists) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -167,6 +176,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             }
         };
         ListView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -2,6 +2,8 @@ package com.s_a_r_c.applicationprojecttest;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +24,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -109,19 +113,35 @@ public class playListDetailActivity extends AppCompatActivity {
 
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,   playlists) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.listview_custom,   playlists) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 
-                TextView textView = (TextView) super.getView(position, convertView, parent);
+                View rowView = LayoutInflater.from(getApplicationContext()).
+                        inflate(R.layout.listview_custom, parent, false);
+
+                TextView text1 = (TextView) rowView.findViewById(R.id.tvTitre);
+                ImageView icon = (ImageView) rowView.findViewById(R.id.listviewVignette);
+
+                text1.setText(songsMaps.get(position).strArtiste + " - " + songsMaps.get(position).strTitre);
 
                 if (UserDatabase.getInstance(getApplicationContext()).loggedIn())
                     Log.e("LISTVIEW COLORS" , songsMaps.get(position).strId + "~" + (UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)));
                 if (UserDatabase.getInstance(getApplicationContext()).loggedIn() && songsMaps.get(position).strOwnerID.equals((UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)))) {
-                    textView.setTextColor(Color.parseColor("#00ff00"));
+                    text1.setTextColor(Color.parseColor("#00ff00"));
                 }
 
-                return textView;
+                if (songsMaps.get(position).strActive.equals("false")) {
+                    text1.setText("Inactive" + " - Id : " + songsMaps.get(position).strId);
+                } else {
+                    byte[] decodedString = Base64.decode(songsMaps.get(position).strVignette, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    icon.setImageBitmap(decodedByte);
+                    icon.requestLayout();
+                }
+
+
+                return rowView;
             }
 
             @Override
