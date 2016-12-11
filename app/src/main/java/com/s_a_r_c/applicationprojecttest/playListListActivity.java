@@ -1,5 +1,7 @@
 package com.s_a_r_c.applicationprojecttest;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -110,6 +112,14 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+<<<<<<< HEAD
+=======
+        DummyContent dummyContent = new DummyContent();
+       // dummyContent.refresh();
+
+        String ok = "";
+
+>>>>>>> f67d757892d3a448c28b20529cab3da8b518d8b2
     }
 
 
@@ -152,6 +162,23 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             nav_Menu.findItem(R.id.menu_logout).setVisible(false);
             nav_Menu.findItem(R.id.menu_new_user).setVisible(true);
             nav_Menu.findItem(R.id.menu_login).setVisible(true);
+        }
+
+        try {
+            Log.d("AVATAR", "A LAIDE DE USERDATABASE");
+            byte[] decodedString = Base64.decode((String) UserDatabase.getInstance(this).retournerInfosUser().get(UserDatabase.USER_AVATAR_B64), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ImageView img = (ImageView) findViewById(R.id.ivDrawerAvatar);
+            img.setImageBitmap(decodedByte);
+            img.requestLayout();
+            img.getLayoutParams().height = 200;
+            img.getLayoutParams().width = 200;
+            img.requestLayout();
+
+            TextView tvEmail = (TextView) findViewById(R.id.tvDrawerEmail);
+            tvEmail.setText((String) UserDatabase.getInstance(this).retournerInfosUser().get(UserDatabase.USER_EMAIL));
+        }catch (Exception e) {
+            Log.d("AVATAR CRASH", e.getMessage());
         }
 
 

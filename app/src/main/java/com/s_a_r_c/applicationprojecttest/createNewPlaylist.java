@@ -147,6 +147,8 @@ public class createNewPlaylist extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -207,6 +209,8 @@ public class createNewPlaylist extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {

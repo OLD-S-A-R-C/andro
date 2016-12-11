@@ -17,8 +17,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.s_a_r_c.applicationprojecttest.Helpers.UserDatabase;
 import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
 import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 
@@ -33,6 +35,7 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
+import java.util.HashMap;
 
 public class ModifyUserActivity extends AppCompatActivity {
     String jsonSaved = "";
@@ -48,6 +51,9 @@ public class ModifyUserActivity extends AppCompatActivity {
     String MDstrId = "";
     String MDstrAvatar = "";
     String MDstrAlias = "";
+
+    AvatarContent lastSelectedAvatar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +62,12 @@ public class ModifyUserActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Modification d'un utilisateur");
 
         Spinner spinnerEditUserAvatar = (Spinner) findViewById(R.id.spinnerEditUserAvatars);
-        /*
+
         Collection<AvatarContent> vals = Avatars.getInstance().getListAvatars().values();
+        HashMap<Integer, Integer> arrayMap = new HashMap<Integer, Integer>();
         AvatarContent[] array = vals.toArray(new AvatarContent[vals.size()]);
+        for (int i = 0; i < array.length; i ++)
+            arrayMap.put(array[i].getId(), i);
         ArrayAdapter<AvatarContent> adapter = new ArrayAdapter<AvatarContent>(this,
                 android.R.layout.simple_spinner_item,
                 array);
@@ -74,7 +83,7 @@ public class ModifyUserActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> arg0) {
 
             }
-        });*/
+        });
 
         Intent intent = getIntent();
         String strMessage = intent.getStringExtra(playListListActivity.EXTRA_MESSAGE);
@@ -92,6 +101,9 @@ public class ModifyUserActivity extends AppCompatActivity {
             editText.setText(strAlias);
             EditText editText2 = (EditText) findViewById(R.id.etEditEmail);
             editText2.setText(strCourriel);
+            spinnerEditUserAvatar.setSelection(arrayMap.get(Integer.valueOf(lireJSON.get("avatar").toString())));
+
+
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("labo7",e.toString());
@@ -125,8 +137,6 @@ public class ModifyUserActivity extends AppCompatActivity {
     public void receivedModifyResponse()
     {
         Log.e("JSON SAVED",jsonSaved+"Message");
-
-
 
         try {
 
@@ -178,6 +188,8 @@ public class ModifyUserActivity extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -226,11 +238,8 @@ public class ModifyUserActivity extends AppCompatActivity {
 
             HttpURLConnection c = null;
             try {
-                //$.md5(Cookies.get('motdepasse') + ticket.cle)
-
-
                 String strConfirmation = getMd5Hash(strMotDePasse+strCle);
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=modifierUser&p1="+strId+"&p2="+MDstrCourriel+"&p3="+MDstrMotDePasse+"&p4="+MDstrAlias+"&p5="+String.valueOf(idAvatarSelected())+"&p6=true");
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=modifierUser&p1="+strId+"&p2="+MDstrCourriel+"&p3="+getMd5Hash(MDstrMotDePasse)+"&p4="+MDstrAlias.trim().replace(" ", "%20")+"&p5="+String.valueOf(idAvatarSelected())+"&p6=true");
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();
@@ -253,6 +262,8 @@ public class ModifyUserActivity extends AppCompatActivity {
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -266,8 +277,7 @@ public class ModifyUserActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             jsonSaved = result;
-            //confirmLogin();
-            //receivedModifyResponse();
+
             Log.e("FinalResponse",jsonSaved);
             finalResponse();
         }
@@ -281,6 +291,7 @@ public class ModifyUserActivity extends AppCompatActivity {
             if(strSuccess.equals("true"))
             {
                 hideKeyboardShowToast(lireJSON.get("reason").toString());
+                setDrawerInfos();
                 finish();
             }
             else
@@ -309,6 +320,7 @@ public class ModifyUserActivity extends AppCompatActivity {
                 img.getLayoutParams().height = 200;
                 img.getLayoutParams().width = 200;
                 img.requestLayout();
+                lastSelectedAvatar = avatarSelected;
             }
 
         }
@@ -329,6 +341,18 @@ public class ModifyUserActivity extends AppCompatActivity {
         } else {
             return 1;
         }
+    }
+
+    private void setDrawerInfos() {
+
+        if (lastSelectedAvatar != null) {
+            EditText etEmail = (EditText) findViewById(R.id.etEditEmail);
+            UserDatabase.getInstance(getApplicationContext()).updateAvatar(lastSelectedAvatar.getAvatarB64());
+            UserDatabase.getInstance(getApplicationContext()).updateEmail(etEmail.getText().toString().trim());
+        } else {
+            Log.v("ERREUR DRAWER AVAR", "WAIT WHAT");
+        }
+
     }
 
     private void hideKeyboardShowToast(String strMessage) {

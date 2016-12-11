@@ -1,11 +1,24 @@
 package com.s_a_r_c.applicationprojecttest.dummy;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Looper;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 
+import com.s_a_r_c.applicationprojecttest.CriticalErrorLandingActivity;
 import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
 
 import org.json.JSONArray;
@@ -58,6 +71,7 @@ public class DummyContent extends Application{
 
         FinalContent finalContent = new FinalContent();
         finalContent.onCreate();
+
     }
 
     public void refresh()
@@ -166,8 +180,15 @@ public class DummyContent extends Application{
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -180,12 +201,14 @@ public class DummyContent extends Application{
         }
 
         protected void onPostExecute(String result) {
-            // bmImage.setImageBitmap(result);
+
             jsonSaved = result;
             if (jsonSaved != null) {
                 createList();
             } else {
-                
+                Intent intent = new Intent(getApplicationContext(), CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
 
         }
@@ -254,8 +277,15 @@ public class DummyContent extends Application{
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -268,7 +298,11 @@ public class DummyContent extends Application{
         }
 
         protected void onPostExecute(String result) {
-            // bmImage.setImageBitmap(result);
+            if (result == null) {
+                Intent intent = new Intent(getApplicationContext(), CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
             jsonSaved = result;
             createListeDeLecture();
         }
@@ -300,8 +334,15 @@ public class DummyContent extends Application{
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        Log.e("JsonRetrieveError","Status 400");
-                        return null;
+                        InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
+                        BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        while ((strString = bufferedReader1.readLine()) != null){stringBuilder1.append(strString);}
+                        bufferedReader1.close();
+                        Log.e("JsonRetrieveError",c.getResponseMessage());
+                        return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {
@@ -314,7 +355,11 @@ public class DummyContent extends Application{
         }
 
         protected void onPostExecute(String result) {
-            // bmImage.setImageBitmap(result);
+            if (result == null) {
+                Intent intent = new Intent(getApplicationContext(), CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
             jsonSaved = result;
             createListAvatars(jsonSaved);
         }
@@ -477,7 +522,6 @@ public class DummyContent extends Application{
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        strString = "";
                         InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
                         BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
                         StringBuilder stringBuilder1 = new StringBuilder();
@@ -485,6 +529,8 @@ public class DummyContent extends Application{
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -501,8 +547,12 @@ public class DummyContent extends Application{
         }
 
         protected void onPostExecute(String result) {
+            if (result == null) {
+                Intent intent = new Intent(getApplicationContext(), CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
             jsonSaved = result;
-            //confirmLogin();
             if (jsonSaved != null) {
                 receivedDeleteResponse();
             }
@@ -560,7 +610,6 @@ public class DummyContent extends Application{
                         bufferedReader.close();
                         return stringBuilder.toString();
                     case 400:
-                        strString = "";
                         InputStreamReader  inputStreamReader1 =new InputStreamReader(c.getErrorStream());
                         BufferedReader bufferedReader1 = new BufferedReader(inputStreamReader1);
                         StringBuilder stringBuilder1 = new StringBuilder();
@@ -568,6 +617,8 @@ public class DummyContent extends Application{
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
             } catch (Exception ex) {
                 return ex.toString();
@@ -584,10 +635,14 @@ public class DummyContent extends Application{
         }
 
         protected void onPostExecute(String result) {
-            jsonSaved = result;
-            Log.e("FinalResponse", jsonSaved + "11111111");
 
-            //finalResponse();
+            if (result == null) {
+
+                Intent intent = new Intent(getApplicationContext(), CriticalErrorLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+            jsonSaved = result;
             createList();
         }
     }

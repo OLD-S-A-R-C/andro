@@ -203,6 +203,8 @@ public void confirmSuccesffulLoginAttempt()
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }
 
             } catch (Exception ex) {
@@ -222,7 +224,10 @@ public void confirmSuccesffulLoginAttempt()
 
         protected void onPostExecute(String result) {
             jsonSaved = result;
-            confirmLogin();
+            if (result != null) {
+                confirmLogin();
+            }
+
         }
     }
 
@@ -264,6 +269,8 @@ public void confirmSuccesffulLoginAttempt()
                         bufferedReader1.close();
                         Log.e("JsonRetrieveError",c.getResponseMessage());
                         return "{\"success\":\"false\",\"reason\":\"" + stringBuilder1.toString() + "\"}";
+                    case 500:
+                        return "{\"success\":\"false\",\"reason\":\"" + "Une erreur est survenue !" + "\"}";
                 }}
             catch (Exception ex) {return ex.toString();} finally {
                 if (c != null) {

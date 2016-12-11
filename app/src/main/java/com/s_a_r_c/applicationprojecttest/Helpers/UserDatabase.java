@@ -46,6 +46,7 @@ public class UserDatabase extends SQLiteOpenHelper {
                 + USER_AVATAR_B64 + " TEXT,"
                 + USER_MD5_PASSWORD + " TEXT" + ")";
         db.execSQL(sqlite_requete_table_login);
+        //db.close();
     }
 
     public void logInUser(int idUser, String alias, String email, int idAvatar, String avatarB64, String motdepasse) {
@@ -62,7 +63,7 @@ public class UserDatabase extends SQLiteOpenHelper {
         values.put(USER_MD5_PASSWORD, motdepasse);
 
         db.insert("USER_INFOS", null, values);
-        db.close();
+        //db.close();
     }
 
     public HashMap retournerInfosUser(){
@@ -82,7 +83,7 @@ public class UserDatabase extends SQLiteOpenHelper {
             utilisateur.put(USER_MD5_PASSWORD, cursor.getString(5));
         }
         cursor.close();
-        bd.close();
+        //bd.close();
 
         return utilisateur;
     }
@@ -97,8 +98,9 @@ public class UserDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         int rowCount = cursor.getCount();
-        db.close();
+
         cursor.close();
+        //db.close();
 
         return rowCount;
     }
@@ -115,11 +117,31 @@ public class UserDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.delete("USER_INFOS", null, null);
-        db.close();
+        //db.close();
     }
 
     public void logOut() {
         reset();
+    }
+
+    public void updateAvatar(String avatarB64) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(USER_AVATAR_B64, avatarB64);
+
+        db.update("USER_INFOS", values, USER_ID + "=" + this.retournerInfosUser().get(USER_ID), null);
+        //db.close();
+    }
+
+    public void updateEmail(String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(USER_EMAIL, email);
+
+        db.update("USER_INFOS", values, USER_ID + "=" + this.retournerInfosUser().get(USER_ID), null);
+        //db.close();
     }
 
     //obligatoire sinon crash
