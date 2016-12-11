@@ -198,7 +198,6 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
         }
 
         try {
-            Log.d("AVATAR", "A LAIDE DE USERDATABASE");
             byte[] decodedString = Base64.decode((String) UserDatabase.getInstance(this).retournerInfosUser().get(UserDatabase.USER_AVATAR_B64), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             ImageView img = (ImageView) findViewById(R.id.ivDrawerAvatar);
