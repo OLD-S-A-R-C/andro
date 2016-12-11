@@ -150,11 +150,19 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             count++;
         }
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  playlists) {
+        adapter = new ArrayAdapter<String>(this, R.layout.listview_custom,  playlists) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 
-                TextView textView = (TextView) super.getView(position, convertView, parent);
+                View rowView = LayoutInflater.from(getApplicationContext()).
+                        inflate(R.layout.listview_custom, parent, false);
+
+                TextView textView = (TextView) rowView.findViewById(R.id.tvTitre);
+                ImageView icon = (ImageView) rowView.findViewById(R.id.listviewVignette);
+
+                textView.setText(playlistsMaps.get(position).name + " - " + playlistsMaps.get(position).id);
+
+                icon.setImageResource(R.drawable.ic_playlist);
 
                 if (UserDatabase.getInstance(getApplicationContext()).loggedIn())
                     Log.e("LISTVIEW COLORS" , playlistsMaps.get(position).owner + "~" + (UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)));
@@ -162,7 +170,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                     textView.setTextColor(Color.parseColor("#00ff00"));
                 }
 
-                return textView;
+                return rowView;
             }
 
             @Override
