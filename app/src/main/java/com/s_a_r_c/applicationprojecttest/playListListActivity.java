@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -111,6 +113,18 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                 FinalContent finalContent = new FinalContent();
                 finalContent.onCreate();
                 if (adapter != null)  {
+                    new CountDownTimer(7000, 7000) {
+                        public void onTick(long millisUntilFinished) {
+                            // You can monitor the progress here as well by changing the onTick() time
+                        }
+                        public void onFinish() {
+                            // stop async task if not in progress
+                            if (asyncObject.getStatus() == AsyncTask.Status.RUNNING) {
+                                asyncObject.cancel(false);
+                                // Add any specific task you wish to do as your extended class variable works here as well.
+                            }
+                        }
+                    }.start();
                     onResume();
                     adapter.notifyDataSetChanged();
 
