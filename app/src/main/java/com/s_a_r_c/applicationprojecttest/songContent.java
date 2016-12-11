@@ -71,7 +71,8 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
         });
 
         try {
-            new DownloadSong(null).execute("Useless");
+          //  new DownloadSong(null).execute("Useless");
+            renderJson();
         } catch (Exception e) {
             finish();
         }
@@ -199,8 +200,22 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
     }
 
     public void renderJson() {
-        try {
-
+     //   try {
+            for(FinalContent.SongItem songItem: FinalContent.SONGITEMSPRIMAL)
+            {
+                if(songItem.strId.equals(DummyContent.strSongSelected))
+                {
+                    strOwnerID = songItem.strOwnerID;
+                    strVignette = songItem.strVignette;
+                    strTitre = songItem.strTitre;
+                    DummyContent.setStrSoloMusic(strOwnerID);
+                    strMusique = songItem.strMusique;
+                    strPublique = songItem.strPublique;
+                    strActive = songItem.strActive;
+                    strArtiste = songItem.strArtiste;
+                }
+            }
+        /*
             JSONObject lireJSON = new JSONObject(jsonSaved);
             String strProprietaire = lireJSON.get("proprietaire").toString();
             JSONObject lireJSON2 = new JSONObject(strProprietaire);
@@ -211,18 +226,18 @@ public class songContent extends AppCompatActivity implements YouTubePlayer.OnIn
             strMusique = lireJSON.get("musique").toString();
             strPublique = lireJSON.get("publique").toString();
             strActive = lireJSON.get("active").toString();
-            strArtiste = lireJSON.get("artiste").toString();
+            strArtiste = lireJSON.get("artiste").toString();*/
 
             setTitle(strTitre + " - " + strArtiste);
 
             ////////////YOUTUBE
             mPlayerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
             mPlayerFragment.initialize("AIzaSyBUaqxxbastsk_rfIKiHo-AzYBO7jtD90I", this);
-
+/*
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("labo7", e.toString());
-        }
+        }*/
     }
 
     private void hideKeyboardShowToast(String strMessage) {
