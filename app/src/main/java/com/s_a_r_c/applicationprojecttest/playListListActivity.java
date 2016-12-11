@@ -298,6 +298,8 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
             Log.e("nav_send","Selected");
             Intent intent = new Intent(this, addSongActivity.class);
             startActivity(intent);
+        } else if (id == R.id.menu_logout) {
+            System.exit(0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
