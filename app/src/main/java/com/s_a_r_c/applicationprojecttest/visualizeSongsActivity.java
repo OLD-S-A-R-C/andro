@@ -32,9 +32,9 @@ public class visualizeSongsActivity extends AppCompatActivity {
         ArrayList<String> playlists = new ArrayList<String>();
         final HashMap<Integer, FinalContent.SongItem> songsMaps = new HashMap<Integer, FinalContent.SongItem>();
         int count = 0;
-        if(DummyContent.getStrSoloMusic().equals("true"))
+        if(DummyContent.getStrSoloMusic().equals("true")&&!DummyContent.getId().equals(""))
         {
-
+            Log.e("OFFLINE","OFFLINE");
             for(FinalContent.SongItem songItem : FinalContent.SONGITEMSPRIMAL) {
                 if(songItem.strOwnerID.equals(DummyContent.getId()))
                 playlists.add(songItem.strTitre+" ;"+songItem.strId);
