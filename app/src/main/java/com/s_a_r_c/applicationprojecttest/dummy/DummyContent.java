@@ -54,6 +54,7 @@ public class DummyContent extends Application{
     public static String strPlaylistSelected = "";
     public String strTicketID = "";
     public String strCle = "";
+    public static String strSeeMusic = "";
     //public static String strOwner = "";
     private static Context mContext;
 
@@ -494,6 +495,9 @@ public class DummyContent extends Application{
     }
     public static String getStrSoloMusic(){return strSoloMusic;}
     public static void setStrSoloMusic(String strThing){strSoloMusic = strThing;}
+
+    public static String getStrSeeMusic(){return strSeeMusic;}
+    public static void setStrSeeMusic(String strThing){strSeeMusic = strThing;}
 
     private class DownloadJsonDeleteAttept extends AsyncTask<String, Void, String> {
         String url;
