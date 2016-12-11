@@ -99,8 +99,6 @@ public class ModifyUserActivity extends AppCompatActivity {
     {
         Log.e("JSON SAVED",jsonSaved+"Message");
 
-
-
         try {
 
             JSONObject lireJSON     = new JSONObject(jsonSaved);

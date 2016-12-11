@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -271,7 +272,7 @@ public class addSongActivity extends AppCompatActivity {
         Pattern compiledPattern = Pattern.compile(pattern);
         Matcher matcher = compiledPattern.matcher(strURL);
 
-        if (matcher.find()) {
+        if (matcher.find() && Patterns.WEB_URL.matcher(strURL).matches()) {
             return true;
         } else {
             return false;
