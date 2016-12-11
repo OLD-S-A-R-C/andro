@@ -144,7 +144,7 @@ public class playListListActivity extends AppCompatActivity implements Navigatio
                 TextView textView = (TextView) super.getView(position, convertView, parent);
 
                 Log.e("LISTVIEW COLORS" , playlistsMaps.get(position).owner + "~" + (UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)));
-                if (Integer.valueOf(playlistsMaps.get(position).owner) == UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)) {
+                if (Integer.valueOf(playlistsMaps.get(position).owner) == Integer.valueOf((String)(UserDatabase.getInstance(getApplicationContext()).retournerInfosUser().get(UserDatabase.USER_ID)))) {
                     textView.setTextColor(Color.parseColor("#00ff00"));
                 }
 
