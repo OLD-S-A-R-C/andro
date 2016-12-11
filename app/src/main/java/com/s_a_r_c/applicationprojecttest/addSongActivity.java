@@ -65,22 +65,6 @@ public class addSongActivity extends AppCompatActivity {
     }
 
 
-    public static String getMd5Hash(String input) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(input.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5 = number.toString(16);
-
-            while (md5.length() < 32)
-                md5 = "0" + md5;
-
-            return md5;
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("MD5", e.getLocalizedMessage());
-            return null;
-        }
-    }
 
     private class DownloadJsonDeleteAttept extends AsyncTask<String, Void, String> {
         String url;
@@ -199,7 +183,7 @@ public class addSongActivity extends AppCompatActivity {
                 strTitre = strTitre.replaceAll(" ", "%20");
                 strArtiste = strArtiste.replaceAll(" ", "%20");
 
-                String strConfirmation = getMd5Hash(DummyContent.getPassword()+strCle);
+                String strConfirmation = DummyContent.encryptMD5(DummyContent.getPassword()+strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=184&confirmation=99fee649e6b6e7680a094d49cec71961&action=nouvelleMusique&p1=9&p2=testestTitre&p3=testtestArtiste&p4=testTestURL&p5=true&p6=true
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=181&confirmation=cc8e336a813dff682d64349fa4374724&action=nouvelleMusique&p1=9&p2=TestTitre&p3=TestArtiste&p4=https://www.youtube.com/watch?v=Pw-0pbY9JeU&p5=true&p6=true
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=nouvelleMusique&p1="+DummyContent.getId()+"&p2="+strTitre+"&p3="+strArtiste+"&p4="+strUrl.replace(" ", "%20")+"&p5="+strPublique+"&p6="+strActive);

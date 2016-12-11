@@ -184,7 +184,7 @@ public class createNewPlaylist extends AppCompatActivity {
 
             HttpURLConnection c = null;
             try {
-                String strConfirmation = getMd5Hash(DummyContent.getPassword()+strCle);
+                String strConfirmation = DummyContent.encryptMD5(DummyContent.getPassword()+strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=26&confirmation=75d1b2cd84e5b34ffc3761ea5c6527b2&action=nouvelleListeDeLecture&p1=9&p2=Jamaica&p3=true&p4=true&p5=12/06/2016 20:05:10
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=nouvelleListeDeLecture&p1="+ DummyContent.getId()+"&p2="+strPlaylistNom+"&p3="+strPublic+"&p4="+strActif+"&p5=12/06/2016%2020:05:10");
                 Log.e("Json","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=nouvelleListeDeLecture&p1="+DummyContent.getId()+"&p2="+ URLEncoder.encode(strPlaylistNom, "UTF-8")+"&p3="+strPublic+"&p4="+strActif+"&p5=12/06/2016%2020:05:10");
@@ -252,22 +252,6 @@ public class createNewPlaylist extends AppCompatActivity {
         }
     }
 
-    public static String getMd5Hash(String input) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(input.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5 = number.toString(16);
-
-            while (md5.length() < 32)
-                md5 = "0" + md5;
-
-            return md5;
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("MD5", e.getLocalizedMessage());
-            return null;
-        }
-    }
 
     private void hideKeyboardShowToast(String strMessage) {
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

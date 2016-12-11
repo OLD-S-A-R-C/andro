@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
 import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
+import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -159,22 +160,6 @@ String jsonSaved = "";
         new DownloadJsonCaptchaAttempt(null).execute("Useless");
     }
 
-    public static String getMd5Hash(String input) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(input.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5 = number.toString(16);
-
-            while (md5.length() < 32)
-                md5 = "0" + md5;
-
-            return md5;
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("MD5", e.getLocalizedMessage());
-            return null;
-        }
-    }
 
     private class DownloadJsonCaptchaAttempt extends AsyncTask<String, Void, String> {
         String url;
@@ -248,7 +233,7 @@ String jsonSaved = "";
             HttpURLConnection c = null;
             try {
                 //Log.d("WAIT", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(displayAvatar()));
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias.trim().replace(" ", "%20")+"&courriel="+strEmail+"&mdp="+getMd5Hash(strPassword)+"&actif=true&date=" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(idAvatarSelected()));
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/creer?alias="+strAlias.trim().replace(" ", "%20")+"&courriel="+strEmail+"&mdp="+ DummyContent.encryptMD5(strPassword)+"&actif=true&date=" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()).replace(" ", "%20") + "&idAvatar=" + String.valueOf(idAvatarSelected()));
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();

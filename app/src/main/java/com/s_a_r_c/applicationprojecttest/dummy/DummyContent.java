@@ -450,21 +450,22 @@ public class DummyContent extends Application{
         strPlaylistSelected = strElement;
     }
 
-    public static String getMd5Hash(String input) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(input.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5 = number.toString(16);
+    public static String encryptMD5(String input) {
 
-            while (md5.length() < 32)
-                md5 = "0" + md5;
+//0fe9a1b70ea556dc15ee1d152e424ee8 = groy + key but its always same?
+        try {MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            byte[] byteMessage = messageDigest.digest(input.getBytes());
+            BigInteger number = new BigInteger(1, byteMessage);
 
-            return md5;
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("MD5", e.getLocalizedMessage());
-            return null;
-        }
+            String serializedString = number.toString(16);
+            while (serializedString.length() < 32)
+            {
+                //   Log.e("Byte","Current:"+serializedString.length()/32);
+                serializedString = "0" + serializedString;
+    }
+
+            return serializedString;
+        } catch (NoSuchAlgorithmException e) {Log.e("Encryption failed", e.getLocalizedMessage());return "{\"Success\": \"false}";}
     }
 
     public static String getAlias()
@@ -593,7 +594,7 @@ public class DummyContent extends Application{
             HttpURLConnection c = null;
             try {
 
-                String strConfirmation = getMd5Hash(DummyContent.getPassword() + strCle);
+                String strConfirmation = DummyContent.encryptMD5(DummyContent.getPassword() + strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=337&confirmation=26b15445192a07d528d0e70c2c58264d&action=supprimerMusiqueListe&p1=9&p2=16&p3=148
                 //Playlist Public+Owner : http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +ticket.idTicket + "&confirmation=" + md5(motdepasse + ticket.cle) +"&action=afficherToutesLesListes&p1=" + utilisateurID
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=afficherToutesLesListes&p1=" + DummyContent.getId());

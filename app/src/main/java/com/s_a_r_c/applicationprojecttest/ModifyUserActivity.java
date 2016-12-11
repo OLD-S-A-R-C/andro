@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.s_a_r_c.applicationprojecttest.Helpers.UserDatabase;
 import com.s_a_r_c.applicationprojecttest.dummy.AvatarContent;
 import com.s_a_r_c.applicationprojecttest.Helpers.Avatars;
+import com.s_a_r_c.applicationprojecttest.dummy.DummyContent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -207,22 +208,7 @@ public class ModifyUserActivity extends AppCompatActivity {
             receivedModifyResponse();
         }
     }
-    public static String getMd5Hash(String input) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(input.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5 = number.toString(16);
 
-            while (md5.length() < 32)
-                md5 = "0" + md5;
-
-            return md5;
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("MD5", e.getLocalizedMessage());
-            return null;
-        }
-    }
 
     private class DownloadJsonModifyComplete extends AsyncTask<String, Void, String> {
         String url;
@@ -238,8 +224,8 @@ public class ModifyUserActivity extends AppCompatActivity {
 
             HttpURLConnection c = null;
             try {
-                String strConfirmation = getMd5Hash(strMotDePasse+strCle);
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=modifierUser&p1="+strId+"&p2="+MDstrCourriel+"&p3="+getMd5Hash(MDstrMotDePasse)+"&p4="+MDstrAlias.trim().replace(" ", "%20")+"&p5="+String.valueOf(idAvatarSelected())+"&p6=true");
+                String strConfirmation = DummyContent.encryptMD5(strMotDePasse+strCle);
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=modifierUser&p1="+strId+"&p2="+MDstrCourriel+"&p3="+ DummyContent.encryptMD5(MDstrMotDePasse)+"&p4="+MDstrAlias.trim().replace(" ", "%20")+"&p5="+String.valueOf(idAvatarSelected())+"&p6=true");
                 c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("PUT");
                 c.connect();

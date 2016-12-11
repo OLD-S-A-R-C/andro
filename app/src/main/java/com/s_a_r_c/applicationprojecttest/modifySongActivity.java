@@ -248,22 +248,6 @@ public class modifySongActivity extends AppCompatActivity {
     }
 
 
-    public static String getMd5Hash(String input) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(input.getBytes());
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5 = number.toString(16);
-
-            while (md5.length() < 32)
-                md5 = "0" + md5;
-
-            return md5;
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("MD5", e.getLocalizedMessage());
-            return null;
-        }
-    }
 
     private class DownloadJsonModifyAttept extends AsyncTask<String, Void, String> {
         String url;
@@ -383,7 +367,7 @@ public class modifySongActivity extends AppCompatActivity {
                 strTitre = strTitre.replaceAll(" ", "%20");
                 strArtiste = strArtiste.replaceAll(" ", "%20");
 
-                String strConfirmation = getMd5Hash(DummyContent.getPassword() + strCle);
+                String strConfirmation = DummyContent.encryptMD5(DummyContent.getPassword() + strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=211&confirmation=f006434e24b278ae1f935331e13810b1&action=modifierMusique&p1=134&p2=9&p3=TestTitre1&p4=TestArtiste1&p5=https://www.youtube.com/watch?v=Pw-0pbY9JeU&p6=true&p7=true
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=modifierMusique&p1=" + DummyContent.getStrSongSelected() + "&p2=" + DummyContent.getId() + "&p3=" + strTitre + "&p4=" + strArtiste + "&p5=" + strUrl + "&p6=" + strPublique + "&p7=" + strActive);
                 Log.e("Error", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=modifierMusique&p1=" + DummyContent.getStrSongSelected() + "&p2=" + DummyContent.getId() + "&p3=" + strTitre + "&p4=" + strArtiste + "&p5=" + strUrl + "&p6=" + strPublique + "&p7=" + strActive);
@@ -558,7 +542,7 @@ public class modifySongActivity extends AppCompatActivity {
                 strTitre = strTitre.replaceAll(" ", "%20");
                 strArtiste = strArtiste.replaceAll(" ", "%20");
 
-                String strConfirmation = getMd5Hash(DummyContent.getPassword() + strCle);
+                String strConfirmation = DummyContent.encryptMD5(DummyContent.getPassword() + strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=216&confirmation=1c3de967358bc9cd76a2c2f61a57c3dd&action=ajouterMusiqueListe&p1=9&p2=14&p3=135
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=ajouterMusiqueListe&p1=" + DummyContent.getId() + "&p2=" + strTargetPlaylist + "&p3=" + DummyContent.getStrSongSelected());
                 Log.e("Error", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=ajouterMusiqueListe&p1=" + DummyContent.getId() + "&p2=" + strTargetPlaylist + "&p3=" + DummyContent.getStrSongSelected());
@@ -717,7 +701,7 @@ public class modifySongActivity extends AppCompatActivity {
                 strTitre = strTitre.replaceAll(" ", "%20");
                 strArtiste = strArtiste.replaceAll(" ", "%20");
 
-                String strConfirmation = getMd5Hash(DummyContent.getPassword() + strCle);
+                String strConfirmation = DummyContent.encryptMD5(DummyContent.getPassword() + strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=216&confirmation=1c3de967358bc9cd76a2c2f61a57c3dd&action=ajouterMusiqueListe&p1=9&p2=14&p3=135
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=transfererMusiqueListe&p1=" + DummyContent.getId() + "&p2=" + DummyContent.getStrPlaylistSelected() + "&p3=" + strTargetPlaylist + "&p4=" + DummyContent.getStrSongSelected());
                 Log.e("Error", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=transfererMusiqueListe&p1=" + DummyContent.getId() + "&p2=" + DummyContent.getStrPlaylistSelected() + "&p3=" + strTargetPlaylist + "&p4=" + DummyContent.getStrSongSelected());
@@ -872,7 +856,7 @@ public class modifySongActivity extends AppCompatActivity {
 
               //  strTicketID = (Integer.valueOf(strTicketID)+1)+"";
 
-                String strConfirmation = getMd5Hash(DummyContent.getPassword() + strCle);
+                String strConfirmation = DummyContent.encryptMD5(DummyContent.getPassword() + strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=337&confirmation=26b15445192a07d528d0e70c2c58264d&action=supprimerMusiqueListe&p1=9&p2=16&p3=148
                 URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=supprimerMusiqueListe&p1=" + DummyContent.getId() + "&p2=" + DummyContent.getStrPlaylistSelected() + "&p3=" + DummyContent.getStrSongSelected());
                 Log.e("Error", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLectureMusique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=supprimerMusiqueListe&p1=" + DummyContent.getId() + "&p2=" + DummyContent.getStrPlaylistSelected() + "&p3=" + DummyContent.getStrSongSelected());
