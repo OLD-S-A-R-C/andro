@@ -194,22 +194,25 @@ public class modifySongActivity extends AppCompatActivity {
             strActive = lireJSON.get("active").toString();
             strArtiste = lireJSON.get("artiste").toString();*/
 
-            setTitle(strTitre + " - " + strArtiste);
 
-            EditText editText12 = (EditText) findViewById(R.id.etTitleEditMusic);
-            editText12.setText(strTitre);
-            EditText editText15 = (EditText) findViewById(R.id.etArtistEditMusic);
-            editText15.setText(strArtiste);
-            EditText editText16 = (EditText) findViewById(R.id.etURLEditMusic);
-            editText16.setText(strMusique);
-            CheckBox checkBoxPublique = (CheckBox) findViewById(R.id.checkBox5);
-            CheckBox checkBoxActive = (CheckBox) findViewById(R.id.checkBox6);
-            if (strPublique.equals("true")) {
-                checkBoxPublique.setChecked(true);
-            }
-            if (strActive.equals("true")) {
-                checkBoxActive.setChecked(true);
-            }
+
+        setTitle(strTitre + " - " + strArtiste);
+
+        EditText editText12 = (EditText) findViewById(R.id.etTitleEditMusic);
+        editText12.setText(strTitre);
+        EditText editText15 = (EditText) findViewById(R.id.etArtistEditMusic);
+        editText15.setText(strArtiste);
+        EditText editText16 = (EditText) findViewById(R.id.etURLEditMusic);
+        editText16.setText(strMusique);
+        CheckBox checkBoxPublique = (CheckBox) findViewById(R.id.checkBox5);
+        CheckBox checkBoxActive = (CheckBox) findViewById(R.id.checkBox6);
+        if (strPublique.equals("true")) {
+            checkBoxPublique.setChecked(true);
+        }
+        if (strActive.equals("true")) {
+            checkBoxActive.setChecked(true);
+        }
+        //test
     }
 
     public void deleteSong(View view) {
