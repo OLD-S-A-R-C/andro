@@ -23,8 +23,11 @@ import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class modifyPlaylist extends AppCompatActivity {
     String jsonSaved = "";
@@ -97,13 +100,13 @@ public class modifyPlaylist extends AppCompatActivity {
         editText2.setText(strNom+"(DUP)");
         if(strActive.equals("true"))
         {
-            CheckBox checkBoxPublique = (CheckBox)findViewById(R.id.checkBox3);
-            checkBoxPublique.setChecked(true);
+            CheckBox checkBoxActive = (CheckBox)findViewById(R.id.checkBox4);
+            checkBoxActive.setChecked(true);
         }
         if(strPublique.equals("true"))
         {
-            CheckBox checkBoxActive = (CheckBox)findViewById(R.id.checkBox4);
-            checkBoxActive.setChecked(true);
+            CheckBox checkBoxPublique = (CheckBox)findViewById(R.id.checkBox3);
+            checkBoxPublique.setChecked(true);
         }
     }
     private class DownloadPlaylistDetailsJson extends AsyncTask<String, Void, String> {
@@ -385,7 +388,7 @@ public class modifyPlaylist extends AppCompatActivity {
                 MDstrNom = MDstrNom.replaceAll(" ", "%20");
                 String strConfirmation = DummyContent.encryptMD5(DummyContent.getPassword()+strCle);
                 //$.put("http://localhost:8080/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" + ticket.idTicket + "&confirmation=" + $.md5(Cookies.get('motdepasse') + ticket.cle) + "&action=afficherListeDeLecture&p1=" + id,
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=modifierListeDeLecture&p1=" + strPlaylistID + "&p2=" + DummyContent.getId() + "&p3=" + MDstrNom + "&p4=" + MDstrPublique + "&p5=" + MDstrActive + "&p6=12/06/2016%2020:05:10");
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=modifierListeDeLecture&p1=" + strPlaylistID + "&p2=" + DummyContent.getId() + "&p3=" + URLEncoder.encode(MDstrNom, "UTF-8") + "&p4=" + MDstrPublique + "&p5=" + MDstrActive + "&p6=" + URLEncoder.encode(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()), "UTF-8"));
                 Log.e("Error","http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/ListeDeLecture/commande?idTicket=" +strTicketID+ "&confirmation=" +strConfirmation+ "&action=modifierListeDeLecture&p1=" + strPlaylistID + "&p2=" + DummyContent.getId() + "&p3=" + MDstrNom + "&p4=" + MDstrPublique + "&p5=" + MDstrActive + "&p6=12/06/2016%2020:05:10");
                 //URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/utilisateur/commande?idTicket="+strTicketID+"&confirmation="+strConfirmation+"&action=modifierUser&p1="+strId+"&p2="+MDstrCourriel+"&p3="+MDstrMotDePasse+"&p4="+MDstrAlias+"&p5="+strAvatar+"&p6=true");
                 c = (HttpURLConnection) u.openConnection();

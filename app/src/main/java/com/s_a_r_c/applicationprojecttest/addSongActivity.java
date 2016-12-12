@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -596,7 +597,7 @@ public class addSongActivity extends AppCompatActivity {
                 String strConfirmation = DummyContent.encryptMD5(DummyContent.getPassword() + strCle);
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=184&confirmation=99fee649e6b6e7680a094d49cec71961&action=nouvelleMusique&p1=9&p2=testestTitre&p3=testtestArtiste&p4=testTestURL&p5=true&p6=true
                 //http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=181&confirmation=cc8e336a813dff682d64349fa4374724&action=nouvelleMusique&p1=9&p2=TestTitre&p3=TestArtiste&p4=https://www.youtube.com/watch?v=Pw-0pbY9JeU&p5=true&p6=true
-                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=nouvelleMusique&p1=" + DummyContent.getId() + "&p2=" + strTitre + "&p3=" + strArtiste + "&p4=" + url[0].replace(" ", "%20") + "&p5=" + strPublique + "&p6=" + strActive);
+                URL u = new URL("http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=nouvelleMusique&p1=" + DummyContent.getId() + "&p2=" + URLEncoder.encode(strTitre, "UTF-8") + "&p3=" + URLEncoder.encode(strArtiste, "UTF-8") + "&p4=" + url[0].replace(" ", "%20") + "&p5=" + strPublique + "&p6=" + strActive);
                 Log.e("Error", "http://424t.cgodin.qc.ca:8180/ProjetFinalServices/service/Musique/commande?idTicket=" + strTicketID + "&confirmation=" + strConfirmation + "&action=nouvelleMusique&p1=" + DummyContent.getId() + "&p2=" + strTitre + "&p3=" + strArtiste + "&p4=" + url[0].replace(" ", "%20") + "&p5=" + strPublique + "&p6=" + strActive);
 
                 c = (HttpURLConnection) u.openConnection();
