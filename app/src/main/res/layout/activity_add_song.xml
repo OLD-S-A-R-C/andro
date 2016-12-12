@@ -60,16 +60,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/etArtistNewMusic" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ajouter"
-        android:onClick="createSong"
-        android:id="@+id/button15"
-        android:layout_below="@+id/checkBox7"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/etURLNewMusic" />
-
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,5 +77,51 @@
         android:layout_below="@+id/etURLNewMusic"
         android:layout_toEndOf="@+id/checkBox7"
         android:checked="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ajouter"
+        android:onClick="createSong"
+        android:id="@+id/button15"
+        android:layout_below="@+id/checkBox7"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/etURLNewMusic" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etYoutubeSearch"
+        android:layout_below="@+id/button15"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/etArtistNewMusic" />
+
+    <Spinner
+        android:id="@+id/spinnerYoutubeSearch"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etYoutubeSearch"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rechercher"
+        android:onClick="searchVideo"
+        android:id="@+id/button17"
+        android:layout_below="@+id/spinnerYoutubeSearch"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/etURLNewMusic" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ajouter"
+        android:onClick="addVideo"
+        android:id="@+id/button18"
+        android:layout_below="@+id/button17"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/etURLNewMusic" />
+
 
 </RelativeLayout>
